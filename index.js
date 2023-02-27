@@ -37,5 +37,3 @@ space.ping(client, Events);
 // Important bot stuff
 keepAlive();
 client.login(process.env['TOKEN']);
-
-console.log("TESTING");
