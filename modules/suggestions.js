@@ -6,17 +6,12 @@ exports.newSuggestion = (client, Events) => {
         }
 
         let tagsToApply = ["Awaiting Response"];
-        let finalTags = msg.channel.appliedTags;
     
-        // Check if message is in forum channel (By id)
         if (msg.channel.isThread()){
-            // Iterate tags to be applied automatically
+            let finalTags = msg.channel.appliedTags;
             for (let tags = 0; tags < tagsToApply.length; tags++){
-                // Iterate tags available in the forum
                 for (let forumTags = 0; forumTags < msg.channel.parent.availableTags.length; forumTags++){
-                    // Checks if the forum has the tag to be applied
                     if (msg.channel.parent.availableTags[forumTags].name == tagsToApply[tags]){
-                        // Checks if the tag to be applied is already applied in the thread
                         if (!(msg.channel.appliedTags.includes(tagsToApply[tags]))){
                             finalTags.push(msg.channel.parent.availableTags[forumTags].id);
                         }
@@ -25,7 +20,6 @@ exports.newSuggestion = (client, Events) => {
             }
             msg.channel.setAppliedTags(finalTags);
         }
-    
     })
 }
 
@@ -48,8 +42,7 @@ exports.resolveSuggestion = (client, Events) =>{
                         newChannel.send(
                             tag.name == "Approved" ? `Hello <@${owner.id}>! This suggestion has been **approved** by <@${audit.entries.first().executor.id}>! If you have any questions regarding the decision, please contact <@${audit.entries.first().executor.id}>. This post has been locked and closed.` :
                             tag.name == "Denied" ? `Hello <@${owner.id}>! This suggestion has been **denied** by <@${audit.entries.first().executor.id}>! If you have any questions regarding the decision, please contact <@${audit.entries.first().executor.id}>. This post has been locked and closed.` :
-                            `Hello <@${owner.id}>! This suggestion has been **implemented**!`
-                        )
+                            `Hello <@${owner.id}>! This suggestion has been **implemented**!`)
                         .then(() =>{
                             newChannel.setLocked(true);
                             newChannel.setArchived(true);
