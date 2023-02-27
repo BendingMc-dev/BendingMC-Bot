@@ -29,12 +29,7 @@ client.on(Events.MessageCreate, msg =>{
 	}
 })
 
-// client.on(Events.ThreadUpdate, (oldChannel, newChannel) =>{
-// 	console.log("Channel has been edited!");
-// })
-
 // Execute modules here
-// suggestions(client, Events);
 suggestions.newSuggestion(client, Events);
 suggestions.resolveSuggestion(client, Events);
 space.ping(client, Events);
