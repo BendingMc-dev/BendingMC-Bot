@@ -1,3 +1,22 @@
+
+function updateTags(channel, addTags = [], removeTags = []){
+    let channelTags = channel.appliedTags;
+    let finalTags = [];
+    for (let channelTag = 0; channelTag < channelTags.length; channelTag++){
+        for (let addTag = 0; addTag < addTags.length; addTag++){
+            if (addTag !== channelTag){
+                finalTags.push(addTag);
+            }
+        }
+        for (let removeTag = 0; removeTag < removeTags.length; removeTag++){
+            if (removeTag !== channelTag){
+                finalTags.push(channelTag);
+            }
+        }
+    }
+    return finalTags;
+}
+
 exports.newSuggestion = (client, Events) => {
     client.on(Events.MessageCreate, msg =>{
         // Check if author of message is the bot and return if true
@@ -26,13 +45,25 @@ exports.newSuggestion = (client, Events) => {
 exports.resolveSuggestion = (client, Events) =>{
     client.on(Events.ThreadUpdate, (oldChannel, newChannel) =>{
         addedTags = newChannel.appliedTags.filter(n => !oldChannel.appliedTags.includes(n))
-
         if (!addedTags.length){
             return
         }
 
-        for (let a = 0; a < addedTags.length; a++){
-            tag = newChannel.parent.availableTags.find(n => (n.id == addedTags[a]))
+        for (let addedTag = 0; addedTag < addedTags.length; addedTag++){
+            availableTag = newChannel.parent.availableTags.find(n => (n.id == addedTags[addedTag]));
+            newChannel.guild.fetchAuditLogs({ type: 111, limit: 1 }).then( (audit) =>{
+                if (availableTag.name === "Awaiting Response")
+                switch (availableTag.name){
+                    case "Approved":
+                        // If thread has waiting response, remove tag
+                        // Message
+                }
+
+                newChannel.send(message).then(() =>{
+                    newChannel.setLocked(true);
+                    newChannel.setArchived(true);
+                })
+            })
 
             if (tag.name == "Approved" || tag.name == "Denied" || tag.name == "Implemented"){
                 newChannel.guild.fetchAuditLogs({ type: 111, limit: 1 })
@@ -51,9 +82,25 @@ exports.resolveSuggestion = (client, Events) =>{
                 }); 
                 
                 for (let a = 0; a < newChannel.parent.availableTags.length; a++){
+                    let availableTag = newChannel.parent.availableTags[a]
+                    switch (availableTag.name){
+                        case "Awaiting Response":
+                            if (newChannel.appliedTags.includes(availableTag.id)){
+                                newChannel.setAppliedTags(newChannel.appliedTags.filter( n =>n !== newChannel.parent.availableTags[a].id))
+                            }
+                    }
+
+
                     if (newChannel.parent.availableTags[a].name === "Awaiting Response"){
+                        // If channel has the tag, remove it
                         if (newChannel.appliedTags.includes(newChannel.parent.availableTags[a].id)){
                             newChannel.setAppliedTags(newChannel.appliedTags.filter( n =>n !== newChannel.parent.availableTags[a].id))
+                        }
+                    }
+                    if (newChannel.parent.availableTags[a].name === "Not Implemented"){
+                        // If channel doesn't have the tag, apply it
+                        if (!newChannel.appliedTags.includes(newChannel.parent.availableTags[a].id)){
+
                         }
                     }
                 }
