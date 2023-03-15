@@ -9,7 +9,7 @@
 */
 
 function updateTags(channel, addTags = [], removeTags = []){
-    let updatedTags = [];
+    let updatedTags = channel.appliedTags;
     addTags.forEach(addTag =>{
         if (!channel.appliedTags.includes(addTag)){
             updatedTags.push(addTag);
@@ -17,11 +17,11 @@ function updateTags(channel, addTags = [], removeTags = []){
     })
     removeTags.forEach(removeTag =>{
         if (!channel.appliedTags.includes(removeTag)){
-            updatedTags.push(removeTag);
+            console.error("FIXME: modules/suggestions.js: updateTags() -> remove tag from channel");
         }
     })
 
-    return updateTags;
+    channel.setAppliedTags(updateTags);
     
     // let channelTags = channel.appliedTags;
     // let finalTags = [];
@@ -70,7 +70,7 @@ exports.newSuggestion = (client, Events) => {
             }
         })
         
-        channel.setAppliedTags(updateTags(channel, applyTags));
+        updateTags(channel, applyTags);
 
         
 
