@@ -12,12 +12,12 @@ function updateTags(channel, addTags = [], removeTags = []){
     let updatedTags = [];
     addTags.forEach(addTag =>{
         if (!channel.appliedTags.includes(addTag)){
-            updatedTag.push(addTag);
+            updatedTags.push(addTag);
         }
     })
     removeTags.forEach(removeTag =>{
         if (!channel.appliedTags.includes(removeTag)){
-            updatedTag.push(removeTag);
+            updatedTags.push(removeTag);
         }
     })
 
