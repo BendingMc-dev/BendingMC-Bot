@@ -1,4 +1,13 @@
 
+/*
+    If a message is sent and the channel doesn't have the awaiting response tag AND doesn't have denied/approved/implemented tags, apply the tag
+
+    If a suggestion is denied or approved, remove awaiting response tag if applicable
+
+    If a suggestion is implemented remove denied and approved tags, if applicable
+
+*/
+
 function updateTags(channel, addTags = [], removeTags = []){
     let channelTags = channel.appliedTags;
     let finalTags = [];
@@ -19,26 +28,52 @@ function updateTags(channel, addTags = [], removeTags = []){
 
 exports.newSuggestion = (client, Events) => {
     client.on(Events.MessageCreate, msg =>{
-        // Check if author of message is the bot and return if true
-        if (msg.author.id === client.user.id){
-            return
-        }
+        if (msg.author.id === client.user.id) return;
+
+        // if message is in thread channel, if the channel has the (awaiting response, approved, and denied) tags
+        // if thread has awaiting response, add it, AND if thread has denied/approved/implemented tags, cancel
+    
+        if (!msg.channel.isThread()) return;
 
         let tagsToApply = ["Awaiting Response"];
-    
-        if (msg.channel.isThread()){
-            let finalTags = msg.channel.appliedTags;
-            for (let tags = 0; tags < tagsToApply.length; tags++){
-                for (let forumTags = 0; forumTags < msg.channel.parent.availableTags.length; forumTags++){
-                    if (msg.channel.parent.availableTags[forumTags].name == tagsToApply[tags]){
-                        if (!(msg.channel.appliedTags.includes(tagsToApply[tags]))){
-                            finalTags.push(msg.channel.parent.availableTags[forumTags].id);
-                        }
-                    }
-                }
+        let channel = msg.channel;
+        let threadTags = channel.appliedTags;
+        let forumTags = channel.parent.availableTags;
+        
+        // Checks if forum has the tags tagsToApply[]
+        let foundForumTags = [];
+        forumTags.forEach(forumTag => {
+            tagsToApply.forEach(tagToApply =>{
+                if (forumTags.name.includes(tagToApply)) foundForumTags.push(forumTag.id);
+            })
+        })
+        if (!foundForumTags.length) return;
+        
+        // Checks if thread has the tags in foundForumTags[]
+        let applyTags = [];
+        foundForumTags.forEach(foundForumTag =>{
+            if (!threadTags.includes(foundForumTag)){
+                applyTags.push(foundForumTag);
             }
-            msg.channel.setAppliedTags(finalTags);
-        }
+        })
+        
+        updateTags(channel, applyTags);
+
+        
+
+        // if (msg.channel.isThread()){
+        //     let finalTags = msg.channel.appliedTags;
+        //     for (let tags = 0; tags < tagsToApply.length; tags++){
+        //         for (let forumTags = 0; forumTags < msg.channel.parent.availableTags.length; forumTags++){
+        //             if (msg.channel.parent.availableTags[forumTags].name == tagsToApply[tags]){
+        //                 if (!(msg.channel.appliedTags.includes(tagsToApply[tags]))){
+        //                     finalTags.push(msg.channel.parent.availableTags[forumTags].id);
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     msg.channel.setAppliedTags(finalTags);
+        // }
     })
 }
 
