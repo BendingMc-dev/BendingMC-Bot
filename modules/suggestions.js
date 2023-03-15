@@ -22,21 +22,6 @@ function updateTags(channel, addTags = [], removeTags = []){
     })
 
     channel.setAppliedTags(updatedTags);
-    
-    // let channelTags = channel.appliedTags;
-    // let finalTags = [];
-    // for (let channelTag = 0; channelTag < channelTags.length; channelTag++){
-    //     for (let addTag = 0; addTag < addTags.length; addTag++){
-    //         if (addTag !== channelTag){
-    //             finalTags.push(addTag);
-    //         }
-    //     }
-    //     for (let removeTag = 0; removeTag < removeTags.length; removeTag++){
-    //         if (removeTag !== channelTag){
-    //             finalTags.push(channelTag);
-    //         }
-    //     }
-    // }
 }
 
 exports.newSuggestion = (client, Events) => {
@@ -49,25 +34,32 @@ exports.newSuggestion = (client, Events) => {
         if (!msg.channel.isThread()) return;
 
         let tagsToApply = ["Awaiting Response"];
+        let blockTags = ["Approved", "Denied", "Implemented"];
         let channel = msg.channel;
         let threadTags = channel.appliedTags;
         let forumTags = channel.parent.availableTags;
         
         // Checks if forum has the tags tagsToApply[]
         let foundForumTags = [];
+        let foundForumBlockTags = [];
         forumTags.forEach(forumTag => {
             tagsToApply.forEach(tagToApply =>{
                 if (forumTag.name === tagToApply) foundForumTags.push(forumTag.id);
             })
+            blockTags.forEach(blockTag =>{
+                if (forumTag.name === blockTag) foundForumBlockTags.push(forumTag.id);
+            })
         })
-        if (!foundForumTags.length) return;
+        if (!foundForumTags.length || !foundForumBlockTags) return;
         
         // Checks if thread has the tags in foundForumTags[]
         let applyTags = [];
         foundForumTags.forEach(foundForumTag =>{
-            if (!threadTags.includes(foundForumTag)){
-                applyTags.push(foundForumTag);
-            }
+            foundForumBlockTags.forEach(foundForumBlockTag =>{
+                if (!threadTags.includes(foundForumTag) && !threadTags.includes(foundForumBlockTag)){
+                    applyTags.push(foundForumTag);
+                }
+            })
         })
         
         updateTags(channel, applyTags);
