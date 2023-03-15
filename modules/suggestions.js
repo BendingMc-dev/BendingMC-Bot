@@ -9,21 +9,34 @@
 */
 
 function updateTags(channel, addTags = [], removeTags = []){
-    let channelTags = channel.appliedTags;
-    let finalTags = [];
-    for (let channelTag = 0; channelTag < channelTags.length; channelTag++){
-        for (let addTag = 0; addTag < addTags.length; addTag++){
-            if (addTag !== channelTag){
-                finalTags.push(addTag);
-            }
+    let updatedTags = [];
+    addTags.forEach(addTag =>{
+        if (!channel.appliedTags.includes(addTag)){
+            updatedTag.push(addTag);
         }
-        for (let removeTag = 0; removeTag < removeTags.length; removeTag++){
-            if (removeTag !== channelTag){
-                finalTags.push(channelTag);
-            }
+    })
+    removeTags.forEach(removeTag =>{
+        if (!channel.appliedTags.includes(removeTag)){
+            updatedTag.push(removeTag);
         }
-    }
-    return finalTags;
+    })
+
+    return updateTags;
+    
+    // let channelTags = channel.appliedTags;
+    // let finalTags = [];
+    // for (let channelTag = 0; channelTag < channelTags.length; channelTag++){
+    //     for (let addTag = 0; addTag < addTags.length; addTag++){
+    //         if (addTag !== channelTag){
+    //             finalTags.push(addTag);
+    //         }
+    //     }
+    //     for (let removeTag = 0; removeTag < removeTags.length; removeTag++){
+    //         if (removeTag !== channelTag){
+    //             finalTags.push(channelTag);
+    //         }
+    //     }
+    // }
 }
 
 exports.newSuggestion = (client, Events) => {
@@ -44,7 +57,7 @@ exports.newSuggestion = (client, Events) => {
         let foundForumTags = [];
         forumTags.forEach(forumTag => {
             tagsToApply.forEach(tagToApply =>{
-                if (forumTags.name.includes(tagToApply)) foundForumTags.push(forumTag.id);
+                if (forumTag.name === tagToApply) foundForumTags.push(forumTag.id);
             })
         })
         if (!foundForumTags.length) return;
@@ -57,7 +70,7 @@ exports.newSuggestion = (client, Events) => {
             }
         })
         
-        updateTags(channel, applyTags);
+        channel.setAppliedTags(updateTags(channel, applyTags));
 
         
 
