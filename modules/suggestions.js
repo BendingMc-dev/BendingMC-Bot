@@ -21,7 +21,7 @@ function updateTags(channel, addTags = [], removeTags = []){
         }
     })
 
-    channel.setAppliedTags(updateTags);
+    channel.setAppliedTags(updatedTags);
     
     // let channelTags = channel.appliedTags;
     // let finalTags = [];
