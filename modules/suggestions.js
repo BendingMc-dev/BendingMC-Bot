@@ -79,9 +79,15 @@ exports.resolveSuggestion = (client, Events) =>{
 
         // let closeTags = ["Approved", "Denied", "Implemented"];
         // let removeTags = ["Awaiting Response"];
+        let user;
+        newChannel.guild.fetchAuditLogs({ type: 111, limit: 1 }).then((audit) =>{
+            user = audit.entries.first().executor.id;
+        });
+
         let forumTagsByName = new Map();
         let forumTagsById = new Map();
         
+        // Define maps
         newChannel.parent.availableTags.forEach(availableTag =>{
             forumTagsByName.set(availableTag.name, availableTag.id);
             forumTagsById.set(availableTag.id, availableTag.name);
@@ -110,16 +116,15 @@ exports.resolveSuggestion = (client, Events) =>{
             }
         })
         removeTags.push(forumTagsByName.get("Awaiting Response"));
-        // Remove tag from channel.then()
+        
+        // Remove tags
         updateTags(newChannel, [], removeTags);
 
-        console.log(message);
-        newChannel.guild.fetchAuditLogs({ type: 111, limit: 1 }).then((audit) =>{
-            newChannel.fetchOwner().then((owner) =>{
-                newChannel.send(`Hello <@${owner.id}>! This suggestion has been ${message} by <@${audit.entries.first().executor.id}>! If you have any questions regarding the decision, please contact <@${audit.entries.first().executor.id}>. This post has been locked and closed.`).then(() => {
-                    newChannel.setLocked(true);
-                    newChannel.setArchived(true);
-                });
+        // Send message and close post
+        newChannel.fetchOwner().then((owner) =>{
+            newChannel.send(`Hello <@${owner.id}>! This suggestion has been ${message} by <@${audit.entries.first().executor.id}>! If you have any questions regarding the decision, please contact <@${user}>. This post has been locked and closed.`).then(() => {
+                newChannel.setLocked(true);
+                newChannel.setArchived(true);
             });
         });
 
