@@ -83,8 +83,8 @@ exports.resolveSuggestion = (client, Events) =>{
         let forumTagsById = new Map();
         
         newChannel.parent.availableTags.forEach(availableTag =>{
-            forumTagsByName.set(availableTag.name, availableTag.name);
-            forumTagsById.set(availableTag.name, availableTag.name);
+            forumTagsByName.set(availableTag.name, availableTag.id);
+            forumTagsById.set(availableTag.id, availableTag.name);
         });
 
         // Set message and remove tags depending on which tags were added
