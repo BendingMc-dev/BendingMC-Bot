@@ -96,6 +96,7 @@ exports.resolveSuggestion = (client, Events) =>{
         // Set message and remove tags depending on which tags were added
         let message = "";
         let removeTags = [];
+        let error;
         addedTags.forEach(addedTag =>{
             switch (forumTagsById.get(addedTag)){
                 case "Approved":
@@ -110,10 +111,11 @@ exports.resolveSuggestion = (client, Events) =>{
                     if (newChannel.appliedTags.includes(forumTagsByName.get("Denied"))) removeTags.push(forumTagsByName.get("Denied"));
                     break;
                 default:
-                    console.log("Returning because no tags were added");
-                    return;
+                    error = true;
+                    break;
             }
         })
+        if (error) return;
         removeTags.push(forumTagsByName.get("Awaiting Response"));
         
         // Remove tags
