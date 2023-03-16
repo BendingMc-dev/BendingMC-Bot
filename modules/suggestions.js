@@ -70,6 +70,7 @@ exports.resolveSuggestion = (client, Events) =>{
         // When a tag is added, if the tag is approved, denied, or implemented, close the thread
 
         let closeTags = ["Approved", "Denied", "Implemented"];
+        let removeTags = ["Awaiting Response", "Approved", "Denied"];
 
         addedTags.forEach(addedTag =>{
             // Checks if forum channel has tags in closeTags[]
@@ -78,8 +79,26 @@ exports.resolveSuggestion = (client, Events) =>{
                 if (closeTags.includes(availableTag.name)) forumTags.push(availableTag.id);
             })
 
+`Hello <@${owner.id}>! This suggestion has been **approved** by <@${audit.entries.first().executor.id}>! If you have any questions regarding the decision, please contact <@${audit.entries.first().executor.id}>. This post has been locked and closed.`
+
+            forumTags.forEach(forumTag =>{
+                let message;
+                switch(forumTag.name){
+                    case "Approved":
+                        message = "approved"
+                        break;
+                    case "Denied":
+                        message = "denied"
+                        break;
+                    case "Implemented":
+                        message = "implemented";
+                        break;
+                    default:
+                        return;
+                }
+            })
             if (forumTags.includes(addedTag)){
-                console.log("One of the closing tags were added!");
+                
             }
         })
 
