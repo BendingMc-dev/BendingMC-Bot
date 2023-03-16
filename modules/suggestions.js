@@ -27,7 +27,7 @@ function updateTags(channel, addTags = [], removeTags = []){
             // console.error("FIXME: modules/suggestions.js: updateTags() -> remove tag from channel");
         }
     })
-    updatedTags = removedTags;
+    if (removedTags.length) updatedTags = removedTags;
 
     channel.setAppliedTags(updatedTags);
 }
@@ -115,7 +115,7 @@ exports.resolveSuggestion = (client, Events) =>{
                     break;
             }
         })
-        if (error) return;
+        if (error === true) return;
         removeTags.push(forumTagsByName.get("Awaiting Response"));
         
         // Remove tags
