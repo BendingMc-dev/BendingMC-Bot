@@ -110,6 +110,7 @@ exports.resolveSuggestion = (client, Events) =>{
                     if (newChannel.appliedTags.includes(forumTagsByName.get("Denied"))) removeTags.push(forumTagsByName.get("Denied"));
                     break;
                 default:
+                    console.log("Returning because no tags were added");
                     return;
             }
         })
