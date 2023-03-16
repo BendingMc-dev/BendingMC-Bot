@@ -21,13 +21,14 @@ function updateTags(channel, addTags = [], removeTags = []){
         }
     })
     removeTags.forEach(removeTag =>{
-        if (channel.appliedTags.includes(removeTag)){
+        // if (channel.appliedTags.includes(removeTag)){
             // updatedTags.slice(updatedTags.indexOf(removeTag), (updatedTags.indexOf(removeTag) + 1));
-            removedTags = updatedTags.filter(i => i !== removeTag);
+            //removedTags = updatedTags.filter(i => i !== removeTag);
+        updatedTags = updatedTags.filter(i => i !== removeTag);
             // console.error("FIXME: modules/suggestions.js: updateTags() -> remove tag from channel");
-        }
+        // }
     })
-    if (removeTags.length && removedTags.length) updatedTags = removedTags;
+    //if (removeTags.length && removedTags.length) updatedTags = removedTags;
 
     channel.setAppliedTags(updatedTags);
 }
