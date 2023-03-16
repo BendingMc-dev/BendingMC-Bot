@@ -105,7 +105,7 @@ exports.resolveSuggestion = (client, Events) =>{
                     return;
             }
         })
-        updateTags.push(forumTagsByName.get("Awaiting Response"));
+        removeTags.push(forumTagsByName.get("Awaiting Response"));
         // Remove tag from channel.then()
         updateTags(newChannel, [], removeTags);
 
