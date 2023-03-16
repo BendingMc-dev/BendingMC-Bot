@@ -80,53 +80,52 @@ exports.resolveSuggestion = (client, Events) =>{
 
         // let closeTags = ["Approved", "Denied", "Implemented"];
         // let removeTags = ["Awaiting Response"];
-        let user;
         newChannel.guild.fetchAuditLogs({ type: 111, limit: 1 }).then((audit) =>{
-            user = audit.entries.first().executor.id;
-        });
+            let user = audit.entries.first().executor.id;
 
-        let forumTagsByName = new Map();
-        let forumTagsById = new Map();
-        
-        // Define maps
-        newChannel.parent.availableTags.forEach(availableTag =>{
-            forumTagsByName.set(availableTag.name, availableTag.id);
-            forumTagsById.set(availableTag.id, availableTag.name);
-        });
+            let forumTagsByName = new Map();
+            let forumTagsById = new Map();
+            
+            // Define maps
+            newChannel.parent.availableTags.forEach(availableTag =>{
+                forumTagsByName.set(availableTag.name, availableTag.id);
+                forumTagsById.set(availableTag.id, availableTag.name);
+            });
 
-        // Set message and remove tags depending on which tags were added
-        let message = "";
-        let removeTags = [];
-        let error;
-        addedTags.forEach(addedTag =>{
-            switch (forumTagsById.get(addedTag)){
-                case "Approved":
-                    message = "approved";
-                    break;
-                case "Denied":
-                    message = "denied";
-                    break;
-                case "Implemented":
-                    message = "implemented";
-                    if (newChannel.appliedTags.includes(forumTagsByName.get("Approved"))) removeTags.push(forumTagsByName.get("Approved"));
-                    if (newChannel.appliedTags.includes(forumTagsByName.get("Denied"))) removeTags.push(forumTagsByName.get("Denied"));
-                    break;
-                default:
-                    error = true;
-                    break;
-            }
-        })
-        if (error === true) return;
-        removeTags.push(forumTagsByName.get("Awaiting Response"));
-        
-        // Remove tags
-        updateTags(newChannel, [], removeTags);
+            // Set message and remove tags depending on which tags were added
+            let message = "";
+            let removeTags = [];
+            let error;
+            addedTags.forEach(addedTag =>{
+                switch (forumTagsById.get(addedTag)){
+                    case "Approved":
+                        message = "approved";
+                        break;
+                    case "Denied":
+                        message = "denied";
+                        break;
+                    case "Implemented":
+                        message = "implemented";
+                        if (newChannel.appliedTags.includes(forumTagsByName.get("Approved"))) removeTags.push(forumTagsByName.get("Approved"));
+                        if (newChannel.appliedTags.includes(forumTagsByName.get("Denied"))) removeTags.push(forumTagsByName.get("Denied"));
+                        break;
+                    default:
+                        error = true;
+                        break;
+                }
+            })
+            if (error === true) return;
+            removeTags.push(forumTagsByName.get("Awaiting Response"));
+            
+            // Remove tags
+            updateTags(newChannel, [], removeTags);
 
-        // Send message and close post
-        newChannel.fetchOwner().then((owner) =>{
-            newChannel.send(`Hello <@${owner.id}>! This suggestion has been ${message} by <@${user}>! If you have any questions regarding the decision, please contact <@${user}>. This post has been locked and closed.`).then(() => {
-                newChannel.setLocked(true);
-                newChannel.setArchived(true);
+            // Send message and close post
+            newChannel.fetchOwner().then((owner) =>{
+                newChannel.send(`Hello <@${owner.id}>! This suggestion has been ${message} by <@${user}>! If you have any questions regarding the decision, please contact <@${user}>. This post has been locked and closed.`).then(() => {
+                    newChannel.setLocked(true);
+                    newChannel.setArchived(true);
+                });
             });
         });
 
