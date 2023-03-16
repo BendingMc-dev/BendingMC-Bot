@@ -14,7 +14,7 @@
 
 function updateTags(channel, addTags = [], removeTags = []){
     let updatedTags = channel.appliedTags;
-    let removedTags;
+    let removedTags = [];
     addTags.forEach(addTag =>{
         if (!channel.appliedTags.includes(addTag)){
             updatedTags.push(addTag);
