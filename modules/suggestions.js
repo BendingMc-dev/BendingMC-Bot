@@ -87,7 +87,7 @@ exports.resolveSuggestion = (client, Events) =>{
 
         // Set message and remove tags depending on which tags were added
         let message;
-        let updateTags = [];
+        let removeTags = [];
         addedTags.forEach(addedTag =>{
             switch (forumTagsById.get(addedTag)){
                 case "Approved":
@@ -98,8 +98,8 @@ exports.resolveSuggestion = (client, Events) =>{
                     break;
                 case "Implemented":
                     message = "implemented";
-                    if (newChannel.appliedTags.includes(forumTagsByName.get("Approved"))) updateTags.push(forumTagsByName.get("Approved"));
-                    if (newChannel.appliedTags.includes(forumTagsByName.get("Denied"))) updateTags.push(forumTagsByName.get("Denied"));
+                    if (newChannel.appliedTags.includes(forumTagsByName.get("Approved"))) removeTags.push(forumTagsByName.get("Approved"));
+                    if (newChannel.appliedTags.includes(forumTagsByName.get("Denied"))) removeTags.push(forumTagsByName.get("Denied"));
                     break;
                 default:
                     return;
@@ -107,7 +107,7 @@ exports.resolveSuggestion = (client, Events) =>{
         })
         updateTags.push(forumTagsByName.get("Awaiting Response"));
         // Remove tag from channel.then()
-        updateTags(newChannel, updateTags);
+        updateTags(newChannel, [], removeTags);
 
         newChannel.guild.fetchAuditLogs({ type: 111, limit: 1 }).then((audit) =>{
             newChannel.fetchOwner().then((owner) =>{
