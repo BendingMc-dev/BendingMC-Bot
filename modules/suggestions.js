@@ -6,6 +6,10 @@
 
     If a suggestion is implemented remove denied and approved tags, if applicable
 
+
+    TODO
+    - Instead of using forumTags to store addedTags id, what if you reassigned the addedTags with the id? (not sure how this works)
+    - Function get id of tag
 */
 
 function updateTags(channel, addTags = [], removeTags = []){
@@ -69,39 +73,82 @@ exports.resolveSuggestion = (client, Events) =>{
 
         // When a tag is added, if the tag is approved, denied, or implemented, close the thread
 
-        let closeTags = ["Approved", "Denied", "Implemented"];
-        let removeTags = ["Awaiting Response", "Approved", "Denied"];
+        // let closeTags = ["Approved", "Denied", "Implemented"];
+        // let removeTags = ["Awaiting Response"];
+        let forumTagsByName = new Map();
+        let forumTagsById = new Map();
+        
+        newChannel.parent.availableTags.forEach(availableTag =>{
+            forumTagsByName.set(availableTag.name, availableTag);
+        });
+        newChannel.parent.availableTags.forEach(availableTag =>{
+            forumTagsById.set(availableTag, availableTag.name);
+        });
 
+        // Set message and remove tags depending on which tags were added
+        let message;
+        let updateTags = [];
         addedTags.forEach(addedTag =>{
-            // Checks if forum channel has tags in closeTags[]
-            let forumTags = [];
-            newChannel.parent.availableTags.forEach(availableTag =>{
-                if (closeTags.includes(availableTag.name)) forumTags.push(availableTag.id);
-            })
-
-`Hello <@${owner.id}>! This suggestion has been **approved** by <@${audit.entries.first().executor.id}>! If you have any questions regarding the decision, please contact <@${audit.entries.first().executor.id}>. This post has been locked and closed.`
-
-            forumTags.forEach(forumTag =>{
-                let message;
-                switch(forumTag.name){
-                    case "Approved":
-                        message = "approved"
-                        break;
-                    case "Denied":
-                        message = "denied"
-                        break;
-                    case "Implemented":
-                        message = "implemented";
-                        break;
-                    default:
-                        return;
-                }
-            })
-            if (forumTags.includes(addedTag)){
-                
+            switch (forumTagsById.get(addedTag)){
+                case "Approved":
+                    message = "approved";
+                    break;
+                case "Denied":
+                    message = "denied";
+                    break;
+                case "Implemented":
+                    message = "implemented";
+                    if (newChannel.appliedTags.includes(forumTagsByName.get("Approved"))) updateTags.push(forumTagsByName.get("Approved"));
+                    if (newChannel.appliedTags.includes(forumTagsByName.get("Denied"))) updateTags.push(forumTagsByName.get("Denied"));
+                    break;
+                default:
+                    return;
             }
         })
+        updateTags.push(forumTagsByName.get("Awaiting Response"));
+        // Remove tag from channel.then()
+        updateTags(newChannel, updateTags);
 
+        newChannel.guild.fetchAuditLogs({ type: 111, limit: 1 }).then((audit) =>{
+            newChannel.fetchOwner().then((owner) =>{
+                newChannel.send(`Hello <@${owner.id}>! This suggestion has been ${message} by <@${audit.entries.first().executor.id}>! If you have any questions regarding the decision, please contact <@${audit.entries.first().executor.id}>. This post has been locked and closed.`).then(() => {
+                    newChannel.setLocked(true);
+                    newChannel.setArchived(true);
+                });
+            });
+        });
+
+
+        // Checks if forum channel has tags in closeTags[]
+        // addedTags.forEach(addedTag =>{
+                // newChannel.parent.availableTags.forEach(availableTag =>{
+                    // if (availableTag.id === addedTag){}
+
+                    // if (closeTags.includes(availableTag.name)) forumTags.push(availableTag.id);
+                // })
+
+// `Hello <@${owner.id}>! This suggestion has been **approved** by <@${audit.entries.first().executor.id}>! If you have any questions regarding the decision, please contact <@${audit.entries.first().executor.id}>. This post has been locked and closed.` 
+        // })
+        // if (!forumTags.length) return;
+
+        // Display different messages depending on which tags were added to the thread channel
+        
+        // let message;
+        // forumTags.forEach(forumTag =>{
+        //     switch(forumTag.name){
+        //         case "Approved":
+        //             message = "approved"
+        //             break;
+        //         case "Denied":
+        //             message = "denied"
+        //             break;
+        //         case "Implemented":
+        //             message = "implemented";
+        //             break;
+        //         default:
+        //             return;
+        //     };
+        // });
         // for (let addedTag = 0; addedTag < addedTags.length; addedTag++){
         //     availableTag = newChannel.parent.availableTags.find(n => (n.id == addedTags[addedTag]));
         //     newChannel.guild.fetchAuditLogs({ type: 111, limit: 1 }).then( (audit) =>{
