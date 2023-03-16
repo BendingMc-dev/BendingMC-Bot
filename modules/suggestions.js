@@ -120,7 +120,7 @@ exports.resolveSuggestion = (client, Events) =>{
 
         // Send message and close post
         newChannel.fetchOwner().then((owner) =>{
-            newChannel.send(`Hello <@${owner.id}>! This suggestion has been ${message} by <@${audit.entries.first().executor.id}>! If you have any questions regarding the decision, please contact <@${user}>. This post has been locked and closed.`).then(() => {
+            newChannel.send(`Hello <@${owner.id}>! This suggestion has been ${message} by <@${user}>! If you have any questions regarding the decision, please contact <@${user}>. This post has been locked and closed.`).then(() => {
                 newChannel.setLocked(true);
                 newChannel.setArchived(true);
             });
