@@ -21,7 +21,8 @@ function updateTags(channel, addTags = [], removeTags = []){
     })
     removeTags.forEach(removeTag =>{
         if (channel.appliedTags.includes(removeTag)){
-            updatedTags.slice(updatedTags.indexOf(removeTag), (updatedTags.indexOf(removeTag) + 1));
+            // updatedTags.slice(updatedTags.indexOf(removeTag), (updatedTags.indexOf(removeTag) + 1));
+            updatedTags = updatedTags.filter(i => i !== removeTag);
             // console.error("FIXME: modules/suggestions.js: updateTags() -> remove tag from channel");
         }
     })
@@ -80,10 +81,8 @@ exports.resolveSuggestion = (client, Events) =>{
         let forumTagsById = new Map();
         
         newChannel.parent.availableTags.forEach(availableTag =>{
-            forumTagsByName.set(availableTag.name, availableTag);
-        });
-        newChannel.parent.availableTags.forEach(availableTag =>{
-            forumTagsById.set(availableTag, availableTag.name);
+            forumTagsByName.set(availableTag.name, availableTag.name);
+            forumTagsById.set(availableTag.name, availableTag.name);
         });
 
         // Set message and remove tags depending on which tags were added
