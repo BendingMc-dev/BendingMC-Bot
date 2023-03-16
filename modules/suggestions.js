@@ -14,6 +14,7 @@
 
 function updateTags(channel, addTags = [], removeTags = []){
     let updatedTags = channel.appliedTags;
+    let removedTags;
     addTags.forEach(addTag =>{
         if (!channel.appliedTags.includes(addTag)){
             updatedTags.push(addTag);
@@ -22,10 +23,11 @@ function updateTags(channel, addTags = [], removeTags = []){
     removeTags.forEach(removeTag =>{
         if (channel.appliedTags.includes(removeTag)){
             // updatedTags.slice(updatedTags.indexOf(removeTag), (updatedTags.indexOf(removeTag) + 1));
-            updatedTags = updatedTags.filter(i => i !== removeTag);
+            removedTags = updatedTags.filter(i => i !== removeTag);
             // console.error("FIXME: modules/suggestions.js: updateTags() -> remove tag from channel");
         }
     })
+    updatedTags = removedTags;
 
     channel.setAppliedTags(updatedTags);
 }
@@ -103,6 +105,7 @@ exports.resolveSuggestion = (client, Events) =>{
                     if (newChannel.appliedTags.includes(forumTagsByName.get("Denied"))) removeTags.push(forumTagsByName.get("Denied"));
                     break;
                 default:
+                    console.log(forumTagsById.get(addedTag));
                     return;
             }
         })
