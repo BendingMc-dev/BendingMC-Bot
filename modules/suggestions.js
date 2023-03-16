@@ -100,7 +100,6 @@ exports.resolveSuggestion = (client, Events) =>{
             switch (forumTagsById.get(addedTag)){
                 case "Approved":
                     message = "approved";
-                    console.log("pass");
                     break;
                 case "Denied":
                     message = "denied";
@@ -111,7 +110,6 @@ exports.resolveSuggestion = (client, Events) =>{
                     if (newChannel.appliedTags.includes(forumTagsByName.get("Denied"))) removeTags.push(forumTagsByName.get("Denied"));
                     break;
                 default:
-                    console.log(forumTagsById.get(addedTag));
                     return;
             }
         })
