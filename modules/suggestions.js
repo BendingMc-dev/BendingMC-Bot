@@ -20,8 +20,9 @@ function updateTags(channel, addTags = [], removeTags = []){
         }
     })
     removeTags.forEach(removeTag =>{
-        if (!channel.appliedTags.includes(removeTag)){
-            console.error("FIXME: modules/suggestions.js: updateTags() -> remove tag from channel");
+        if (channel.appliedTags.includes(removeTag)){
+            updatedTags.slice(updatedTags.indexOf(removeTag), (updatedTags.indexOf(removeTag) + 1));
+            // console.error("FIXME: modules/suggestions.js: updateTags() -> remove tag from channel");
         }
     })
 
@@ -86,12 +87,13 @@ exports.resolveSuggestion = (client, Events) =>{
         });
 
         // Set message and remove tags depending on which tags were added
-        let message;
+        let message = "";
         let removeTags = [];
         addedTags.forEach(addedTag =>{
             switch (forumTagsById.get(addedTag)){
                 case "Approved":
                     message = "approved";
+                    console.log("pass");
                     break;
                 case "Denied":
                     message = "denied";
@@ -109,6 +111,7 @@ exports.resolveSuggestion = (client, Events) =>{
         // Remove tag from channel.then()
         updateTags(newChannel, [], removeTags);
 
+        console.log(message);
         newChannel.guild.fetchAuditLogs({ type: 111, limit: 1 }).then((audit) =>{
             newChannel.fetchOwner().then((owner) =>{
                 newChannel.send(`Hello <@${owner.id}>! This suggestion has been ${message} by <@${audit.entries.first().executor.id}>! If you have any questions regarding the decision, please contact <@${audit.entries.first().executor.id}>. This post has been locked and closed.`).then(() => {
