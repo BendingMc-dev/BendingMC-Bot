@@ -27,7 +27,7 @@ function updateTags(channel, addTags = [], removeTags = []){
             // console.error("FIXME: modules/suggestions.js: updateTags() -> remove tag from channel");
         }
     })
-    if (removedTags.length) updatedTags = removedTags;
+    if (removeTags.length && removedTags.length) updatedTags = removedTags;
 
     channel.setAppliedTags(updatedTags);
 }
