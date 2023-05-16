@@ -3,6 +3,7 @@ const { Client, IntentsBitField, Partials, Events } = require('discord.js');
 const space = require("./space.js");
 const suggestions = require("./modules/suggestions.js");
 require('dotenv').config();
+console.log(process.env);
 
 const client = new Client({
 	intents: [
