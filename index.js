@@ -3,7 +3,6 @@ const { Client, IntentsBitField, Partials, Events } = require('discord.js');
 const space = require("./space.js");
 const suggestions = require("./modules/suggestions.js");
 require('dotenv').config();
-console.log(process.env);
 
 const client = new Client({
 	intents: [
@@ -36,6 +35,5 @@ suggestions.newSuggestion(client, Events);
 suggestions.resolveSuggestion(client, Events);
 space.ping(client, Events);
 
-// Important bot stuff
-console.log("Test: " + process.env['BOT_TOKEN']);
-client.login(process.env['BOT_TOKEN']);
+// Log in
+client.login(process.env.BOT_TOKEN);
