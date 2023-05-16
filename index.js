@@ -36,4 +36,4 @@ space.ping(client, Events);
 
 // Important bot stuff
 // keepAlive();
-client.login(process.env['TOKEN']);
+client.login(process.env['BOT_TOKEN']);
