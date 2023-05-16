@@ -37,4 +37,4 @@ space.ping(client, Events);
 
 // Log in
 console.log("Key: " + process.env.BOT_TOKEN);
-client.login(process.env.BOT_TOKEN);
+client.login(`${process.env.BOT_TOKEN}`);
