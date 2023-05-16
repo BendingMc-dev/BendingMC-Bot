@@ -35,5 +35,5 @@ suggestions.resolveSuggestion(client, Events);
 space.ping(client, Events);
 
 // Important bot stuff
-// keepAlive();
+console.log("Test: " + process.env['BOT_TOKEN']);
 client.login(process.env['BOT_TOKEN']);
