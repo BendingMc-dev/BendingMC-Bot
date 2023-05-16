@@ -1,5 +1,5 @@
 const { Client, IntentsBitField, Partials, Events } = require('discord.js');
-const keepAlive = require("./server.js");
+// const keepAlive = require("./server.js");
 const space = require("./space.js");
 const suggestions = require("./modules/suggestions.js");
 
@@ -35,5 +35,5 @@ suggestions.resolveSuggestion(client, Events);
 space.ping(client, Events);
 
 // Important bot stuff
-keepAlive();
+// keepAlive();
 client.login(process.env['TOKEN']);
