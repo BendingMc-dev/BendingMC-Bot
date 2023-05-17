@@ -28,7 +28,11 @@ function findTagsInForumByName(forum, tags = []){
 }
 
 function threadChannelHasTags(channel, tags = []){
+
+    console.log("Amount of blocked tags: " + tags.length); //DEBUG
     tags.forEach( tag =>{
+        console.log("Channel tags: " + channel.appliedTags) //DEBUG
+        console.log("Current tag: " + tag) //DEBUG
         // check if the channel has the tag applied to it
         if (channel.appliedTags.includes(tag))
             return true;
