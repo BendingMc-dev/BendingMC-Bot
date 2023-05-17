@@ -48,7 +48,7 @@ exports.test = (client, Events) => {
         let threadChannel = msg.channel;
 
         // check if thread channel is part of a forum
-        if (channel.parent.type !== ChannelType.GuildForum) return;
+        if (threadChannel.parent.type !== ChannelType.GuildForum) return;
 
         let tagsToApply = ["Awaiting Response"]; // tags that will be applied when the message is created
         let ignoreMessagesWithTags = ["Approved", "Denied", "Implemented"]; // if thread has any of these tags, ignore this event
