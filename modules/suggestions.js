@@ -30,7 +30,7 @@ function findTagsInForumByName(forum, tags = []){
 function threadChannelHasTags(channel, tags){
 
     console.log("Amount of blocked tags: " + tags.length); //DEBUG
-    for (let tag in tags){
+    for (let tag of tags){
         console.log("iterating..."); //DEBUG
         if (channel.appliedTags.includes(tag.id))
             return true;
