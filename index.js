@@ -44,7 +44,3 @@ client.login(BOT_TOKEN);
 client.once(Events.ClientReady, c => {
 	console.log(`Ready! Logged in as ${c.user.tag}`);
 });
-
-client.on(Events.Error, e =>{
-	console.log("Error!!");
-})
