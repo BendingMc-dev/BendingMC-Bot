@@ -50,9 +50,7 @@ exports.test = (client, Events) => {
         const FORUM_CHANNEL_TYPE_ENUM = 15;
 
         // check if thread channel is part of a forum
-        if (threadChannel.parent.type !== FORUM_CHANNEL_TYPE_ENUM) return;
-
-        console.log(ChannelType.GuildForum);
+        // if (threadChannel.parent.type !== FORUM_CHANNEL_TYPE_ENUM) return;
 
         let tagsToApply = ["Awaiting Response"]; // tags that will be applied when the message is created
         let ignoreMessagesWithTags = ["Approved", "Denied", "Implemented"]; // if thread has any of these tags, ignore this event
