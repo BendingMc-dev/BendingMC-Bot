@@ -39,13 +39,7 @@ try {
 	client.channels.get(ERROR_OUTPUT_CHANNEL_ID).send('There was an error while handling new suggestion');
 }
 
-try {
-	suggestions.resolveSuggestion(client, Events);
-} catch {
-	console.log("ERROR");
-	client.channels.get(ERROR_OUTPUT_CHANNEL_ID).send('There was an error while resolving suggestion');
-}
-
+suggestions.resolveSuggestion(client, Events);
 space.ping(client, Events);
 
 // Log in
@@ -56,3 +50,7 @@ client.login(BOT_TOKEN);
 client.once(Events.ClientReady, c => {
 	console.log(`Ready! Logged in as ${c.user.tag}`);
 });
+
+client.on(Events.Error, e =>{
+	console.log("Error!!");
+})
