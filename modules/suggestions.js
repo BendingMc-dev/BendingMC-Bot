@@ -65,7 +65,7 @@ exports.test = (client, Events) => {
             return;
 
         // check if thread channel has any tags from ignoreMessagesWithTagsById
-        if (threadChannelHasTags(forumChannel, ignoreMessagesWithTagsById))
+        if (threadChannelHasTags(threadChannel, ignoreMessagesWithTagsById))
             return;
 
         let applyTags = [];
