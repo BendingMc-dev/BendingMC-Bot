@@ -29,10 +29,21 @@ client.on(Events.MessageCreate, msg =>{
 	}
 })
 
+const ERROR_OUTPUT_CHANNEL_ID = "485946253931446287";
+
 // Execute modules here
-suggestions.test(client, Events);
-// suggestions.newSuggestion(client, Events);
-suggestions.resolveSuggestion(client, Events);
+try {
+	suggestions.test(client, Events);
+} catch {
+	client.channels.get(ERROR_OUTPUT_CHANNEL_ID).send('There was an error while handling new suggestion');
+}
+
+try {
+	suggestions.resolveSuggestion(client, Events);
+} catch {
+	client.channels.get(ERROR_OUTPUT_CHANNEL_ID).send('There was an error while resolving suggestion');
+}
+
 space.ping(client, Events);
 
 // Log in
