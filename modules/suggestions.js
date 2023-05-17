@@ -47,13 +47,15 @@ exports.test = (client, Events) => {
 
         let threadChannel = msg.channel;
 
+        const FORUM_CHANNEL_TYPE_ENUM = 15;
+
         // check if thread channel is part of a forum
-        if (threadChannel.parent.type !== ChannelType.GuildForum) return;
+        if (threadChannel.parent.type !== FORUM_CHANNEL_TYPE_ENUM) return;
 
         let tagsToApply = ["Awaiting Response"]; // tags that will be applied when the message is created
         let ignoreMessagesWithTags = ["Approved", "Denied", "Implemented"]; // if thread has any of these tags, ignore this event
 
-        let forumChannel = channel.parent;
+        let forumChannel = threadChannel.parent;
 
         let tagsToApplyById = findTagsInForumByName(forumChannel, tagsToApply);
         let ignoreMessagesWithTagsById = findTagsInForumByName(forumChannel, ignoreMessagesWithTags);
@@ -78,7 +80,7 @@ exports.test = (client, Events) => {
         if (!applyTags.length)
             return;
 
-        updateTags(channel, applyTags);
+        updateTags(threadChannel, applyTags);
     })
 } 
 

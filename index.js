@@ -1,5 +1,4 @@
-const { Client, IntentsBitField, Partials, Events } = require('discord.js');
-// const keepAlive = require("./server.js");
+const { Client, IntentsBitField, Partials, Events, Channel } = require('discord.js');
 const space = require("./space.js");
 const suggestions = require("./modules/suggestions.js");
 require('dotenv').config();
@@ -39,3 +38,8 @@ space.ping(client, Events);
 // Log in
 const BOT_TOKEN = process.env.BOT_TOKEN;
 client.login(BOT_TOKEN);
+
+// Start console message
+client.once(Events.ClientReady, c => {
+	console.log(`Ready! Logged in as ${c.user.tag}`);
+});
