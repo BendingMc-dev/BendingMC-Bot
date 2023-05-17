@@ -30,14 +30,19 @@ function findTagsInForumByName(forum, tags = []){
 function threadChannelHasTags(channel, tags){
 
     console.log("Amount of blocked tags: " + tags.length); //DEBUG
-    tags.forEach( tag =>{
-        console.log("Channel tags: " + channel.appliedTags + " | " + "Current iteration: " + tag.id + " (" + tag.name + ")") //DEBUG
-        // check if the channel has the tag applied to it
-        if (channel.appliedTags.includes(tag.id))
-            console.log("Found blocked tag"); //DEBUG
+    for (let tag in tags){
+        console.log("iterating..."); //DEBUG
         if (channel.appliedTags.includes(tag.id))
             return true;
-    });
+    }
+    // tags.forEach( tag =>{
+    //     console.log("Channel tags: " + channel.appliedTags + " | " + "Current iteration: " + tag.id + " (" + tag.name + ")") //DEBUG
+    //     // check if the channel has the tag applied to it
+    //     if (channel.appliedTags.includes(tag.id))
+    //         console.log("Found blocked tag"); //DEBUG
+    //     if (channel.appliedTags.includes(tag.id))
+    //         return true;
+    // });
 
     console.log("Did not find any blocked tags"); //DEBUG
     return false;
