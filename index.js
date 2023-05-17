@@ -35,12 +35,14 @@ const ERROR_OUTPUT_CHANNEL_ID = "485946253931446287";
 try {
 	suggestions.test(client, Events);
 } catch {
+	console.log("ERROR");
 	client.channels.get(ERROR_OUTPUT_CHANNEL_ID).send('There was an error while handling new suggestion');
 }
 
 try {
 	suggestions.resolveSuggestion(client, Events);
 } catch {
+	console.log("ERROR");
 	client.channels.get(ERROR_OUTPUT_CHANNEL_ID).send('There was an error while resolving suggestion');
 }
 
