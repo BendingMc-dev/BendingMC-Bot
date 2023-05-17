@@ -24,16 +24,12 @@ function findTagsInForumByName(forum, tags = []){
         });
     });
 
-    console.log("Available tags: " + results); //DEBUG
     return results;
 }
 
 function threadChannelHasTags(channel, tags = []){
-    console.log("Number of tags to be ignored: " + tags.length);
     tags.forEach( tag =>{
         // check if the channel has the tag applied to it
-        console.log("Current tag: " + tag) //DEBUG
-        console.log("Applied tags: " + channel.appliedTags) //DEBUG
         if (channel.appliedTags.includes(tag))
             return true;
     });
@@ -69,7 +65,7 @@ exports.test = (client, Events) => {
             return;
 
         // check if thread channel has any tags from ignoreMessagesWithTagsById
-        if (threadChannelHasTags(ignoreMessagesWithTagsById))
+        if (threadChannelHasTags(forumChannel, ignoreMessagesWithTagsById))
             return;
 
         let applyTags = [];
