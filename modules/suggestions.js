@@ -20,21 +20,20 @@ function findTagsInForumByName(forum, tags = []){
         tags.forEach( tag => {
             // check if the name of the tag in the forum matches the name of the given tag
             if (forumTag.name === tag)
-                results.push(forumTag.id);
+                results.push(forumTag);
         });
     });
 
     return results;
 }
 
-function threadChannelHasTags(channel, tags = []){
+function threadChannelHasTags(channel, tags){
 
     console.log("Amount of blocked tags: " + tags.length); //DEBUG
     tags.forEach( tag =>{
-        console.log("Channel tags: " + channel.appliedTags) //DEBUG
-        console.log("Current tag: " + tag) //DEBUG
+        console.log("Channel tags: " + channel.appliedTags + " | " + "Current tag: " + tag.id) //DEBUG
         // check if the channel has the tag applied to it
-        if (channel.appliedTags.includes(tag))
+        if (channel.appliedTags.includes(tag.id))
             return true;
     });
 
@@ -76,8 +75,8 @@ exports.test = (client, Events) => {
 
         tagsToApplyById.forEach( tag =>{
             // check if thread channel has tags from tagsToApplyById
-            if (!threadChannel.appliedTags.includes(tag))
-                applyTags.push(tag);
+            if (!threadChannel.appliedTags.includes(tag.id))
+                applyTags.push(tag.id);
         });
 
         // check if channel will have any tags applied to it
