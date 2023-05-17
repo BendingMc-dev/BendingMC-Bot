@@ -32,13 +32,7 @@ client.on(Events.MessageCreate, msg =>{
 const ERROR_OUTPUT_CHANNEL_ID = "485946253931446287";
 
 // Execute modules here
-try {
-	suggestions.test(client, Events);
-} catch {
-	console.log("ERROR");
-	client.channels.get(ERROR_OUTPUT_CHANNEL_ID).send('There was an error while handling new suggestion');
-}
-
+suggestions.test(client, Events);
 suggestions.resolveSuggestion(client, Events);
 space.ping(client, Events);
 
