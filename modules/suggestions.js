@@ -12,6 +12,76 @@ function updateTags(channel, addTags = [], removeTags = []){
     channel.setAppliedTags(updatedTags);
 }
 
+function findTagsInForumByName(forum, tags = []){
+    let forumAvailableTags = forum.availableTags;
+    let results = [];
+
+    forumAvailableTags.forEach( forumTag =>{
+        tags.forEach( tag => {
+            // check if the name of the tag in the forum matches the name of the given tag
+            if (forumTag.name === tag)
+                results.push(forumTag.id);
+        });
+    });
+
+    return results;
+}
+
+function threadChannelHasTags(channel, tags = []){
+    tags.forEach( tag =>{
+        // check if the channel has the tag applied to it
+        if (channel.appliedTags.includes(tag))
+            return true;
+    });
+
+    return false;
+}
+
+exports.test = (client, Events) => {
+    client.on(Events.MessageCreate, msg =>{
+        // check if message was sent by the bot
+        if (msg.author.id === client.user.id) return;
+
+        // check if message is a thread
+        if (!msg.channel.isThread()) return;
+
+        let threadChannel = msg.channel;
+
+        // check if thread channel is part of a forum
+        if (channel.parent.type !== ChannelType.GuildForum) return;
+
+        let tagsToApply = ["Awaiting Response"]; // tags that will be applied when the message is created
+        let ignoreMessagesWithTags = ["Approved", "Denied", "Implemented"]; // if thread has any of these tags, ignore this event
+
+        let forumChannel = channel.parent;
+
+        let tagsToApplyById = findTagsInForumByName(forumChannel, tagsToApply);
+        let ignoreMessagesWithTagsById = findTagsInForumByName(forumChannel, ignoreMessagesWithTags);
+
+        // check if thread channel needs to apply any tags
+        if (!tagsToApply.length)
+            return;
+
+        // check if thread channel has any tags from ignoreMessagesWithTagsById
+        if (threadChannelHasTags(ignoreMessagesWithTagsById))
+            return;
+
+        let applyTags = [];
+
+        tagsToApplyById.forEach( tag =>{
+            // check if thread channel has tags from tagsToApplyById
+            if (!threadChannel.appliedTags.includes(tag))
+                applyTags.push(tag);
+        });
+
+        // check if channel will have any tags applied to it
+        if (!applyTags.length)
+            return;
+
+        updateTags(channel, applyTags);
+    })
+} 
+
 exports.newSuggestion = (client, Events) => {
     client.on(Events.MessageCreate, msg =>{
         if (msg.author.id === client.user.id) return;
