@@ -24,10 +24,12 @@ function findTagsInForumByName(forum, tags = []){
         });
     });
 
+    console.log("Available tags: " + results); //DEBUG
     return results;
 }
 
 function threadChannelHasTags(channel, tags = []){
+    console.log("Number of tags to be ignored: " + tags.length);
     tags.forEach( tag =>{
         // check if the channel has the tag applied to it
         console.log("Current tag: " + tag) //DEBUG
