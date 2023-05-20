@@ -37,8 +37,7 @@ function threadChannelHasTags(channel, tags){
     return false;
 }
 
-exports.test = (client, Events) => {
-    client.on(Events.MessageCreate, msg =>{
+exports.onNewSuggestion = (msg) => {
         // check if message was sent by the bot
         if (msg.author.id === client.user.id) return;
 
@@ -81,7 +80,6 @@ exports.test = (client, Events) => {
             return;
 
         updateTags(threadChannel, applyTags);
-    })
 } 
 
 exports.newSuggestion = (client, Events) => {

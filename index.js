@@ -1,6 +1,5 @@
 const { Client, IntentsBitField, Partials, Events, Channel } = require('discord.js');
-const space = require("./space.js");
-const suggestions = require("./modules/suggestions.js");
+const suggestions = require("./bot_modules/suggestions.js");
 require('dotenv').config();
 
 const client = new Client({
@@ -29,12 +28,13 @@ client.on(Events.MessageCreate, msg =>{
 	}
 })
 
-const ERROR_OUTPUT_CHANNEL_ID = "485946253931446287";
-
-// Execute modules here
-suggestions.test(client, Events);
+// Execute modules based on events
+//FIXME implement event manager
 suggestions.resolveSuggestion(client, Events);
-space.ping(client, Events);
+
+client.on(Events.MessageCreate, msg =>{
+	suggestions.onNewSuggestion(msg);
+})
 
 // Log in
 const BOT_TOKEN = process.env.BOT_TOKEN;
