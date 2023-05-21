@@ -12,8 +12,9 @@ exports.setReminder = (client, msg) => {
     
     // let prefix = "?reminder"
 
-    // if (msg.content.startsWith("?")){
-    //     msg.reply("test");
-    // }
-    console.log("test");
+    if (msg.content.startsWith("?")){
+        // msg.reply("test");
+        console.log("test");
+    }
+    // console.log("test");
 }
