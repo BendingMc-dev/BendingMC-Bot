@@ -36,8 +36,8 @@ client.on(Events.MessageCreate, msg =>{
 suggestions.resolveSuggestion(client, Events); //FIXME use the function after the event is triggered instead -> "on new message, function()"
 
 client.on(Events.MessageCreate, msg =>{
-	suggestions.onNewSuggestion(msg);
-	reminder.setReminder(msg);
+	suggestions.onNewSuggestion(client, msg);
+	reminder.setReminder(client, msg);
 })
 
 // Log in

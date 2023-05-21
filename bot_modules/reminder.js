@@ -6,7 +6,7 @@ function setTimer(){
 
 }
 
-exports.setReminder = (msg) => {
+exports.setReminder = (client, msg) => {
     // check if message was sent by the bot
     if (msg.author.id === client.user.id) return;
     

@@ -37,7 +37,7 @@ function threadChannelHasTags(channel, tags){
     return false;
 }
 
-exports.onNewSuggestion = (msg) => {
+exports.onNewSuggestion = (client, msg) => {
         // check if message was sent by the bot
         if (msg.author.id === client.user.id) return;
 
