@@ -12,7 +12,7 @@ exports.setReminder = (client, msg) => {
     
     let prefix = "?reminder"
 
-    if (msg.content.startsWith(prefix)){
-        msg.reply("setting reminder");
+    if (msg.content.startsWith("?")){
+        msg.reply("test");
     }
 }
