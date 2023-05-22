@@ -19,7 +19,7 @@ exports.setReminder = (client, msg) => { //FIXME implement event listener (onCom
 
     const tableName = "Reminders";
     const createTableColumns = "Id TEXT, Author TEXT, Message TEXT, Channel TEXT";
-    const tableColumns = "Id TEXT, Author TEXT, Message TEXT, Channel TEXT";
+    const tableColumns = "Id, Author, Message, Channel";
 
     mysql.createTable(tableName, createTableColumns);
     
