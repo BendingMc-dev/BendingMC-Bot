@@ -38,7 +38,7 @@ exports.createTable = (tableName, tableColumns) =>{
     let connection = createConnection();
 
     // create table
-    let query = `CREATE TABLE ${tableName} [IF NOT EXISTS] (${tableColumns});`;
+    let query = `CREATE TABLE ${tableName} IF NOT EXISTS (${tableColumns});`;
 
     dbQuery(connection, query);
 
