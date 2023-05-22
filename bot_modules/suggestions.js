@@ -35,11 +35,9 @@ function addTagsInChannel(channel, tags = []){
         console.log("Tried to apply more tags than is allowed in a thread (tags/max): " + channelTags.length + " / " + CHANNEL_MAX_TAGS) //FIXME throw exception here
         console.log("Only the last " + CHANNEL_MAX_TAGS + " tags will be applied to the thread");
 
-        let lastIndex = channelTags.length - 1;
-        let startPosition = lastIndex - CHANNEL_MAX_TAGS;
+        let startPosition = channelTags.length - CHANNEL_MAX_TAGS;
 
         channelTags = channelTags.slice(startPosition);
-        console.log("Channel Tags: (" + channelTags + ")."); //DEBUG
     }
 
     channel.setAppliedTags(channelTags);
