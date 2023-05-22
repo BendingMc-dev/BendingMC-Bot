@@ -60,12 +60,12 @@ exports.fetch = (id, table) => {
     return results;
 }
 
-exports.insert = (values, table) => {
+exports.insert = (values, table, columns) => {
     let connection = createConnection();
 
     dbConnect(connection);
 
-    let query = `INSERT INTO ${table} VALUES ${values};`;
+    let query = `INSERT INTO ${table} (${columns}) VALUES (${values});`;
 
     dbQuery(connection, query);
 
