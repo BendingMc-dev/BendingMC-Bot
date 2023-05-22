@@ -39,6 +39,7 @@ function addTagsInChannel(channel, tags = []){
         let startPosition = lastIndex - CHANNEL_MAX_TAGS;
 
         channelTags = channelTags.slice(startPosition);
+        console.log("Channel Tags: (" + channelTags + ")."); //DEBUG
     }
 
     channel.setAppliedTags(channelTags);
