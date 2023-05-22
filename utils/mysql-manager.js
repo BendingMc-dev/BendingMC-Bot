@@ -14,7 +14,7 @@ function createConnection() {
 }
 
 function dbQuery(connection, query){
-    query = `USE ${MYSQL_CREDENTIALS.database}; ${query}`;
+    // query = `USE ${MYSQL_CREDENTIALS.database}; ${query}`;
     // console.log("Database: " + MYSQL_CREDENTIALS.database);
     console.log("Query: " + query); //DEBUG
     connection.query(query, (err, results) =>{
