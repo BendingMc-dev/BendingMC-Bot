@@ -1,4 +1,4 @@
-function removeTags(channel, tags = []){
+function removeTagsInChannel(channel, tags = []){
     let channelTags = channel.appliedTags;
 
     for (let tag of tags){
@@ -10,7 +10,7 @@ function removeTags(channel, tags = []){
     channel.setAppliedTags(channelTags);
 }
 
-function addTags(channel, tags = []){
+function addTagsInChannel(channel, tags = []){
     const CHANNEL_MAX_TAGS = 5;
 
     // check if number of tags to be applied is greater than max allowed
@@ -128,7 +128,7 @@ exports.onNewSuggestion = (client, msg) => {
         if (!applyTags.length)
             return;
 
-        addTags(threadChannel, applyTags);
+        addTagsInChannel(threadChannel, applyTags);
 } 
 
 // exports.newSuggestion = (client, Events) => {
@@ -212,7 +212,7 @@ exports.resolveSuggestion = (client, Events) =>{
             removeTags.push(forumTagsByName.get("Awaiting Response"));
             
             // Remove tags
-            removeTags(newChannel, removeTags);
+            removeTagsInChannel(newChannel, removeTags);
 
             // Send message and close post
             newChannel.fetchOwner().then((owner) =>{
