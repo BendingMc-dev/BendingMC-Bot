@@ -14,6 +14,7 @@ function createConnection() {
 }
 
 function dbQuery(connection, query){
+    let query = `USE ${connection.database}; ${query};`;
     connection.query(query, (err, results, fields) =>{
         // throw an error if query produces one
         if (err) console.log("There was an error while fetching query from database: " + err); //FIXME try and catch
