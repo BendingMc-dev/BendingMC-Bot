@@ -27,7 +27,7 @@ exports.setReminder = (client, msg) => { //FIXME implement event listener (onCom
     console.log("Inserting message author into db: " + msg.author.id); //DEBUG
 
     const reminderId = Date.now();
-    let insert = `${reminderId}, ${msg.author.id}, ${msg.content}, ${msg.channel.id}`;
+    let insert = `'${reminderId}', '${msg.author.id}', '${msg.content}', '${msg.channel.id}'`;
 
     mysql.insert(insert, tableName, tableColumns);
 
