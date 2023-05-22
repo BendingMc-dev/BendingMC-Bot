@@ -15,12 +15,12 @@ function addTagsInChannel(channel, tags = []){
 
     // check if number of tags to be applied is greater than max allowed
     if (tags.length > CHANNEL_MAX_TAGS){
-        let maxLength = CHANNEL_MAX_TAGS - 1;
-
-        tags.slice(0, maxLength);
-
         console.log("List of tags to apply is greater than max number of tags allowed in a thread (tags/max): " + tags.length + " / " + CHANNEL_MAX_TAGS); //FIXME throw new exception here
         console.log("Only the first " + CHANNEL_MAX_TAGS + " tags will be applied to the channel");
+
+        let maxLength = CHANNEL_MAX_TAGS - 1;
+
+        tags = tags.slice(0, maxLength);
     }
 
     let channelTags = channel.appliedTags;
@@ -32,14 +32,14 @@ function addTagsInChannel(channel, tags = []){
 
     // check if channel has more than 5 tags
     if (channelTags.length > CHANNEL_MAX_TAGS){
+        console.log("Tried to apply more tags than is allowed in a thread (tags/max): " + channelTags.length + " / " + CHANNEL_MAX_TAGS) //FIXME throw exception here
+        console.log("Only the last " + CHANNEL_MAX_TAGS + " tags will be applied to the thread");
+
         let lastIndex = channelTags.length - 1;
         let startPosition = lastIndex * -1;
         let stopPosition = lastIndex - CHANNEL_MAX_TAGS;
 
-        channelTags.slice(startPosition, stopPosition);
-
-        console.log("Tried to apply more tags than is allowed in a thread (tags/max): " + channelTags.length + " / " + CHANNEL_MAX_TAGS) //FIXME throw exception here
-        console.log("Only the last " + CHANNEL_MAX_TAGS + " tags will be applied to the thread");
+        channelTags = channelTags.slice(startPosition, stopPosition);
     }
 
     channel.setAppliedTags(channelTags);
