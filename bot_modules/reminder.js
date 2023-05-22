@@ -1,6 +1,4 @@
-function checkTimer(){
-
-}
+const mysql = require("./bot_modules/mysql.js");
 
 function setTimer(){
 
@@ -16,6 +14,29 @@ exports.setReminder = (client, msg) => { //FIXME implement event listener (onCom
 
     msg.reply("Setting reminder to 5 seconds.");
 
+    // create reminders table
+    console.log("Creating new table for reminders") //DEBUG
+
+    const tableName = "Reminders";
+    const tableColumns = "Id TEXT, Author TEXT, Message TEXT, Channel TEXT";
+
+    mysql.createTable(tableName, tableColumns);
+    
+    // make new db entry with msg author, channel id, and message
+    console.log("Inserting message author into db: " + msg.author.id); //DEBUG
+
+    const reminderId = Date.now();
+    let insert = `${reminderId}, ${msg.author.id}, ${msg.content}, ${msg.channel.id}`;
+
+    mysql.insert(insert, table);
+
+    console.log("Checking if entry was inserted correctly. Id of reminder: " + reminderId);
+    let entry = mysql.fetch(reminderId, tableName);
+    console.log("Fetched entry: " + entry);
+
+    // set timer
+    // when timer is up, ping author in channel with message content
+
     let duration = 5;
 
     let interval = setInterval(() =>{
@@ -25,5 +46,5 @@ exports.setReminder = (client, msg) => { //FIXME implement event listener (onCom
             msg.reply("This is a reminder!");
             clearInterval(interval);
         }
-    }, 1000)
+    }, 1000);
 }
