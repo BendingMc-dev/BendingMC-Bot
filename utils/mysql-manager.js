@@ -2,19 +2,19 @@ const mysql = require('mysql');
 
 require('dotenv').config();
 
-function createConnection() {
-    const mysqlCred = {
-        host: process.env.MYSQL_HOST,
-        user: process.env.MYSQL_USER,
-        password: process.env.MYSQL_PASSWORD,
-        database: process.env.MYSQL_DATABASE
-    };
+const MYSQL_CREDENTIALS = {
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE
+};
 
-    return mysql.createConnection(mysqlCred);
+function createConnection() {
+    return mysql.createConnection(MYSQL_CREDENTIALS);
 }
 
 function dbQuery(connection, query){
-    query = `USE ${connection.database}; ${query};`;
+    query = `USE ${MYSQL_CREDENTIALS.database}; ${query};`;
     connection.query(query, (err, results, fields) =>{
         // throw an error if query produces one
         if (err) console.log("There was an error while fetching query from database: " + err); //FIXME try and catch
