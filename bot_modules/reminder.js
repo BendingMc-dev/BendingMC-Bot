@@ -10,10 +10,9 @@ exports.setReminder = (client, msg) => {
     // check if message was sent by the bot
     if (msg.author.id === client.user.id) return;
     
-    // let prefix = "?reminder"
+    let prefix = "?reminder"
 
-    if (msg.content.startsWith("?")){
-        msg.reply("Setting reminder!");
-    }
-    // console.log("test");
+    if (!msg.content.startsWith(prefix)) return;
+
+    msg.reply("Setting reminder!");
 }
