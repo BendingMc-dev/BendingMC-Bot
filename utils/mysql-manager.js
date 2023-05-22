@@ -1,4 +1,3 @@
-const { create } = require('domain');
 const mysql = require('mysql');
 
 require('dotenv').config();
