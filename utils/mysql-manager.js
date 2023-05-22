@@ -66,7 +66,5 @@ exports.insert = (values, table) => {
 
     dbQuery(connection, query);
 
-    dbInsert(connection, values);
-
     connection.end();
 }
