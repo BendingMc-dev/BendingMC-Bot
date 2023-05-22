@@ -36,10 +36,9 @@ function addTagsInChannel(channel, tags = []){
         console.log("Only the last " + CHANNEL_MAX_TAGS + " tags will be applied to the thread");
 
         let lastIndex = channelTags.length - 1;
-        let startPosition = lastIndex * -1;
-        let stopPosition = lastIndex - CHANNEL_MAX_TAGS;
+        let startPosition = lastIndex - CHANNEL_MAX_TAGS;
 
-        channelTags = channelTags.slice(startPosition, stopPosition);
+        channelTags = channelTags.slice(startPosition);
     }
 
     channel.setAppliedTags(channelTags);
