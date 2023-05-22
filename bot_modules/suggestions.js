@@ -1,10 +1,59 @@
+function removeTags(channel, tags = []){
+    let channelTags = channel.appliedTags;
+
+    for (let tag of tags){
+        // check if the channel has tag
+        if (channelTags.includes(tag))
+            channelTags.splice(channelTags.indexOf(tag), 1)
+    }
+
+    channel.setAppliedTags(channelTags);
+}
+
+function addTags(channel, tags = []){
+    const CHANNEL_MAX_TAGS = 5;
+
+    // check if number of tags to be applied is greater than max allowed
+    if (tags.length > CHANNEL_MAX_TAGS){
+        let maxLength = CHANNEL_MAX_TAGS - 1;
+
+        tags.slice(0, maxLength);
+
+        console.log("List of tags to apply is greater than max number of tags allowed in a thread (tags/max): " + tags.length + " / " + CHANNEL_MAX_TAGS); //FIXME throw new exception here
+        console.log("Only the first " + CHANNEL_MAX_TAGS + " tags will be applied to the channel");
+    }
+
+    let channelTags = channel.appliedTags;
+
+    for (let tag of tags){
+        if (!channelTags.includes(tag))
+            channelTags.push(tag);
+    }
+
+    // check if channel has more than 5 tags
+    if (channelTags.length > CHANNEL_MAX_TAGS){
+        let lastIndex = channelTags.length - 1;
+        let startPosition = lastIndex * -1;
+        let stopPosition = lastIndex - CHANNEL_MAX_TAGS;
+
+        channelTags.slice(startPosition, stopPosition);
+
+        console.log("Tried to apply more tags than is allowed in a thread (tags/max): " + channelTags.length + " / " + CHANNEL_MAX_TAGS) //FIXME throw exception here
+        console.log("Only the last " + CHANNEL_MAX_TAGS + " tags will be applied to the thread");
+    }
+
+    channel.setAppliedTags(channelTags);
+}
+
 function updateTags(channel, addTags = [], removeTags = []){
     let updatedTags = channel.appliedTags;
+
     addTags.forEach(addTag =>{
         if (!channel.appliedTags.includes(addTag)){
             updatedTags.push(addTag);
         }
     })
+
     removeTags.forEach(removeTag =>{
         updatedTags = updatedTags.filter(i => i !== removeTag);
     })
@@ -79,46 +128,46 @@ exports.onNewSuggestion = (client, msg) => {
         if (!applyTags.length)
             return;
 
-        updateTags(threadChannel, applyTags);
+        addTags(threadChannel, applyTags);
 } 
 
-exports.newSuggestion = (client, Events) => {
-    client.on(Events.MessageCreate, msg =>{
-        if (msg.author.id === client.user.id) return;
-        if (!msg.channel.isThread()) return;
+// exports.newSuggestion = (client, Events) => {
+//     client.on(Events.MessageCreate, msg =>{
+//         if (msg.author.id === client.user.id) return;
+//         if (!msg.channel.isThread()) return;
 
-        let tagsToApply = ["Awaiting Response"];
-        let blockTags = ["Approved", "Denied", "Implemented"];
-        let channel = msg.channel;
-        let threadTags = channel.appliedTags;
-        let forumTags = channel.parent.availableTags;
+//         let tagsToApply = ["Awaiting Response"];
+//         let blockTags = ["Approved", "Denied", "Implemented"];
+//         let channel = msg.channel;
+//         let threadTags = channel.appliedTags;
+//         let forumTags = channel.parent.availableTags;
         
-        // Checks if forum has the tags tagsToApply[]
-        let foundForumTags = [];
-        let foundForumBlockTags = [];
-        forumTags.forEach(forumTag => {
-            tagsToApply.forEach(tagToApply =>{
-                if (forumTag.name === tagToApply) foundForumTags.push(forumTag.id);
-            })
-            blockTags.forEach(blockTag =>{
-                if (forumTag.name === blockTag) foundForumBlockTags.push(forumTag.id);
-            })
-        })
-        if (!foundForumTags.length || !foundForumBlockTags) return;
+//         // Checks if forum has the tags tagsToApply[]
+//         let foundForumTags = [];
+//         let foundForumBlockTags = [];
+//         forumTags.forEach(forumTag => {
+//             tagsToApply.forEach(tagToApply =>{
+//                 if (forumTag.name === tagToApply) foundForumTags.push(forumTag.id);
+//             })
+//             blockTags.forEach(blockTag =>{
+//                 if (forumTag.name === blockTag) foundForumBlockTags.push(forumTag.id);
+//             })
+//         })
+//         if (!foundForumTags.length || !foundForumBlockTags) return;
         
-        // Checks if thread has the tags in foundForumTags[] AND if thread doesn't have tags in blockTags[]
-        let applyTags = [];
-        foundForumTags.forEach(foundForumTag =>{
-            foundForumBlockTags.forEach(foundForumBlockTag =>{
-                if (!threadTags.includes(foundForumTag) && !threadTags.includes(foundForumBlockTag)){
-                    applyTags.push(foundForumTag);
-                }
-            })
-        })
+//         // Checks if thread has the tags in foundForumTags[] AND if thread doesn't have tags in blockTags[]
+//         let applyTags = [];
+//         foundForumTags.forEach(foundForumTag =>{
+//             foundForumBlockTags.forEach(foundForumBlockTag =>{
+//                 if (!threadTags.includes(foundForumTag) && !threadTags.includes(foundForumBlockTag)){
+//                     applyTags.push(foundForumTag);
+//                 }
+//             })
+//         })
         
-        updateTags(channel, applyTags);
-    })
-}
+//         updateTags(channel, applyTags);
+//     })
+// }
 
 exports.resolveSuggestion = (client, Events) =>{
     client.on(Events.ThreadUpdate, (oldChannel, newChannel) =>{
@@ -163,7 +212,7 @@ exports.resolveSuggestion = (client, Events) =>{
             removeTags.push(forumTagsByName.get("Awaiting Response"));
             
             // Remove tags
-            updateTags(newChannel, [], removeTags);
+            removeTags(newChannel, removeTags);
 
             // Send message and close post
             newChannel.fetchOwner().then((owner) =>{
