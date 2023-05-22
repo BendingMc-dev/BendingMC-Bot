@@ -14,10 +14,12 @@ function createConnection() {
 }
 
 function dbQuery(connection, query){
-    query = `USE ${MYSQL_CREDENTIALS.database}; ${query};`;
+    query = `USE '${MYSQL_CREDENTIALS.database}'; ${query};`;
+    console.log("Database: " + MYSQL_CREDENTIALS.database);
+    console.log("Query: " + query);
     connection.query(query, (err, results, fields) =>{
         // throw an error if query produces one
-        if (err) console.log("There was an error while fetching query from database: " + err); //FIXME try and catch
+        if (err) console.log("There was an error while executing query from database: " + err); //FIXME try and catch
         
         console.log("Query results: " + results);
         return results;
@@ -38,7 +40,7 @@ exports.createTable = (tableName, tableColumns) =>{
     let connection = createConnection();
 
     // create table
-    let query = `CREATE TABLE IF NOT EXISTS ${tableName} (${tableColumns});`;
+    let query = `CREATE TABLE IF NOT EXISTS '${tableName}' (${tableColumns});`;
 
     dbQuery(connection, query);
 
@@ -50,7 +52,7 @@ exports.fetch = (id, table) => {
     
     dbConnect(connection);
 
-    let query = `SELECT * FROM ${table} WHERE Id='${id}';`;
+    let query = `SELECT * FROM '${table}' WHERE Id='${id}';`;
     let results = dbQuery(connection, query);
 
     connection.end();
@@ -63,7 +65,7 @@ exports.insert = (values, table) => {
 
     dbConnect(connection);
 
-    let query = `INSERT INTO ${table} VALUES ${values};`;
+    let query = `INSERT INTO '${table}' VALUES ${values};`;
 
     dbQuery(connection, query);
 
