@@ -18,9 +18,10 @@ exports.setReminder = (client, msg) => { //FIXME implement event listener (onCom
     console.log("Creating new table for reminders") //DEBUG
 
     const tableName = "Reminders";
+    const createTableColumns = "Id TEXT, Author TEXT, Message TEXT, Channel TEXT";
     const tableColumns = "Id TEXT, Author TEXT, Message TEXT, Channel TEXT";
 
-    mysql.createTable(tableName, tableColumns);
+    mysql.createTable(tableName, createTableColumns);
     
     // make new db entry with msg author, channel id, and message
     console.log("Inserting message author into db: " + msg.author.id); //DEBUG
@@ -31,7 +32,7 @@ exports.setReminder = (client, msg) => { //FIXME implement event listener (onCom
     mysql.insert(insert, tableName);
 
     console.log("Checking if entry was inserted correctly. Id of reminder: " + reminderId);
-    let entry = mysql.fetch(reminderId, tableName);
+    let entry = mysql.fetch(reminderId, tableName, tableColumns);
     console.log("Fetched entry: " + entry);
 
     // set timer
