@@ -1,4 +1,4 @@
-const mysql = require("./utils/mysql.js");
+const mysql = require("./utils/mysql-manager.js");
 
 function setTimer(){
 
