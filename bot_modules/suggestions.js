@@ -43,36 +43,36 @@ function addTagsInChannel(channel, tags = []){
     channel.setAppliedTags(channelTags);
 }
 
-function updateTags(channel, addTags = [], removeTags = []){
-    let updatedTags = channel.appliedTags;
+// function updateTags(channel, addTags = [], removeTags = []){
+//     let updatedTags = channel.appliedTags;
 
-    addTags.forEach(addTag =>{
-        if (!channel.appliedTags.includes(addTag)){
-            updatedTags.push(addTag);
-        }
-    })
+//     addTags.forEach(addTag =>{
+//         if (!channel.appliedTags.includes(addTag)){
+//             updatedTags.push(addTag);
+//         }
+//     })
 
-    removeTags.forEach(removeTag =>{
-        updatedTags = updatedTags.filter(i => i !== removeTag);
-    })
+//     removeTags.forEach(removeTag =>{
+//         updatedTags = updatedTags.filter(i => i !== removeTag);
+//     })
 
-    channel.setAppliedTags(updatedTags);
-}
+//     channel.setAppliedTags(updatedTags);
+// }
 
-function findTagsInForumByName(forum, tags = []){
-    let forumAvailableTags = forum.availableTags;
-    let results = [];
+// function findTagsInForumByName(forum, tags = []){
+//     let forumAvailableTags = forum.availableTags;
+//     let results = [];
 
-    forumAvailableTags.forEach( forumTag =>{
-        tags.forEach( tag => {
-            // check if the name of the tag in the forum matches the name of the given tag
-            if (forumTag.name === tag)
-                results.push(forumTag);
-        });
-    });
+//     forumAvailableTags.forEach( forumTag =>{
+//         tags.forEach( tag => {
+//             // check if the name of the tag in the forum matches the name of the given tag
+//             if (forumTag.name === tag)
+//                 results.push(forumTag);
+//         });
+//     });
 
-    return results;
-}
+//     return results;
+// }
 
 function threadChannelHasTags(channel, tags){
     for (let tag of tags){
