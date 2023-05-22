@@ -15,13 +15,13 @@ function createConnection() {
 
 function dbQuery(connection, query){
     query = `USE ${MYSQL_CREDENTIALS.database}; ${query}`;
-    console.log("Database: " + MYSQL_CREDENTIALS.database);
-    console.log("Query: " + query);
+    // console.log("Database: " + MYSQL_CREDENTIALS.database);
+    console.log("Query: " + query); //DEBUG
     connection.query(query, (err, results) =>{
         // throw an error if query produces one
         if (err) console.log("There was an error while executing query from database: " + err); //FIXME try and catch
         
-        console.log("Query results: " + results);
+        console.log("Query results: " + results); //DEBUG
         return results;
     });
 }
@@ -30,8 +30,6 @@ function dbConnect(connection){
     connection.connect((err) => {
         // throw an error if connection produces one
         if (err) console.log("There was an error while connecting to the database: " + err); //FIXME try and catch
-
-        console.log("Connected to database");
     });
 }
 
