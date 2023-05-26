@@ -29,7 +29,6 @@ exports.newTodo = (client, Events) => {
         let tableColumns = "";
 
         database.columns.forEach((value, key, map) => {
-            console.log("Table columns: " + key + " " + value); //DEBUG
             if (tableColumns) {
                 tableColumns += `, ${key} ${value}`;
             } else {
@@ -37,7 +36,6 @@ exports.newTodo = (client, Events) => {
             }
         })
 
-        console.log("Table columns in query would be: " + tableColumns); //DEBUG
         mysql.createTable(database.table, tableColumns);
 
         // fetch todo of channel from database
@@ -47,6 +45,14 @@ exports.newTodo = (client, Events) => {
         if (!channelTodo) {
             // create todo
             console.log("Channel does not have todo, creating new entry in database"); //DEBUG
+
+            let columnNames = "";
+            for (let columnName of database.keys()) {
+                columnNames += columnName;
+            }
+            console.log("Columns of database: " + columnNames) //DEBUG
+
+            // mysql.insert()
         }
 
         let content = msg.content.split(prefix)[1];
