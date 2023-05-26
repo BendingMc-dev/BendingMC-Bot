@@ -41,6 +41,8 @@ exports.newTodo = (client, Events) => {
         mysql.createTable(database.table, tableColumns);
 
         // fetch data from database
+        let results = mysql.fetch("channel id", database.table);
+        console.log(results); //DEBUG
 
         let channelTodo;
 
@@ -49,8 +51,8 @@ exports.newTodo = (client, Events) => {
             console.log("Creating todo entry for channel"); //DEBUG
         }
 
-        let content = msg.content.split(prefix + " ")[1];
-        console.log("Message is: " + content); //DEBUG
+        let content = msg.content.split(prefix)[1];
+        console.log("Message is: (" + content + ")"); //DEBUG
 
         // check if message content exists after removing prefix
         if (!content) {
