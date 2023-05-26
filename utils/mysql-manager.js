@@ -60,7 +60,7 @@ exports.fetch = (id, table) => {
     return results;
 }
 
-exports.insert = (values, table, columns, call = "none") => {
+exports.insert = (values, table, columns, call = "Inserting to db") => {
     let connection = createConnection();
 
     dbConnect(connection);
