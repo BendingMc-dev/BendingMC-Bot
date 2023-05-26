@@ -37,6 +37,12 @@ function dbConnect(connection){
     });
 }
 
+function test() {
+    return new Promise( (resolve, reject) => {
+        resolve("resolved");
+    })
+}
+
 exports.createTable = (tableName, tableColumns) =>{
     // create connection
     let connection = createConnection();
@@ -57,7 +63,7 @@ exports.fetch = async (id, table) => {
     let query = `SELECT * FROM ${table} WHERE Id="${id}";`;
     let results = await dbQuery(connection, query);
     let test = await test(); //DEBUG
-    console.log("Testing" + test); //DEBUG
+    // console.log("Testing" + test); //DEBUG
     test().then((value) =>{
         console.log("Logging test: " + value);
     })
@@ -81,10 +87,4 @@ exports.insert = (values, table, columns) => {
     dbQuery(connection, query);
 
     connection.end();
-}
-
-function test() {
-    return new Promise( (resolve, reject) => {
-        resolve("resolved");
-    })
 }
