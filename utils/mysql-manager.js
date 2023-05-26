@@ -61,10 +61,12 @@ exports.fetch = async (id, table) => {
     dbConnect(connection);
 
     let query = `SELECT * FROM ${table} WHERE Id="${id}";`;
-    dbQuery(connection, query).then((result) => {
-        console.log("Length of data: " + result.length);
-    })
-    let results = await dbQuery(connection, query);
+    return dbQuery(connection, query).then((results) => {
+        // console.log("Length of data: " + result.length);
+        connection.end();
+        return results;
+    });
+    // let results = await dbQuery(connection, query);
     // // let test = await test(); //DEBUG
     // // console.log("Testing" + test); //DEBUG
     // test().then((value) =>{
@@ -75,9 +77,8 @@ exports.fetch = async (id, table) => {
     // console.log("Fetch results.length: " + results.length); //DEBUG
     // console.log("Fetch results[0]: " + results[0]); //DEBUG
 
-    connection.end();
 
-    return results;
+    // return results;
 }
 
 exports.insert = (values, table, columns) => {
