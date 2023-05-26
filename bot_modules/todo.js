@@ -57,7 +57,7 @@ exports.newTodo = (client, Events) => {
         console.log("Channel Todo: " + channelTodo);
 
         // check if channel has a todo list
-        if (!channelTodo) {
+        if (!channelTodo.length) {
             // create todo
             console.log("Channel does not have todo, creating new entry in database"); //DEBUG
 
