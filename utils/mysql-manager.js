@@ -16,17 +16,15 @@ function createConnection() {
 function dbQuery(connection, query){
     // query = `USE ${MYSQL_CREDENTIALS.database}; ${query}`;
     // console.log("Database: " + MYSQL_CREDENTIALS.database);
-    let results;
-
-    connection.query(query, (err, result) =>{
-        // throw an error if query produces one
-        if (err) console.log(" There was an error while executing query from database: " + err); //FIXME try and catch
+    return new Promise( data => {
+        connection.query(query, (err, result) =>{
+            // throw an error if query produces one
+            if (err) console.log(" There was an error while executing query from database: " + err); //FIXME try and catch
         
-        results = result;
-        console.log("Inside query, results: " + result); //DEBUG
-    });
-
-    return results;
+            console.log("Inside query, results: " + result); //DEBUG
+            data(result);
+        });
+    })
 }
 
 function dbConnect(connection){
@@ -48,13 +46,13 @@ exports.createTable = (tableName, tableColumns) =>{
     connection.end();
 }
 
-exports.fetch = (id, table) => {
+exports.fetch = async (id, table) => {
     let connection = createConnection();
     
     dbConnect(connection);
 
     let query = `SELECT * FROM ${table} WHERE Id="${id}";`;
-    let results = dbQuery(connection, query);
+    let results = await dbQuery(connection, query);
 
     console.log("Fetch results: " + results); //DEBUG
     console.log("Fetch results.length: " + results.length); //DEBUG
