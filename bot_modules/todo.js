@@ -13,6 +13,20 @@ const database = { //FIXME create a new class in another file to handle database
         ["Id","TEXT"],
         ["Todo","TEXT"],
     ]),
+
+    getColumnNames: function (){
+        this.columns.forEach((value, key, map) => {
+            let tableColumns = "";
+
+            if (!tableColumns) {
+                tableColumns += `${key}`;
+            } else {
+                tableColumns += `, ${key}`;
+            }
+
+            return tableColumns;
+        })
+    }
 }
 
 exports.newTodo = (client, Events) => {
@@ -40,17 +54,16 @@ exports.newTodo = (client, Events) => {
 
         // fetch todo of channel from database
         let channelTodo = mysql.fetch(channelId, database.table);
+        console.log("Channel Todo: " + channelTodo[0].Todo);
 
         // check if channel has a todo list
         if (!channelTodo) {
             // create todo
             console.log("Channel does not have todo, creating new entry in database"); //DEBUG
 
-            let columnNames = "";
-            for (let columnName of database.keys()) {
-                columnNames += columnName;
-            }
-            console.log("Columns of database: " + columnNames) //DEBUG
+            mysql.insert(`${channelId}, ""`, database.table, database.getColumnNames());
+
+            // console.log("Columns of database: " + columnNames) //DEBUG
 
             // mysql.insert()
         }
