@@ -40,15 +40,13 @@ exports.newTodo = (client, Events) => {
         console.log("Table columns in query would be: " + tableColumns); //DEBUG
         mysql.createTable(database.table, tableColumns);
 
-        // fetch data from database
-        let results = mysql.fetch("channel id", database.table);
-        console.log("Fetch results: " + results); //DEBUG
+        // fetch todo of channel from database
+        let channelTodo = mysql.fetch(channelId, database.table);
 
-        let channelTodo;
-
+        // check if channel has a todo list
         if (!channelTodo) {
             // create todo
-            console.log("Creating todo entry for channel"); //DEBUG
+            console.log("Channel does not have todo, creating new entry in database"); //DEBUG
         }
 
         let content = msg.content.split(prefix)[1];
@@ -57,10 +55,10 @@ exports.newTodo = (client, Events) => {
         // check if message content exists after removing prefix
         if (!content) {
             // display todo of channel
-            console.log("Displaying todo of channel") //DEBUG
+            console.log("Todo command has no content. Displaying todo of channel") //DEBUG
         } else {
             // add todo to channel
-            console.log("Adding new todo item to channel") //DEBUG
+            console.log("Todo command has content. Adding new todo item to channel") //DEBUG
         }
 
         //FIXME add a way to remove todo item (at the start of each todo item, add a number as an id)
