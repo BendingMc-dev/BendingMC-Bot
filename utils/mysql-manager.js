@@ -16,14 +16,16 @@ function createConnection() {
 function dbQuery(connection, query){
     // query = `USE ${MYSQL_CREDENTIALS.database}; ${query}`;
     // console.log("Database: " + MYSQL_CREDENTIALS.database);
-    // let result;
+    let results;
 
-    return connection.query(query, (err, results) =>{
+    connection.query(query, (err, result) =>{
         // throw an error if query produces one
         if (err) console.log(" There was an error while executing query from database: " + err); //FIXME try and catch
         
-        return results;
+        results = result;
     });
+
+    return results;
 }
 
 function dbConnect(connection){
