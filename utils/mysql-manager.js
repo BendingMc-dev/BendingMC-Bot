@@ -23,12 +23,7 @@ function dbQuery(connection, query){
         if (err) console.log("There was an error while executing query from database: " + err); //FIXME try and catch
         
         return results;
-        // console.log("Inside query, results: " + results);
-        // result = results;
     });
-    // console.log("Logging t: " + t); //DEBUG
-
-    // return result;
 }
 
 function dbConnect(connection){
