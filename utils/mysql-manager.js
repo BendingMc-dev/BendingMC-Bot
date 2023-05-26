@@ -23,6 +23,7 @@ function dbQuery(connection, query){
         if (err) console.log(" There was an error while executing query from database: " + err); //FIXME try and catch
         
         results = result;
+        console.log("Inside query, results: " + result); //DEBUG
     });
 
     return results;
