@@ -5,7 +5,7 @@
 */
 const mysql = require("../utils/mysql-manager.js");
 
-const prefix = "?todo "; // added whitespace -> '?todo '
+const prefix = "?todo";
 
 const database = { //FIXME create a new class in another file to handle database info of modules. New class constructor takes in table name and map of columns. Include function to output columns in query format
     table: "ChannelTodo",
@@ -38,6 +38,7 @@ exports.newTodo = (client, Events) => {
         })
 
         console.log("Table columns in query would be: " + tableColumns); //DEBUG
+        mysql.createTable(database.table, tableColumns);
 
         // fetch data from database
 
@@ -48,8 +49,7 @@ exports.newTodo = (client, Events) => {
             console.log("Creating todo entry for channel"); //DEBUG
         }
 
-
-        let content = msg.content.split(prefix)[1];
+        let content = msg.content.split(prefix + " ")[1];
         console.log("Message is: " + content); //DEBUG
 
         // check if message content exists after removing prefix
