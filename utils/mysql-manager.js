@@ -17,7 +17,7 @@ function dbQuery(connection, query){
     // query = `USE ${MYSQL_CREDENTIALS.database}; ${query}`;
     // console.log("Database: " + MYSQL_CREDENTIALS.database);
     // return new Promise( (resolve, reject) => {
-        return connection.query(query, (err, result) =>{
+        connection.query(query, (err, result) =>{
             // throw an error if query produces one
             if (err) console.log(" There was an error while executing query from database: " + err); //FIXME try and catch
             // if (err)
