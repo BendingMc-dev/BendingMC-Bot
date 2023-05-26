@@ -18,7 +18,7 @@ function dbQuery(connection, query){
     // console.log("Database: " + MYSQL_CREDENTIALS.database);
     // let result;
 
-    connection.query(query, (err, results) =>{
+    return connection.query(query, (err, results) =>{
         // throw an error if query produces one
         if (err) console.log(" There was an error while executing query from database: " + err); //FIXME try and catch
         
@@ -53,7 +53,8 @@ exports.fetch = (id, table) => {
     let query = `SELECT * FROM ${table} WHERE Id="${id}";`;
     let results = dbQuery(connection, query);
 
-    console.log("Fetch results: " + results); //DEBUG
+    console.log("Fetch results: " + results.length); //DEBUG
+    console.log("Fetch results[0]: " + results[0]); //DEBUG
 
     connection.end();
 
