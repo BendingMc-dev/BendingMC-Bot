@@ -66,6 +66,8 @@ exports.newTodo = (client, Events) => {
             // console.log("Columns of database: " + columnNames) //DEBUG
 
             // mysql.insert()
+        } else {
+            console.log("Channel already has entry. Skipping"); //DEBUG
         }
 
         let content = msg.content.split(prefix)[1];
