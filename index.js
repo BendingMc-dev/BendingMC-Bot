@@ -35,7 +35,7 @@ client.on(Events.MessageCreate, msg =>{
 // Execute modules based on events
 //FIXME implement event manager
 suggestions.resolveSuggestion(client, Events); //FIXME use the function after the event is triggered instead -> "on new message, function()"
-todo.newTodo(client, Events);
+// todo.newTodo(client, Events);
 
 client.on(Events.MessageCreate, msg =>{
 	suggestions.onNewSuggestion(client, msg);
