@@ -13,14 +13,14 @@ function createConnection() {
     return mysql.createConnection(MYSQL_CREDENTIALS);
 }
 
-function dbQuery(connection, query, call = "none"){
+function dbQuery(connection, query){
     // query = `USE ${MYSQL_CREDENTIALS.database}; ${query}`;
     // console.log("Database: " + MYSQL_CREDENTIALS.database);
     // let result;
 
     connection.query(query, (err, results) =>{
         // throw an error if query produces one
-        if (err) console.log(call + " There was an error while executing query from database: " + err); //FIXME try and catch
+        if (err) console.log(" There was an error while executing query from database: " + err); //FIXME try and catch
         
         return results;
     });
@@ -60,15 +60,14 @@ exports.fetch = (id, table) => {
     return results;
 }
 
-exports.insert = (values, table, columns, call = "Inserting to db") => {
+exports.insert = (values, table, columns) => {
     let connection = createConnection();
 
     dbConnect(connection);
 
     let query = `INSERT INTO ${table} (${columns}) VALUES (${values});`;
-    console.log("Insert query: " + query);
 
-    dbQuery(connection, query, call);
+    dbQuery(connection, query);
 
     connection.end();
 }
