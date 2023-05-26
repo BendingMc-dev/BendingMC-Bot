@@ -64,8 +64,10 @@ exports.fetch = (id, table) => {
     let query = `SELECT * FROM ${table} WHERE Id="${id}";`;
 
     return new Promise( (resolve, reject) => {
-        connection.end();
-        resolve(dbQuery(connection, query));
+        dbQuery(connection, query).then( (results) =>{
+            resolve(results);
+            connection.end();
+        })
     });
 
     // return dbQuery(connection, query).then((results) => {
