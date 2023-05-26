@@ -65,7 +65,7 @@ exports.fetch = async (id, table) => {
 
     return new Promise( (resolve, reject) => {
         connection.end();
-        resolve(returndbQuery(connection, query));
+        resolve(dbQuery(connection, query));
     });
 
     // return dbQuery(connection, query).then((results) => {
