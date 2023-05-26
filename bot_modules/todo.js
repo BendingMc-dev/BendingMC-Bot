@@ -15,17 +15,17 @@ const database = { //FIXME create a new class in another file to handle database
     ]),
 
     getColumnNames: function (){
+        let tableColumns = "";
+        
         this.columns.forEach((value, key, map) => {
-            let tableColumns = "";
-
             if (!tableColumns) {
                 tableColumns += `${key}`;
             } else {
                 tableColumns += `, ${key}`;
             }
+        });
 
-            return tableColumns;
-        })
+        return tableColumns;
     }
 }
 
