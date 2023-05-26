@@ -18,7 +18,7 @@ function dbQuery(connection, query){
     // console.log("Database: " + MYSQL_CREDENTIALS.database);
     // let result;
 
-    return connection.query(query, (err, results) =>{
+    connection.query(query, (err, results) =>{
         // throw an error if query produces one
         if (err) console.log("There was an error while executing query from database: " + err); //FIXME try and catch
         

@@ -54,7 +54,7 @@ exports.newTodo = (client, Events) => {
 
         // fetch todo of channel from database
         let channelTodo = mysql.fetch(channelId, database.table);
-        console.log("Channel Todo: " + channelTodo[0]);
+        console.log("Channel Todo: " + channelTodo[0].Todo);
 
         // check if channel has a todo list
         if (!channelTodo) {
