@@ -61,16 +61,19 @@ exports.fetch = async (id, table) => {
     dbConnect(connection);
 
     let query = `SELECT * FROM ${table} WHERE Id="${id}";`;
-    let results = await dbQuery(connection, query);
-    // let test = await test(); //DEBUG
-    // console.log("Testing" + test); //DEBUG
-    test().then((value) =>{
-        console.log("Logging test: " + value);
+    dbQuery(connection, query).then((result) => {
+        console.log("Length of data: " + result.length);
     })
+    let results = await dbQuery(connection, query);
+    // // let test = await test(); //DEBUG
+    // // console.log("Testing" + test); //DEBUG
+    // test().then((value) =>{
+    //     console.log("Logging test: " + value);
+    // })
 
-    console.log("Fetch results: " + results); //DEBUG
-    console.log("Fetch results.length: " + results.length); //DEBUG
-    console.log("Fetch results[0]: " + results[0]); //DEBUG
+    // console.log("Fetch results: " + results); //DEBUG
+    // console.log("Fetch results.length: " + results.length); //DEBUG
+    // console.log("Fetch results[0]: " + results[0]); //DEBUG
 
     connection.end();
 
