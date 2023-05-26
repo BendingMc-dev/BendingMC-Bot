@@ -66,6 +66,7 @@ exports.insert = (values, table, columns, call = "Inserting to db") => {
     dbConnect(connection);
 
     let query = `INSERT INTO ${table} (${columns}) VALUES (${values});`;
+    console.log("Insert query: " + query);
 
     dbQuery(connection, query, call);
 
