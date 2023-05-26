@@ -21,7 +21,7 @@ function dbQuery(connection, query){
             // throw an error if query produces one
             if (err) console.log(" There was an error while executing query from database: " + err); //FIXME try and catch
         
-            // console.log("Inside query, results: " + result); //DEBUG
+            console.log("Inside query, results: " + result); //DEBUG
             data(result);
         });
     })
@@ -51,7 +51,7 @@ exports.fetch = async (id, table) => {
     
     dbConnect(connection);
 
-    let query = `SELECT * FROM ${table} WHERE Id="${id}";`;
+    let query = `SELECT * FROM ${table} WHERE Id="${id} LIMIT 1";`;
     let results = await dbQuery(connection, query);
 
     console.log("Fetch results: " + results); //DEBUG
