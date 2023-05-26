@@ -42,7 +42,7 @@ exports.newTodo = (client, Events) => {
 
         // fetch data from database
         let results = mysql.fetch("channel id", database.table);
-        console.log(results); //DEBUG
+        console.log("Fetch results: " + results); //DEBUG
 
         let channelTodo;
 
