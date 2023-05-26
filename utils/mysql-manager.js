@@ -62,7 +62,7 @@ exports.fetch = async (id, table) => {
 
     let query = `SELECT * FROM ${table} WHERE Id="${id}";`;
     let results = await dbQuery(connection, query);
-    let test = await test(); //DEBUG
+    // let test = await test(); //DEBUG
     // console.log("Testing" + test); //DEBUG
     test().then((value) =>{
         console.log("Logging test: " + value);
