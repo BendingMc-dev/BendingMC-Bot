@@ -5,16 +5,17 @@
 */
 const mysql = require("../utils/mysql-manager.js");
 
-const prefix = "?todo";
+const prefix = "?todo "; // added whitespace -> '?todo '
 
-const database = {
-    table: "",
+const database = { //FIXME create a new class in another file to handle database info of modules. New class constructor takes in table name and map of columns. Include function to output columns in query format
+    table: "ChannelTodo",
     columns: new Map([
-        ["key","value"],
+        ["Id","TEXT"],
+        ["Todo","TEXT"],
     ]),
 }
 
-exports.onTodoMessage = (client, Events) => {
+exports.newTodo = (client, Events) => {
     client.on(Events.MessageCreate, msg =>{
         // check if message was sent by the bot
         if (msg.author.id === client.user.id) return;
@@ -24,12 +25,27 @@ exports.onTodoMessage = (client, Events) => {
 
         let channelId = msg.channel.id;
 
+        // create table in database
+        let tableColumns = "";
+
+        database.columns.forEach((value, key, map) => {
+            console.log("Table columns: " + key + " " + value); //DEBUG
+            if (tableColumns) {
+                tableColumns += `, ${key} ${value}`;
+            } else {
+                tableColumns += `${key} ${value}`;
+            }
+        })
+
+        console.log("Table columns in query would be: " + tableColumns); //DEBUG
+
         // fetch data from database
 
         let channelTodo;
 
         if (!channelTodo) {
             // create todo
+            console.log("Creating todo entry for channel"); //DEBUG
         }
 
 
@@ -44,5 +60,8 @@ exports.onTodoMessage = (client, Events) => {
             // add todo to channel
             console.log("Adding new todo item to channel") //DEBUG
         }
+
+        //FIXME add a way to remove todo item (at the start of each todo item, add a number as an id)
+        //FIXME create embed manager
     })
 }

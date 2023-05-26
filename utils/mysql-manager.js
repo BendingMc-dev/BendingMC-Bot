@@ -55,7 +55,7 @@ exports.fetch = (id, table) => {
     let query = `SELECT * FROM ${table} WHERE Id='${id}';`;
     let results = dbQuery(connection, query);
 
-    console.log("Fetch results: " + results);
+    // console.log("Fetch results: " + results); //DEBUG
 
     connection.end();
 
