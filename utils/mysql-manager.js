@@ -16,18 +16,19 @@ function createConnection() {
 function dbQuery(connection, query){
     // query = `USE ${MYSQL_CREDENTIALS.database}; ${query}`;
     // console.log("Database: " + MYSQL_CREDENTIALS.database);
-    return new Promise( (resolve, reject) => {
-        connection.query(query, (err, result) =>{
+    // return new Promise( (resolve, reject) => {
+        return connection.query(query, (err, result) =>{
             // throw an error if query produces one
-            // if (err) console.log(" There was an error while executing query from database: " + err); //FIXME try and catch
-            if (err)
+            if (err) console.log(" There was an error while executing query from database: " + err); //FIXME try and catch
+            // if (err)
                 // console.log()
-                reject(err);
+                // reject(err);
+            return result;
         
             // console.log("Inside query, results: " + result); //DEBUG
-            resolve(result);
+            // resolve(result);
         });
-    })
+    // })
 }
 
 function dbConnect(connection){
@@ -61,11 +62,17 @@ exports.fetch = async (id, table) => {
     dbConnect(connection);
 
     let query = `SELECT * FROM ${table} WHERE Id="${id}";`;
-    return dbQuery(connection, query).then((results) => {
-        // console.log("Length of data: " + result.length);
+
+    return new Promise( (resolve, reject) => {
         connection.end();
-        return results;
+        resolve(returndbQuery(connection, query));
     });
+
+    // return dbQuery(connection, query).then((results) => {
+    //     // console.log("Length of data: " + result.length);
+    //     connection.end();
+    //     return results;
+    // });
     // let results = await dbQuery(connection, query);
     // // let test = await test(); //DEBUG
     // // console.log("Testing" + test); //DEBUG
