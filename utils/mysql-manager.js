@@ -16,13 +16,16 @@ function createConnection() {
 function dbQuery(connection, query){
     // query = `USE ${MYSQL_CREDENTIALS.database}; ${query}`;
     // console.log("Database: " + MYSQL_CREDENTIALS.database);
-    return new Promise( data => { //FIXME change 'data' -> '(resolve, reject)'
+    return new Promise( (resolve, reject) => {
         connection.query(query, (err, result) =>{
             // throw an error if query produces one
-            if (err) console.log(" There was an error while executing query from database: " + err); //FIXME try and catch
+            // if (err) console.log(" There was an error while executing query from database: " + err); //FIXME try and catch
+            if (err)
+                // console.log()
+                reject(err);
         
-            console.log("Inside query, results: " + result); //DEBUG
-            data(result);
+            // console.log("Inside query, results: " + result); //DEBUG
+            resolve(result);
         });
     })
 }
@@ -51,8 +54,13 @@ exports.fetch = async (id, table) => {
     
     dbConnect(connection);
 
-    let query = `SELECT * FROM ${table} WHERE Id="${id} LIMIT 1";`;
+    let query = `SELECT * FROM ${table} WHERE Id="${id}";`;
     let results = await dbQuery(connection, query);
+    let test = await test(); //DEBUG
+    console.log("Testing" + test); //DEBUG
+    test().then((value) =>{
+        console.log("Logging test: " + value);
+    })
 
     console.log("Fetch results: " + results); //DEBUG
     console.log("Fetch results.length: " + results.length); //DEBUG
@@ -73,4 +81,10 @@ exports.insert = (values, table, columns) => {
     dbQuery(connection, query);
 
     connection.end();
+}
+
+function test() {
+    return new Promise( (resolve, reject) => {
+        resolve("resolved");
+    })
 }
