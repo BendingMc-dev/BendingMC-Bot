@@ -1,6 +1,6 @@
 const { Client, IntentsBitField, Partials, Events, Channel } = require('discord.js');
 
-console.log(Client); //DEBUG
+console.log("class: " + IntentsBitField); //DEBUG
 
 const suggestions = require("./bot_modules/suggestions.js");
 // const reminder = require("./bot_modules/reminder.js");
