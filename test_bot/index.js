@@ -1,6 +1,7 @@
 // const { Client, IntentsBitField, Partials, Events, Channel } = require('discord.js');
-const { Client, GatewayIntentBits, Partials, Events, Channel } = require('discord.js');
+const { Client, GatewayIntentBits, Partials, Events } = require('discord.js');
 
+console.log("client: " + Client); //DEBUG
 console.log("class: " + GatewayIntentBits); //DEBUG
 
 const suggestions = require("./bot_modules/suggestions.js");
