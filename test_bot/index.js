@@ -2,7 +2,7 @@
 const { Client, GatewayIntentBits, Partials, Events } = require('discord.js');
 
 console.log("client: " + Client); //DEBUG
-console.log("class: " + GatewayIntentBits); //DEBUG
+console.log("intent: " + GatewayIntentBits); //DEBUG
 
 const suggestions = require("./bot_modules/suggestions.js");
 // const reminder = require("./bot_modules/reminder.js");
