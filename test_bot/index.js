@@ -1,6 +1,7 @@
-const { Client, IntentsBitField, Partials, Events, Channel } = require('discord.js');
+// const { Client, IntentsBitField, Partials, Events, Channel } = require('discord.js');
+const { Client, GatewayIntentBits, Partials, Events, Channel } = require('discord.js');
 
-console.log("class: " + IntentsBitField); //DEBUG
+console.log("class: " + GatewayIntentBits); //DEBUG
 
 const suggestions = require("./bot_modules/suggestions.js");
 // const reminder = require("./bot_modules/reminder.js");
@@ -10,11 +11,11 @@ require('dotenv').config();
 
 const client = new Client({
 	intents: [
-		IntentsBitField.Flags.Guilds,
-		IntentsBitField.Flags.GuildMembers,
-		IntentsBitField.Flags.GuildMessages,
-		IntentsBitField.Flags.MessageContent,
-		IntentsBitField.Flags.GuildMessageReactions
+		GatewayIntentBits.Guilds,
+		GatewayIntentBits.GuildMembers,
+		GatewayIntentBits.GuildMessages,
+		GatewayIntentBits.MessageContent,
+		GatewayIntentBits.GuildMessageReactions
 	],
 	partials: [
 		Partials.Message,
