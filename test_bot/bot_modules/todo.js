@@ -56,7 +56,7 @@ exports.newTodo = (client, Events) => {
 
         // fetch todo of channel from database
         mysql.fetch(channelId, database.table).then((channelTodo) =>{
-            console.log("Channel Todo: " + channelTodo);
+            console.log("Channel Todo: " + channelTodo[0].Id);
 
             // check if channel has a todo list
             if (!channelTodo.length) {
@@ -72,7 +72,7 @@ exports.newTodo = (client, Events) => {
                 console.log("Channel already has entry. Skipping"); //DEBUG
             }
 
-            let content = msg.content.split(prefix)[1];
+            let content = msg.content.split(prefix + " ")[1];
             console.log("Message is: (" + content + ")"); //DEBUG
 
             // check if message content exists after removing prefix
