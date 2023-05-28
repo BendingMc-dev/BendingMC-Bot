@@ -30,7 +30,7 @@ const database = { //FIXME create a new class in another file to handle database
 }
 
 function getChannelEntry(channelId){
-    return mysql.fetch(channelId, database.table).then((entry) =>{ 
+    mysql.fetch(channelId, database.table).then((entry) =>{ 
         return entry;
     });
 }
