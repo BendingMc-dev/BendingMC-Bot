@@ -84,7 +84,6 @@ exports.fetch = (id, table) => {
 }
 
 exports.insert = (values, table, columns) => {
-    //FIXME return promise
     return new Promise( (resolve) => {
         let connection = createConnection();
 
@@ -101,14 +100,18 @@ exports.insert = (values, table, columns) => {
 }
 
 exports.update = (table, column, value, id) => {
-    //FIXME return promise ?
-    let connection = createConnection();
+    return new Promise( (resolve) => {
+        let connection = createConnection();
 
-    dbConnect(connection);
+        dbConnect(connection);
 
-    let query = `UPDATE ${table} SET ${column}='${value}' WHERE Id='${id}'`;
+        let query = `UPDATE ${table} SET ${column}='${value}' WHERE Id='${id}'`;
 
-    dbQuery(connection, query);
+        dbQuery(connection, query).then(()=>{
+            connection.end();
 
-    connection.end();
+            resolve();
+        })
+
+    })
 }
