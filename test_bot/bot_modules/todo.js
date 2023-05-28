@@ -85,6 +85,7 @@ exports.newTodo = (client, Events) => {
             
             let channelTodo = entry[0].Todo;
             let content = msg.content.split(prefix)[1];
+            content.replaceAll("\\", "\\\\");
             console.log("Message is: (" + content + ")"); //DEBUG
 
             // check if message content exists after removing prefix
@@ -95,7 +96,7 @@ exports.newTodo = (client, Events) => {
             } else {
                 //FIXME add todo to channel
                 console.log("Todo command has content. Adding new todo item to channel") //DEBUG
-                channelTodo += `\n\n${content}`;
+                channelTodo += `"${content}"`;
                 mysql.update(database.table, "Todo", channelTodo, channelId);
             }
 
