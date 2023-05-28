@@ -38,15 +38,18 @@ function dbConnect(connection){
 }
 
 exports.createTable = (tableName, tableColumns) =>{
-    // create connection
-    let connection = createConnection();
+    return new Promise( (resolve) => {
+        // create connection
+        let connection = createConnection();
 
-    // create table
-    let query = `CREATE TABLE IF NOT EXISTS ${tableName} (${tableColumns});`;
+        // create table
+        let query = `CREATE TABLE IF NOT EXISTS ${tableName} (${tableColumns});`;
 
-    dbQuery(connection, query);
-
-    connection.end();
+        dbQuery(connection, query).then( ()=>{
+            connection.end();
+            resolve(); 
+        });
+    })
 }
 
 exports.fetch = (id, table) => {
@@ -100,18 +103,13 @@ exports.insert = (values, table, columns) => {
 }
 
 exports.update = (table, column, value, id) => {
-    return new Promise( (resolve) => {
-        let connection = createConnection();
+    let connection = createConnection();
 
-        dbConnect(connection);
+    dbConnect(connection);
 
-        let query = `UPDATE ${table} SET ${column}='${value}' WHERE Id='${id}'`;
+    let query = `UPDATE ${table} SET ${column}='${value}' WHERE Id='${id}'`;
 
-        dbQuery(connection, query).then(()=>{
-            connection.end();
-
-            resolve();
-        })
-
-    })
+    dbQuery(connection, query);
+    
+    connection.end();
 }
