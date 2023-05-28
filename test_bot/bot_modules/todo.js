@@ -29,6 +29,12 @@ const database = { //FIXME create a new class in another file to handle database
     }
 }
 
+function getChannelEntry(channelId){
+    return mysql.fetch(channelId, database.table).then((entry) =>{ 
+        return entry;
+    });
+}
+
 exports.newTodo = (client, Events) => {
     client.on(Events.MessageCreate, msg =>{
         // check if message was sent by the bot
@@ -53,6 +59,9 @@ exports.newTodo = (client, Events) => {
         })
 
         mysql.createTable(database.table, tableColumns);
+
+        console.log("Test getEntry: " + getChannelEntry(channelId)); //DEBUG
+        console.log("Test getEntry[0].Id: " + getChannelEntry(channelId)[0].Id); //DEBUG
 
         // check if channel has an entry in the database
         mysql.fetch(channelId, database.table).then((channelTodo) =>{ //FIXME rename channelTodo to entry
