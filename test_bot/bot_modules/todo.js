@@ -38,7 +38,7 @@ class TodoItem {
         this.content = content;
     }
 
-    toJson() {
+    toJSON() {
         return `{ "count": ${this.count}, "content": ${this.content} }`;
     }
 }
@@ -135,7 +135,7 @@ exports.newTodo = (client, Events) => {
                         console.log("message has todo item. Adding item to the database"); //DEBUG
                         let todoItem = new TodoItem(1, messageContent);
                         let jsonTodoItem = JSON.stringify(todoItem);
-                        console.log(jsonTodoItem); //DEBUG
+                        console.log("Todo item object as json: " + jsonTodoItem); //DEBUG
                     }
 
                     //FIXME add a way to remove todo item (at the start of each todo item, add a number as an id)
