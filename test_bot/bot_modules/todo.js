@@ -60,16 +60,13 @@ exports.newTodo = (client, Events) => {
 
         mysql.createTable(database.table, tableColumns);
 
-        console.log("Test getEntry: " + getChannelEntry(channelId)); //DEBUG
-        console.log("Test getEntry[0].Id: " + getChannelEntry(channelId)[0].Id); //DEBUG
-
         // check if channel has an entry in the database
-        mysql.fetch(channelId, database.table).then((channelTodo) =>{ //FIXME rename channelTodo to entry
+        mysql.fetch(channelId, database.table).then((entry) =>{
         //FIXME ^ test if one line only works
-            console.log("Channel Todo: " + channelTodo[0].Id); //DEBUG
+            console.log("Channel Todo: " + entry[0].Id); //DEBUG
 
             // check if channel has a todo list
-            if (!channelTodo.length) {
+            if (!entry.length) {
                 console.log("Channel does not have todo, creating new entry in database"); //DEBUG
 
                 mysql.insert(`${channelId}, ""`, database.table, database.getColumnNames());
@@ -78,6 +75,11 @@ exports.newTodo = (client, Events) => {
             } else {
                 console.log("Channel already has entry. Skipping"); //DEBUG
             }
+        });
+
+        mysql.fetch(channelId, database.table).then((entry) =>{
+            console.log("Channel entry: " + entry) //DEBUG
+            console.log("Channel entry[0].Id: " + entry[0].Id) //DEBUG
 
             let content = msg.content.split(prefix)[1];
             console.log("Message is: (" + content + ")"); //DEBUG
