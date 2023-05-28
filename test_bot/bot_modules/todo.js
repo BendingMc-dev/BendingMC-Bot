@@ -48,6 +48,8 @@ exports.newTodo = (client, Events) => {
             } else {
                 tableColumns += `${key} ${value}`;
             }
+
+            // tableColumns += `${key} ${value}` (? :) 
         })
 
         mysql.createTable(database.table, tableColumns);
