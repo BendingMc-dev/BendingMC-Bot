@@ -94,8 +94,8 @@ exports.newTodo = (client, Events) => {
                 let content = msg.content.split(prefix + " ")[1];
                 // let regex = new RegExp("(\', \", \`)");
 
-                content.replaceAll("\\", "\\\\");
-                content.replaceAll("\"", "\\");
+                content = content.replaceAll("\\", "\\\\");
+                content = content.replaceAll("\"", "\\");
                 console.log("Message is: (" + content + ")"); //DEBUG
 
                 // check if message content exists after removing prefix
