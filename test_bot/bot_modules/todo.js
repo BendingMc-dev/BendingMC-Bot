@@ -62,7 +62,6 @@ exports.newTodo = (client, Events) => {
 
         // check if channel has an entry in the database
         mysql.fetch(channelId, database.table).then((entry) =>{
-        //FIXME ^ test if one line only works
             console.log("Channel Todo: " + entry[0].Id); //DEBUG
 
             // check if channel has a todo list
@@ -75,9 +74,7 @@ exports.newTodo = (client, Events) => {
             } else {
                 console.log("Channel already has entry. Skipping"); //DEBUG
             }
-        });
 
-        mysql.fetch(channelId, database.table).then((entry) =>{
             console.log("Channel entry: " + entry) //DEBUG
             console.log("Channel entry[0].Id: " + entry[0].Id) //DEBUG
 
