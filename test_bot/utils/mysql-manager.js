@@ -37,12 +37,6 @@ function dbConnect(connection){
     });
 }
 
-function test() {
-    return new Promise( (resolve, reject) => {
-        resolve("resolved");
-    })
-}
-
 exports.createTable = (tableName, tableColumns) =>{
     // create connection
     let connection = createConnection();
@@ -91,15 +85,19 @@ exports.fetch = (id, table) => {
 
 exports.insert = (values, table, columns) => {
     //FIXME return promise
-    let connection = createConnection();
+    return new Promise( (resolve) => {
+        let connection = createConnection();
 
-    dbConnect(connection);
+        dbConnect(connection);
 
-    let query = `INSERT INTO ${table} (${columns}) VALUES (${values});`;
+        let query = `INSERT INTO ${table} (${columns}) VALUES (${values});`;
 
-    dbQuery(connection, query);
+        dbQuery(connection, query).then( () =>{
+            connection.end();
 
-    connection.end();
+            resolve();
+        });
+    })
 }
 
 exports.update = (table, column, value, id) => {
