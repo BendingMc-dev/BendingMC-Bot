@@ -43,12 +43,14 @@ exports.newTodo = (client, Events) => {
         // check if message has prefix
         if (!msg.content.startsWith(prefix)) return;
 
+        console.log("--------- Start of Log ---------"); //DEBUG
+
         let channelId = msg.channel.id;
 
         // create table in database
         let tableColumns = "";
 
-        database.columns.forEach((value, key, map) => {
+        database.columns.forEach((value, key, map) => { //FIXME put into function (create table)
             if (tableColumns) {
                 tableColumns += `, ${key} ${value}`;
             } else {
@@ -60,11 +62,11 @@ exports.newTodo = (client, Events) => {
 
         mysql.createTable(database.table, tableColumns);
 
-        // check if channel has an entry in the database
-        mysql.fetch(channelId, database.table).then((entry) =>{
+        // fetch channel entry from database as 'entry'
+        mysql.fetch(channelId, database.table).then((entry) =>{ //FIXME put into function (create entry)
             // console.log("Channel Todo: " + entry[0].Id); //DEBUG
 
-            // check if channel has a todo list
+            // check if channel has an entry in the database
             if (!entry.length) {
                 console.log("Channel does not have todo, creating new entry in database"); //DEBUG
 
@@ -75,21 +77,26 @@ exports.newTodo = (client, Events) => {
                 console.log("Channel already has entry. Skipping"); //DEBUG
             }
         });
-
-        mysql.fetch(channelId, database.table).then((entry) =>{
+        
+        // fetch channel entry from database as 'entry'
+        mysql.fetch(channelId, database.table).then((entry) =>{ //FIXME put into function (add/display todo)
             console.log("Channel entry: " + entry) //DEBUG
             console.log("Channel entry[0].Id: " + entry[0].Id) //DEBUG
-
+            
+            let channelTodo = entry[0].Todo;
             let content = msg.content.split(prefix)[1];
             console.log("Message is: (" + content + ")"); //DEBUG
 
             // check if message content exists after removing prefix
             if (!content) {
                 //FIXME display todo of channel
-                console.log("Todo command has no content. Displaying todo of channel") //DEBUG
+                console.log("Todo command has no content. Displaying todo of channel."); //DEBUG
+                console.log("Channel todo: " + channelTodo); //DEBUG
             } else {
                 //FIXME add todo to channel
                 console.log("Todo command has content. Adding new todo item to channel") //DEBUG
+                channelTodo += `\n\n${content}`;
+                console.log("New channel todo is: " + channelTodo);
             }
 
             //FIXME add a way to remove todo item (at the start of each todo item, add a number as an id)
