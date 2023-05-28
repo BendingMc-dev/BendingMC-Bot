@@ -100,3 +100,15 @@ exports.insert = (values, table, columns) => {
 
     connection.end();
 }
+
+exports.update = (table, column, value, id) => {
+    let connection = createConnection();
+
+    dbConnect(connection);
+
+    let query = `UPDATE ${table} SET ${column}='${value}' WHERE Id='${id}'`;
+
+    dbQuery(connection, query);
+
+    connection.end();
+}
