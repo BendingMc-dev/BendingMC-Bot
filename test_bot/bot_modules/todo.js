@@ -95,8 +95,8 @@ exports.newTodo = (client, Events) => {
             } else {
                 //FIXME add todo to channel
                 console.log("Todo command has content. Adding new todo item to channel") //DEBUG
-                channelTodo += `\n\n${content}`;
-                console.log("New channel todo is: " + channelTodo);
+                // channelTodo += `\n\n${content}`;
+                mysql.update(database.table, "Todo", `\n\n${content}`, channelId);
             }
 
             //FIXME add a way to remove todo item (at the start of each todo item, add a number as an id)
