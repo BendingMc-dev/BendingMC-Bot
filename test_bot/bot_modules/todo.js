@@ -3,6 +3,7 @@
     if the channel already has a todo stored, add the message content to the todo
     if no message content, display the todo of the channel
 */
+const { channel } = require("diagnostics_channel");
 const mysql = require("../utils/mysql-manager.js");
 
 const prefix = "?todo";
@@ -27,6 +28,12 @@ const database = { //FIXME create a new class in another file to handle database
 
         return tableColumns;
     }
+}
+
+function getChannelEntry(channelId) {
+    mysql.fetch(channelId, database.table).then((entry) =>{
+        return entry; //FIXME change to 'Todo'
+    });
 }
 
 exports.newTodo = (client, Events) => {
@@ -54,38 +61,34 @@ exports.newTodo = (client, Events) => {
 
         mysql.createTable(database.table, tableColumns);
 
-        // fetch todo of channel from database
-        mysql.fetch(channelId, database.table).then((channelTodo) =>{
-            console.log("Channel Todo: " + channelTodo[0].Id);
+        let channelEntry = getChannelEntry(channelId);
 
-            // check if channel has a todo list
-            if (!channelTodo.length) {
-                // create todo
-                console.log("Channel does not have todo, creating new entry in database"); //DEBUG
+        console.log("Channel Todo: " + channelEntry[0].Id); //DEBUG
 
-                mysql.insert(`${channelId}, ""`, database.table, database.getColumnNames());
+        // check if channel has an entry in the database
+        if (!channelEntry.length) {
+            console.log("Channel does not have todo, creating new entry in database"); //DEBUG
 
-                // console.log("Columns of database: " + columnNames) //DEBUG
+            mysql.insert(`${channelId}, ""`, database.table, database.getColumnNames());
 
-                // mysql.insert()
-            } else {
-                console.log("Channel already has entry. Skipping"); //DEBUG
-            }
+            // console.log("Columns of database: " + columnNames) //DEBUG
+        } else {
+            console.log("Channel already has entry. Skipping"); //DEBUG
+        }
 
-            let content = msg.content.split(prefix + " ")[1];
-            console.log("Message is: (" + content + ")"); //DEBUG
+        let content = msg.content.split(prefix)[1];
+        console.log("Message is: (" + content + ")"); //DEBUG
 
-            // check if message content exists after removing prefix
-            if (!content) {
-                // display todo of channel
-                console.log("Todo command has no content. Displaying todo of channel") //DEBUG
-            } else {
-                // add todo to channel
-                console.log("Todo command has content. Adding new todo item to channel") //DEBUG
-            }
+        // check if message content exists after removing prefix
+        if (!content) {
+            //FIXME display todo of channel
+            console.log("Todo command has no content. Displaying todo of channel") //DEBUG
+        } else {
+            //FIXME add todo to channel
+            console.log("Todo command has content. Adding new todo item to channel") //DEBUG
+        }
 
-            //FIXME add a way to remove todo item (at the start of each todo item, add a number as an id)
-            //FIXME create embed manager
-        });
+        //FIXME add a way to remove todo item (at the start of each todo item, add a number as an id)
+        //FIXME create embed manager
     })
 }
