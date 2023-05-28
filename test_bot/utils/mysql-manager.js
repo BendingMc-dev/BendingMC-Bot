@@ -21,7 +21,6 @@ function dbQuery(connection, query){
             // throw an error if query produces one
             // if (err) console.log(" There was an error while executing query from database: " + err); //FIXME try and catch
             if (err)
-                console.log()
                 reject(err);
             // result;
         
