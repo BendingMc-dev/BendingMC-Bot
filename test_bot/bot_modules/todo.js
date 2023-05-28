@@ -11,7 +11,7 @@ const database = { //FIXME create a new class in another file to handle database
     table: "ChannelTodo",
     columns: new Map([
         ["Id","TEXT"],
-        ["Todo","TEXT"],
+        ["Todo","JSON"],
     ]),
 
     getColumnNames: function (){
@@ -29,11 +29,25 @@ const database = { //FIXME create a new class in another file to handle database
     }
 }
 
-function getChannelEntry(channelId){
-    mysql.fetch(channelId, database.table).then((entry) =>{ 
-        return entry;
-    });
+class TodoItem {
+    count;
+    content;
+
+    TodoItem(count, content){
+        this.count = count;
+        this.content = content;
+    }
+
+    toJson() {
+        return `{ "count": ${this.count}, "content": ${this.content} }`;
+    }
 }
+
+// function getChannelEntry(channelId){
+//     mysql.fetch(channelId, database.table).then((entry) =>{ 
+//         return entry;
+//     });
+// }
 
 function createDBEntry(channelId){
     return new Promise( (resolve) =>{
@@ -89,27 +103,39 @@ exports.newTodo = (client, Events) => {
         createDBEntry(channelId).then(() =>{
             // fetch channel entry from database as 'entry'
             mysql.fetch(channelId, database.table).then((entry) =>{ //FIXME put into function (add/display todo)
-                console.log("Channel entry: " + entry) //DEBUG
-                console.log("Channel entry[0].Id: " + entry[0].Id) //DEBUG
+                // console.log("Channel entry: " + entry) //DEBUG
+                // console.log("Channel entry[0].Id: " + entry[0].Id) //DEBUG
                 
-                let channelTodo = entry[0].Todo;
-                let content = (msg.content.split(prefix + " ")[1] === undefined ? msg.content.split(prefix)[1] : msg.content.split(prefix + " ")[1]);
-                // let regex = new RegExp("(\', \", \`)");
+                // let channelTodo = entry[0].Todo;
+                // let content = (msg.content.split(prefix + " ")[1] === undefined ? msg.content.split(prefix)[1] : msg.content.split(prefix + " ")[1]);
+                // // let regex = new RegExp("(\', \", \`)");
 
-                content = content.replaceAll("\\", "\\\\");
-                content = content.replaceAll("\"", "\\\"");
-                console.log("Message is: (" + content + ")"); //DEBUG
+                // content = content.replaceAll("\\", "\\\\");
+                // content = content.replaceAll("\"", "\\\"");
+                // console.log("Message is: (" + content + ")"); //DEBUG
 
-                // check if message content exists after removing prefix
-                if (!content) {
+                // // check if message content exists after removing prefix
+                // if (!content) {
+                //     //FIXME display todo of channel
+                //     console.log("Todo command has no content. Displaying todo of channel."); //DEBUG
+                //     console.log("Channel todo: " + channelTodo); //DEBUG
+                // } else {
+                //     //FIXME add todo to channel
+                //     console.log("Todo command has content. Adding new todo item to channel") //DEBUG
+                //     channelTodo += `"${content}",`;
+                //     mysql.update(database.table, "Todo", channelTodo, channelId);
+                // }
+
+                let messageContent = (msg.content.split(prefix + " ")[1] === undefined ? msg.content.split(prefix)[1] : msg.content.split(prefix + " ")[1]);
+
+                if (!messageContent){
                     //FIXME display todo of channel
-                    console.log("Todo command has no content. Displaying todo of channel."); //DEBUG
-                    console.log("Channel todo: " + channelTodo); //DEBUG
+                    console.log("message doesn't have any todo items. Displaying channel todo: " + entry[0].Todo); //DEBUG
                 } else {
-                    //FIXME add todo to channel
-                    console.log("Todo command has content. Adding new todo item to channel") //DEBUG
-                    channelTodo += `"${content}",`;
-                    mysql.update(database.table, "Todo", channelTodo, channelId);
+                    //FIXME add todo item to channel
+                    console.log("message has todo item. Adding item to the database"); //DEBUG
+                    let todoItem = new TodoItem(1, messageContent);
+                    console.log(JSON.stringify(todoItem)); //DEBUG
                 }
 
                 //FIXME add a way to remove todo item (at the start of each todo item, add a number as an id)
