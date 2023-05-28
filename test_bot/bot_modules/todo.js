@@ -33,7 +33,7 @@ class TodoItem {
     count;
     content;
 
-    TodoItem(count, content){
+    constructor(count, content){
         this.count = count;
         this.content = content;
     }
