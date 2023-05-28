@@ -39,7 +39,10 @@ class TodoItem {
     }
 
     toJSON() {
-        return `{ "count": ${this.count}, "content": ${this.content} }`;
+        return {
+            count: this.count,
+            content: this.content
+        }
     }
 }
 
