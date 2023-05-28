@@ -93,7 +93,7 @@ exports.newTodo = (client, Events) => {
                 console.log("Channel entry[0].Id: " + entry[0].Id) //DEBUG
                 
                 let channelTodo = entry[0].Todo;
-                let content = msg.content.split(prefix)[1];
+                let content = (msg.content.split(prefix + " ")[1] === undefined ? msg.content.split(prefix)[1] : msg.content.split(prefix + " ")[1]);
                 // let regex = new RegExp("(\', \", \`)");
 
                 content = content.replaceAll("\\", "\\\\");
