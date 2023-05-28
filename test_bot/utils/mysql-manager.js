@@ -90,6 +90,7 @@ exports.fetch = (id, table) => {
 }
 
 exports.insert = (values, table, columns) => {
+    //FIXME return promise
     let connection = createConnection();
 
     dbConnect(connection);
@@ -102,6 +103,7 @@ exports.insert = (values, table, columns) => {
 }
 
 exports.update = (table, column, value, id) => {
+    //FIXME return promise ?
     let connection = createConnection();
 
     dbConnect(connection);
