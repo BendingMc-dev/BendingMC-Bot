@@ -45,7 +45,9 @@ function createDBEntry(channelId){
             if (!entry.length) {
                 console.log("Channel does not have todo, creating new entry in database"); //DEBUG
 
-                mysql.insert(`${channelId}, ""`, database.table, database.getColumnNames());
+                mysql.insert(`${channelId}, ""`, database.table, database.getColumnNames()).then( () =>{
+                    resolve();
+                })
 
                 // console.log("Columns of database: " + columnNames) //DEBUG
             } else {
