@@ -74,7 +74,9 @@ exports.newTodo = (client, Events) => {
             } else {
                 console.log("Channel already has entry. Skipping"); //DEBUG
             }
+        });
 
+        mysql.fetch(channelId, database.table).then((entry) =>{
             console.log("Channel entry: " + entry) //DEBUG
             console.log("Channel entry[0].Id: " + entry[0].Id) //DEBUG
 
