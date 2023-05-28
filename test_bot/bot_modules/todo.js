@@ -134,7 +134,8 @@ exports.newTodo = (client, Events) => {
                         //FIXME add todo item to channel
                         console.log("message has todo item. Adding item to the database"); //DEBUG
                         let todoItem = new TodoItem(1, messageContent);
-                        console.log(JSON.stringify(todoItem)); //DEBUG
+                        let jsonTodoItem = JSON.stringify(todoItem);
+                        console.log(jsonTodoItem); //DEBUG
                     }
 
                     //FIXME add a way to remove todo item (at the start of each todo item, add a number as an id)
