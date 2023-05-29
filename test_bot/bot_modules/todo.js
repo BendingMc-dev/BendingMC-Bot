@@ -92,10 +92,11 @@ exports.newTodo = (client, Events) =>{
         let filePath = files.mainPath + fileName;
 
         // check if file exists
-        console.log(`"The file (${filePath}) exists: " + ${fs.fileExists("filePath")}`); //DEBUG
-        if (!fs.fileExists())
-            // FIXME create file in path
+        console.log(`The file (${filePath}) exists: ${fs.fileExists(filePath)}`); //DEBUG
+        if (!fs.fileExists(filePath)){
             console.log("File doesn't exist. Creating new file for channel");
+            fs.saveFile(filePath);
+        }
 
         // check if message exists
         // send response
