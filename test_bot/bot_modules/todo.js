@@ -4,6 +4,7 @@
     if no message content, display the todo of the channel
 */
 const mysql = require("../utils/mysql-manager.js");
+const fs = require("../utils/json-manager.js");
 
 const prefix = "?todo";
 
@@ -76,7 +77,21 @@ function createDBEntry(channelId){
     })
 }
 
-exports.newTodo = (client, Events) => {
+exports.newTodos = (client, Events) =>{
+    // check if message was sent by the bot
+    if (msg.author.id === client.user.id) return;
+
+    // check if message has prefix
+    if (!msg.content.startsWith(prefix)) return;
+
+    // check if file exists
+    fs.fileExists("path.json");
+
+    // check if message exists
+    // send response
+}
+
+exports.newTodos = (client, Events) => {
     client.on(Events.MessageCreate, msg =>{
         // check if message was sent by the bot
         if (msg.author.id === client.user.id) return;
