@@ -77,18 +77,20 @@ function createDBEntry(channelId){
     })
 }
 
-exports.newTodos = (client, Events) =>{
-    // check if message was sent by the bot
-    if (msg.author.id === client.user.id) return;
+exports.newTodo = (client, Events) =>{
+    client.on(Events.MessageCreate, msg =>{
+        // check if message was sent by the bot
+        if (msg.author.id === client.user.id) return;
 
-    // check if message has prefix
-    if (!msg.content.startsWith(prefix)) return;
+        // check if message has prefix
+        if (!msg.content.startsWith(prefix)) return;
 
-    // check if file exists
-    fs.fileExists("path.json");
+        // check if file exists
+        fs.fileExists("path.json");
 
-    // check if message exists
-    // send response
+        // check if message exists
+        // send response
+    })    
 }
 
 exports.newTodos = (client, Events) => {
