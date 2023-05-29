@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 
 exports.saveFile = (file, data = "") =>{
     try {
@@ -10,6 +11,8 @@ exports.saveFile = (file, data = "") =>{
                 console.error("There was an error while making a directory");
                 console.error(err);
             });
+
+            console.log("Creating folder for file");
         }
 
         // write file
@@ -19,13 +22,13 @@ exports.saveFile = (file, data = "") =>{
         console.error(err);
     }
 
-    console.log(`New file created: ${path}`);
+    console.log(`New file created: ${file}`);
 }
 
-exports.readFile = (path) =>{
+exports.readFile = (file) =>{
 
 }
 
-exports.fileExists = (path) =>{
-    return fs.existsSync(path);
+exports.fileExists = (file) =>{
+    return fs.existsSync(file);
 }
