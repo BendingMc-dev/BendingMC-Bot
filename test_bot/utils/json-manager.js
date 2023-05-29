@@ -4,12 +4,12 @@ const path = require('path');
 exports.saveFile = (file, data = "") =>{
     try {
         fs.writeFileSync(file, data);
+        console.log(`New file created: ${file}`);
     } catch (err) {
         console.error("There was an error while saving a json file");
         console.error(err);
     }
 
-    console.log(`New file created: ${file}`);
 }
 
 exports.readFile = (file) =>{
@@ -21,7 +21,7 @@ exports.fileExists = (file) =>{
 }
 
 exports.makeDir = (dir) => {
-    fs.mkdirSync(dir, {recursive: false}, (err) =>{
+    fs.mkdirSync(dir, {recursive: true}, (err) =>{
         console.error("There was an error while making a directory");
         console.error(err);
     });
