@@ -97,6 +97,7 @@ exports.newTodo = (client, Events) =>{
         if (!fs.fileExists(filePath)){
             console.log("File doesn't exist. Creating new file for channel");
             fs.saveFile(filePath);
+            // fs.makeDir(files.mainPath);
         }
 
         // check if message exists
