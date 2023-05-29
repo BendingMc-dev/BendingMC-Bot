@@ -86,7 +86,7 @@ exports.newTodo = (client, Events) =>{
         if (!msg.content.startsWith(prefix)) return;
 
         // check if file exists
-        fs.fileExists("path.json");
+        console.log("The file 'path.json' exists: " + fs.fileExists("path.json")); //DEBUG
 
         // check if message exists
         // send response
