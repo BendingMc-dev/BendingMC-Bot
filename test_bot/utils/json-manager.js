@@ -6,7 +6,7 @@ exports.saveFile = (file, data = "") =>{
         const dirname = path.dirname(file);
 
         // check if directory of file exists
-        if (!fileExists(dirname)){
+        if (!this.fileExists(dirname)){
             fs.mkdirSync(dirname, {recursive: false}, (err) =>{
                 console.error("There was an error while making a directory");
                 console.error(err);
