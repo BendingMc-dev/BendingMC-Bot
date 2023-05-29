@@ -1,8 +1,19 @@
 const fs = require('fs');
 
-exports.saveFile = (path, data = "") =>{
+exports.saveFile = (file, data = "") =>{
     try {
-        fs.writeFileSync(path, data);
+        const dirname = path.dirname(file);
+
+        // check if directory of file exists
+        if (!fileExists(dirname)){
+            fs.mkdirSync(dirname, {recursive: false}, (err) =>{
+                console.error("There was an error while making a directory");
+                console.error(err);
+            });
+        }
+
+        // write file
+        fs.writeFileSync(file, data);
     } catch (err) {
         console.error("There was an error while saving a json file");
         console.error(err);
