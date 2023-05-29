@@ -19,9 +19,9 @@ function dbQuery(connection, query){
     return new Promise( (resolve, reject) => {
         connection.query(query, (err, result) =>{
             // throw an error if query produces one
-            // if (err) console.log(" There was an error while executing query from database: " + err); //FIXME try and catch
-            if (err)
-                reject(err);
+            if (err) console.log(" There was an error while executing query from database: " + err); //FIXME try and catch
+            // if (err)
+                // reject(err);
             // result;
         
             // console.log("Inside query, results: " + result); //DEBUG
