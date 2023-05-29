@@ -2,12 +2,6 @@ const fs = require('fs');
 const path = require('path');
 
 exports.saveFile = (file, data = "") =>{
-    const dirname = path.dirname(file);
-
-    // check if directory of file exists
-    if (!this.fileExists(dirname))
-        this.makeDir(dirname);
-    
     try {
         fs.writeFileSync(file, data);
     } catch (err) {
