@@ -30,10 +30,11 @@ const database = { //FIXME create a new class in another file to handle database
     }
 }
 
-class TodoItem {
-    count;
-    content;
+const files = {
+    mainPath: "../data/"
+}
 
+class TodoItem {
     constructor(count, content){
         this.count = count;
         this.content = content;
@@ -85,8 +86,16 @@ exports.newTodo = (client, Events) =>{
         // check if message has prefix
         if (!msg.content.startsWith(prefix)) return;
 
+        let channelId = msg.channel.id;
+
+        let fileName = channelId + ".json";
+        let filePath = files.mainPath + fileName;
+
         // check if file exists
-        console.log("The file 'path.json' exists: " + fs.fileExists("path.json")); //DEBUG
+        console.log(`"The file (${filePath}) exists: " + ${fs.fileExists("filePath")}`); //DEBUG
+        if (!fs.fileExists())
+            // FIXME create file in path
+            console.log("File doesn't exist. Creating new file for channel");
 
         // check if message exists
         // send response
