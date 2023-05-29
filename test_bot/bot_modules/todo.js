@@ -31,7 +31,7 @@ const database = { //FIXME create a new class in another file to handle database
 }
 
 const files = {
-    mainPath: ""
+    mainPath: "/data/todo-lists/"
 }
 
 class TodoItem {
