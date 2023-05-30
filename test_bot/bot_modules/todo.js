@@ -39,6 +39,7 @@ function saveTodoList(channelId, todoItems){
     const todoList = new TodoList();
 
     for (let todoItem of todoItems){
+        console.log(`Current length of list is (${todoList.todoList.length}). If this increases, use this as the count instead.`); //DEBUG
         const item = new TodoItem(todoItem.count, todoItem.content);
 
         todoList.todoList.push(item);
@@ -95,8 +96,8 @@ function removeTodo(channelId, todoNumber){
     const fileTodoItems = fs.readFile(filePath);
 
     const filteredTodoItems = fileTodoItems.todo.filter(todoItem =>{
-        console.log(`Filtering items... Count of todoItem (${todoItem.count}) and number of item to be removed ${todoNumber}`); //DEBUG
-        return todoItem.count !== todoNumber;
+        // console.log(`Filtering items... Count of todoItem (${todoItem.count}) and number of item to be removed ${todoNumber}`); //DEBUG
+        return todoItem.count != todoNumber;
     });
 
     saveTodoList(channelId, filteredTodoItems);
