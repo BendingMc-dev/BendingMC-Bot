@@ -87,14 +87,16 @@ exports.newTodo = (client, Events) =>{
         // check if message exists
         let messageContent = (msg.content.split(prefix + " ")[1] === undefined ? msg.content.split(prefix)[1] : msg.content.split(prefix + " ")[1]);
 
-        let fileContent = fs.readFile(filePath);
+        const fileContent = fs.readFile(filePath);
 
         if (messageContent){
             console.log("Message has todo item. Saving todo in file"); //DEBUG
             const todoItem = new TodoItem(1, messageContent);
-            fileContent = fileContent.todo.push(JSON.stringify(todoItem));
+            let jsonTodoItem = JSON.stringify(todoItem);
+            let newFileContent = fileContent.todo.push(jsonTodoItem);
             let jsonFileContent = JSON.stringify(fileContent);
-            console.log("Writing file with json: " + jsonFileContent);
+            console.log("Object as json is: " + jsonTodoItem);
+            console.log("Writing file with json: " + newFileContent);
             fs.saveFile(filePath, jsonFileContent);
             // send message in channel
         } else {
