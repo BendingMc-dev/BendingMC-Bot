@@ -109,19 +109,23 @@ function displayTodo(channelId){
         },
         fields: [
             {
-                name: '1',
+                name: '',
                 value: '',
             },
             {
-                name: '2',
+                name: '',
                 value: '',
             },
             {
-                name: '3',
+                name: '',
                 value: '',
             },
             {
-                name: '4',
+                name: '',
+                value: '',
+            },
+            {
+                name: '',
                 value: '',
             },
         ],
@@ -136,9 +140,10 @@ function displayTodo(channelId){
 
     for (let todoItem of fileTodoItems.todo){
         messageResponseEmbed.fields[0].value += `**[ ] ${todoItem.count}. ${todoItem.content}**\n`;
-        messageResponseEmbed.fields[1].value += `**${todoItem.count}. [ ] ${todoItem.content}**\n`;
         messageResponseEmbed.fields[2].value += `**(${todoItem.count}) [ ] ${todoItem.content}**\n`;
-        messageResponseEmbed.fields[3].value += `**(${todoItem.count}) [ ] ${todoItem.content}**\n`;
+        messageResponseEmbed.fields[3].value += `**[ ] ${todoItem.content}**\n`;
+        messageResponseEmbed.fields[1].value += `**${todoItem.count}. [ ] ${todoItem.content}**\n`;
+        messageResponseEmbed.fields[4].value += `**- ${todoItem.count} ${todoItem.content}**\n`;
     }
 
     // console.log("Message response to displayTodo command: " + messageResponse); //DEBUG
