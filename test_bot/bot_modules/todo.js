@@ -79,7 +79,7 @@ function newTodo(channelId, messageContent){
 
     saveTodoList(channelId, fileTodoItems.todo);
 
-    let messageResponse = `Added new todo item with number ${todoItem.count} successfully! Use '?todo' to see the current todo list of this channel.`;
+    let messageResponse = `Todo item #${todoItem.count} added successfully! Use '?todo' to see the current todo list of this channel.`;
     
     return messageResponse;
 }
@@ -96,7 +96,7 @@ function displayTodo(channelId){
     let messageResponse = `WIP. Displaying todo item of channel:\n`;
 
     for (let todoItem of fileTodoItems.todo){
-        messageResponse += `\- ${todoItem.count}. ${todoItem.content}\n`;
+        messageResponse += `**${todoItem.count}. ${todoItem.content}\n\n**`;
     }
 
     return messageResponse;
