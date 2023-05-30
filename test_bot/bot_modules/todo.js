@@ -93,7 +93,7 @@ function displayTodo(channelId){
         console.log("Todo item of channel: " + todoItem.count + " -> " + todoItem.content);
     }
 
-    let messageResponse = `WIP. Displaying todo item of channel:`;
+    let messageResponse = `WIP. Displaying todo item of channel:\n`;
 
     for (let todoItem of fileTodoItems.todo){
         messageResponse += `\- ${todoItem.count}. ${todoItem.content}\n`;
@@ -172,6 +172,9 @@ exports.onTodoCommand = (client, Events) =>{
                 break;
         }
 
+        if (!response)
+            return;
+            
         msg.reply(response);
 
         // check if message exists
