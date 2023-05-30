@@ -39,7 +39,7 @@ const files = {
 class TodoList{
     toJSON(){
         return {
-            Todo: []
+            todo: []
         }
     }
 }
@@ -79,6 +79,7 @@ exports.newTodo = (client, Events) =>{
 
             const todoList = new TodoList();
             let jsonTodoList = JSON.stringify(todoList);
+            console.log("New file created with the json: " + jsonTodoList);
 
             fs.saveFile(filePath, jsonTodoList);
         }
