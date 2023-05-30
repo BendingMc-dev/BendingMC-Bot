@@ -4,7 +4,7 @@ const fs = require("../utils/json-manager.js");
 const prefix = "?todo";
 
 const files = {
-    mainPath: "data/test/todo_lists/"
+    mainPath: "data/todo_lists/"
 }
 
 class TodoList{
