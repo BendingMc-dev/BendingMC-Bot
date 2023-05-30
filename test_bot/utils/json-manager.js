@@ -11,6 +11,8 @@ exports.fileExists = (file) =>{
 
 exports.makeDir = (dir) => {
     fs.mkdirSync(dir, {recursive: true}, (err) =>{
+        if (!err) return;
+
         console.error("There was an error while making a directory");
         console.error(err);
     });
@@ -25,6 +27,8 @@ exports.saveFile = (file, data = "") =>{
         this.makeDir(dirname);
 
     fs.writeFile(file, data, (err) =>{
+        if (!err) return;
+        
         console.log("There was an error while saving a json file");
         console.log(err);
     });
