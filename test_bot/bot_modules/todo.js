@@ -31,7 +31,7 @@ class TodoItem {
     }
 }
 
-function newTodo(fileTodoItems, messageContent){
+function newTodo(fileTodoItems, messageContent, filePath){
     console.log("Message has todo item. Saving todo in file"); //DEBUG
 
     const todoList = new TodoList();
@@ -109,7 +109,7 @@ exports.onTodoCommand = (client, Events) =>{
         const fileTodoItems = fs.readFile(filePath);
 
         if (messageContent){
-            newTodo(fileTodoItems, messageContent);
+            newTodo(fileTodoItems, messageContent, filePath);
         } else {
             displayTodo(fileTodoItems);
             // FIXME send message in channel
