@@ -17,15 +17,17 @@ class TodoList{
 }
 
 class TodoItem {
-    constructor(count, content){
+    constructor(count, content, author){
         this.count = count;
         this.content = content;
+        this.author = author;
     }
 
     toJSON() {
         return  {
             count: this.count,
-            content: this.content
+            content: this.content,
+            author: this.author,
         }
     }
 }
@@ -39,7 +41,7 @@ function saveTodoList(channelId, todoItems){
 
     for (let todoItem of todoItems){
         let count = todoList.todoList.length + 1;
-        const item = new TodoItem(count, todoItem.content);
+        const item = new TodoItem(count, todoItem.content, todoItem.author);
 
         todoList.todoList.push(item);
     }
@@ -52,7 +54,7 @@ function saveTodoList(channelId, todoItems){
     fs.saveFile(filePath, jsonTodoList);
 }
 
-function newTodo(channelId, messageContent){
+function newTodo(channelId, messageContent, messageAuthor){
     const filePath = getFilePath(channelId);
     let fileTodoItems = fs.readFile(filePath);
 
@@ -74,7 +76,7 @@ function newTodo(channelId, messageContent){
     // const jsonTodoList = JSON.stringify(todoList, null, 2);
 
     // fs.saveFile(filePath, jsonTodoList);
-    const todoItem = new TodoItem(todoListCount, messageContent);
+    const todoItem = new TodoItem(todoListCount, messageContent, messageAuthor);
     fileTodoItems.todo.push(todoItem);
 
     saveTodoList(channelId, fileTodoItems.todo);
@@ -96,12 +98,12 @@ function displayTodo(channelId){
     // let messageResponse = `WIP. Displaying todo item of channel:\n`;
     const messageResponseEmbed = {
         color: 0xFB4E88,
-        title: 'Channel Todo List',
+        // title: 'Channel Todo List',
         // url: '', //'https://discord.js.org',
         author: {
-            name: 'test', //'Some name',
+            name: 'Channel Todo List', //'Some name',
             icon_url: 'https:\/\/www.dropbox.com\/temp_thumb_from_token\/s\/u5ajixq3x3ubmsp?preserve_transparency=False&size=1200x1200&size_mode=4',
-            url: '', //'https://discord.js.org',
+            // url: '', //'https://discord.js.org',
         },
         //description: '', //'Some description here',
         fields: [
@@ -120,7 +122,7 @@ function displayTodo(channelId){
     };
 
     for (let todoItem of fileTodoItems.todo){
-        messageResponseEmbed.fields[0].value += `**⬛  [${todoItem.count}]** ${todoItem.content}\n\n`;
+        messageResponseEmbed.fields[0].value += `**☐ [${todoItem.count}]** ${todoItem.content} (<@&${todoItem.author}>)\n\n`;
     }
 
     // console.log("Message response to displayTodo command: " + messageResponse); //DEBUG
@@ -188,8 +190,9 @@ exports.onTodoCommand = (client, Events) =>{
             // starts with 1 or more whitespace at the start, following 1 or more non-whitespace characters
             case command.search(/^\s+\S+/) != -1:
                 messageContent = command.split(/^\s+/)[1];
+                let messageAuthor = msg.author.id;
 
-                response = newTodo(channelId, messageContent);
+                response = newTodo(channelId, messageContent, messageAuthor);
                 break;
             
             default:
