@@ -164,7 +164,7 @@ exports.onTodoCommand = (client, Events) =>{
             case command.search(/^\s+\S+/) != -1:
                 messageContent = command.split(/^\s+/)[1];
 
-                reseponse = newTodo(channelId, messageContent);
+                response = newTodo(channelId, messageContent);
                 break;
             
             default:
