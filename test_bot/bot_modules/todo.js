@@ -98,7 +98,7 @@ function displayTodo(channelId){
     // let messageResponse = `WIP. Displaying todo item of channel:\n`;
     const messageResponseEmbed = {
         color: 0xFB4E88,
-        // title: 'Channel Todo List',
+        title: '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
         // url: '', //'https://discord.js.org',
         author: {
             name: 'Channel Todo List', //'Some name',
@@ -122,7 +122,7 @@ function displayTodo(channelId){
     };
 
     for (let todoItem of fileTodoItems.todo){
-        messageResponseEmbed.fields[0].value +=  `${todoItem.count}. ☐ ${todoItem.content} ${(todoItem.author ? ('<@' + todoItem.author + '>') : '')} \n\n`;
+        messageResponseEmbed.fields[0].value +=  `${todoItem.count}. ☐ ${todoItem.content} ${(todoItem.author ? '(<@' + todoItem.author + '>)' : '')} \n\n`;
     }
 
     // console.log("Message response to displayTodo command: " + messageResponse); //DEBUG
