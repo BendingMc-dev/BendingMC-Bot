@@ -111,7 +111,9 @@ exports.newTodo = (client, Events) =>{
 
         if (messageContent){
             console.log("Message has todo item. Saving todo in file"); //DEBUG
-            fs.saveFile(filePath, messageContent);
+            const todoItem = new TodoItem(1, messageContent);
+            let jsonMessageContent = JSON.stringify(todoItem);
+            fs.saveFile(filePath, jsonMessageContent);
             // send message in channel
         } else {
             console.log("Message does not have todo item. Displaying todo list of channel"); //DEBUG
