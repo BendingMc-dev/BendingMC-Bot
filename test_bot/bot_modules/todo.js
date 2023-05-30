@@ -102,7 +102,7 @@ exports.newTodo = (client, Events) =>{
                 todoList.todoList.push(todoItem);
             }
 
-            let todoListCount = todoList.todoList.length;
+            let todoListCount = todoList.todoList.length + 1;
             const todoItem = new TodoItem(todoListCount, messageContent);
 
             todoList.todoList.push(todoItem);
