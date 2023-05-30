@@ -102,6 +102,7 @@ exports.newTodo = (client, Events) =>{
         //     fs.saveFile(filePath);
         // }
         if (!fs.fileExists(dirName)){
+            fs.makeDir(dirName);
             fs.saveFile(filePath);
         }
 
@@ -110,12 +111,12 @@ exports.newTodo = (client, Events) =>{
 
         if (messageContent){
             console.log("Message has todo item. Saving todo in file"); //DEBUG
-            // read file
-            // append todo at the end of file
-            // save file
+            fs.saveFile(filePath, messageContent);
             // send message in channel
         } else {
             console.log("Message does not have todo item. Displaying todo list of channel"); //DEBUG
+            let fileContent = fs.readFile(filePath);
+            console.log("Channel todo: " + fileContent);
             // read file
             // send message in channel
         }
