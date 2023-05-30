@@ -27,11 +27,9 @@ exports.fileExists = (file) =>{
 
 exports.makeDir = (dir) => {
     fs.mkdirSync(dir, {recursive: true}, (err) =>{
-        if (err){
-            console.error("There was an error while making a directory");
-            console.error(err);
-        } else {
-            console.log(`New directory created: ${dir}`)
-        }
+        console.error("There was an error while making a directory");
+        console.error(err);
     });
+    
+    console.log(`New directory created: ${dir}`)
 }
