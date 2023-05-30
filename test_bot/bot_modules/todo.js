@@ -97,41 +97,22 @@ function displayTodo(channelId){
     const messageResponseEmbed = {
         color: 0xFB4E88,
         title: 'Channel Todo List',
-        url: '', //'https://discord.js.org',
+        // url: '', //'https://discord.js.org',
         author: {
             name: '', //'Some name',
             icon_url: 'https://www.dropbox.com/temp_thumb_from_token/s/u5ajixq3x3ubmsp?preserve_transparency=False&size=1200x1200&size_mode=4',
             url: '', //'https://discord.js.org',
         },
-        description: '', //'Some description here',
-        thumbnail: {
-            url: '', //'https://i.imgur.com/AfFp7pu.png',
-        },
+        //description: '', //'Some description here',
         fields: [
             {
                 name: '',
                 value: '',
             },
-            {
-                name: '',
-                value: '',
-            },
-            {
-                name: '',
-                value: '',
-            },
-            {
-                name: '',
-                value: '',
-            },
-            {
-                name: '',
-                value: '',
-            },
         ],
-        image: {
-            url: '', //'https://i.imgur.com/AfFp7pu.png',
-        },
+        // image: {
+        //     url: '', //'https://i.imgur.com/AfFp7pu.png',
+        // },
         footer: {
             text: '', //'Some footer text here',
             icon_url: '', //'https://i.imgur.com/AfFp7pu.png',
@@ -139,11 +120,7 @@ function displayTodo(channelId){
     };
 
     for (let todoItem of fileTodoItems.todo){
-        messageResponseEmbed.fields[0].value += `**[ ] ${todoItem.count}. ${todoItem.content}**\n`;
-        messageResponseEmbed.fields[2].value += `**(${todoItem.count}) [ ] ${todoItem.content}**\n`;
-        messageResponseEmbed.fields[3].value += `**[ ] ${todoItem.content}**\n`;
-        messageResponseEmbed.fields[1].value += `**${todoItem.count}. [ ] ${todoItem.content}**\n`;
-        messageResponseEmbed.fields[4].value += `**- ${todoItem.count} ${todoItem.content}**\n`;
+        messageResponseEmbed.fields[0].value += `**:empty: [${todoItem.count}] ${todoItem.content}**\n`;
     }
 
     // console.log("Message response to displayTodo command: " + messageResponse); //DEBUG
