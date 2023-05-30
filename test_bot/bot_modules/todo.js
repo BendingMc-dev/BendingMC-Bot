@@ -84,36 +84,36 @@ exports.onTodoCommand = (client, Events) =>{
 
             const todoList = new TodoList();
             let jsonTodoList = JSON.stringify(todoList, null, 2);
-            console.log("New file created with the json: " + jsonTodoList); //DEBUG
+            // console.log("New file created with the json: " + jsonTodoList); //DEBUG
 
             fs.saveFile(filePath, jsonTodoList);
         }
 
         let command = msg.content.split(prefix)[1];
+        const fileTodoItems = fs.readFile(filePath);
 
         switch (true){
-            case command.search(/remove\s+\d|r\s+\d/) != -1: // starts with "remove", following 1 or more whitespace, following a digit
-                g = "remove todo";
+            case command.search(/^(remove|r|rem)\s+\d/) != -1: // starts with "remove", following 1 or more whitespace, following a digit
+                //FIXME new function to remove todo item
                 break;
             case command.search(/^\s+\S+/) != -1: // starts with 1 or more whitespace at the start, following 1 or more non-whitespace characters
-                g = "add todo";
+                newTodo(fileTodoItems, messageContent, filePath);
                 break;
             default:
-                g = "display todo";
+                displayTodo(fileTodoItems);
                 break;
         }
 
         // check if message exists
-        let messageContent = (msg.content.split(prefix + " ")[1] === undefined ? msg.content.split(prefix)[1] : msg.content.split(prefix + " ")[1]);
+        // let messageContent = (msg.content.split(prefix + " ")[1] === undefined ? msg.content.split(prefix)[1] : msg.content.split(prefix + " ")[1]);
 
-        const fileTodoItems = fs.readFile(filePath);
+        // const fileTodoItems = fs.readFile(filePath);
 
-        if (messageContent){
-            newTodo(fileTodoItems, messageContent, filePath);
-        } else {
-            displayTodo(fileTodoItems);
-            // FIXME send message in channel
-        }
+        // if (messageContent){
+        //     newTodo(fileTodoItems, messageContent, filePath);
+        // } else {
+        //     displayTodo(fileTodoItems);
+        // }
 
         console.log("--------- End of Log ---------"); //DEBUG
         console.log(" "); //DEBUG
