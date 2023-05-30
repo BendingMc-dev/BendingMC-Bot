@@ -54,7 +54,7 @@ function newTodo(fileTodoItems, messageContent){
     // FIXME send message response
 }
 
-function displayTodo(){
+function displayTodo(fileTodoItems){
     console.log("Message does not have todo item. Displaying todo list of channel"); //DEBUG
     for (let todoItem of fileTodoItems.todo){
         console.log("Todo item of channel: " + todoItem.count + " -> " + todoItem.content);
@@ -111,7 +111,7 @@ exports.onTodoCommand = (client, Events) =>{
         if (messageContent){
             newTodo(fileTodoItems, messageContent);
         } else {
-            displayTodo();
+            displayTodo(fileTodoItems);
             // FIXME send message in channel
         }
 
