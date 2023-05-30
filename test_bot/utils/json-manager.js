@@ -8,13 +8,11 @@ exports.saveFile = (file, data = "") =>{
         this.makeDir(dirname);
 
     fs.writeFile(file, data, (err) =>{
-        if (err){
-            console.log("There was an error while saving a json file");
-            console.log(err);
-        } else {
-            console.log(`New file created: ${file}`);
-        }
-    })
+        console.log("There was an error while saving a json file");
+        console.log(err);
+    });
+
+    console.log(`New file created: ${file}`);
 }
 
 exports.readFile = (file) =>{
@@ -30,6 +28,6 @@ exports.makeDir = (dir) => {
         console.error("There was an error while making a directory");
         console.error(err);
     });
-    
+
     console.log(`New directory created: ${dir}`)
 }
