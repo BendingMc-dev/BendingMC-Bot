@@ -99,6 +99,7 @@ function displayTodo(channelId){
         messageResponse += `**${todoItem.count}. ${todoItem.content}\n\n**`;
     }
 
+    console.log("Message response to displayTodo command: " + messageResponse); //DEBUG
     return messageResponse;
 }
 
