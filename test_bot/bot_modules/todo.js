@@ -118,7 +118,8 @@ exports.newTodo = (client, Events) =>{
         } else {
             console.log("Message does not have todo item. Displaying todo list of channel"); //DEBUG
             let fileContent = fs.readFile(filePath);
-            console.log("Channel todo: " + fileContent);
+            console.log("Channel todo: " + fileContent.content);
+            console.log("Channel todo: " + fileContent[0].content);
             // read file
             // send message in channel
         }
