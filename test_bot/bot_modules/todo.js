@@ -92,7 +92,7 @@ exports.newTodo = (client, Events) =>{
         if (messageContent){
             console.log("Message has todo item. Saving todo in file"); //DEBUG
             const todoItem = new TodoItem(1, messageContent);
-            fileContent = fileContent.Todo.push(JSON.stringify(todoItem));
+            fileContent = fileContent.todo.push(JSON.stringify(todoItem));
             let jsonFileContent = JSON.stringify(fileContent);
             fs.saveFile(filePath, jsonFileContent);
             // send message in channel
