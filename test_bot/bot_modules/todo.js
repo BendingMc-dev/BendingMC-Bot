@@ -60,13 +60,10 @@ exports.newTodo = (client, Events) =>{
         let command = msg.split(prefix)[1];
 
         switch (true){
-            case command.startsWith("r"):
+            case command.search(/remove\s+\d|r\s+\d/) != -1: // starts with "remove", following 1 or more whitespace, following a digit
                 g = "remove todo";
                 break;
-            case command.startsWith("remove"):
-                g = "remove todo";
-                break;
-            case command.startsWith(" "): //FIXME doesn't work properly -> '?todo '
+            case command.search(/^\s+\S+/) != -1: // starts with 1 or more whitespace at the start, following 1 or more non-whitespace characters
                 g = "add todo";
                 break;
             default:
