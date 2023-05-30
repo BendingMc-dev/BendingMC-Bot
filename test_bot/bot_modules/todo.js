@@ -95,11 +95,13 @@ exports.onTodoCommand = (client, Events) =>{
 
         switch (true){
             case command.search(/^(remove|r|rem)\s+\d/) != -1: // starts with "remove", following 1 or more whitespace, following a digit
-                messageContent = command.split(/^(remove|r|rem)\s+\d/)[2];
+                messageContent = command.split(/(\d+)/)[1]; // extract number of todo to be removed from command
+                
                 //FIXME new function to remove todo item
                 break;
             case command.search(/^\s+\S+/) != -1: // starts with 1 or more whitespace at the start, following 1 or more non-whitespace characters
-                messageContent = command.split(/^\s+/)[1];
+                messageContent = command.split(/^\s+/)[1]; // extract content of message from command
+
                 newTodo(fileTodoItems, messageContent, filePath);
                 break;
             default:
