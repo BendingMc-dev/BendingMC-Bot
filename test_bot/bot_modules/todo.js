@@ -31,7 +31,31 @@ class TodoItem {
     }
 }
 
-function newTodo(fileTodoItems, messageContent, filePath){
+function getFilePath(channelId){
+    return files.mainPath + channelId + ".json";
+}
+
+function saveTodoList(todoItems){
+    const todoList = new TodoList();
+
+    for (let todoItem of todoItems){
+        const item = new TodoItem(todoItem.count, todoItem.content);
+
+        todoList.todoList.push(item);
+    }
+
+    let options = null;
+    let spacing = 2;
+    const jsonTodoList = JSON.stringify(todoList, options, spacing);
+    const filePath = getFilePath(channelId);
+
+    fs.saveFile(filePath, jsonTodoList);
+}
+
+function newTodo(channelId, messageContent){
+    const filePath = getFilePath(channelId);
+    const fileTodoItems = fs.readFile(filePath);
+
     console.log("Message has todo item. Saving todo in file"); //DEBUG
 
     const todoList = new TodoList();
@@ -54,13 +78,32 @@ function newTodo(fileTodoItems, messageContent, filePath){
     // FIXME send message response
 }
 
-function displayTodo(fileTodoItems){
+function displayTodo(channelId){
+    const filePath = getFilePath(channelId);
+    const fileTodoItems = fs.readFile(filePath);
+
     console.log("Message does not have todo item. Displaying todo list of channel"); //DEBUG
     for (let todoItem of fileTodoItems.todo){
         console.log("Todo item of channel: " + todoItem.count + " -> " + todoItem.content);
     }
 
     // FIXME display todo in channel
+}
+
+function removeTodo(channelId, todoNumber){
+    const filePath = getFilePath(channelId);
+    const fileTodoItems = fs.readFile(filePath);
+
+    const filteredTodoItems = fileTodoItems.todo.filter(todoItem =>{
+        todoItem.count === todoNumber;
+    });
+
+    saveTodoList(filteredTodoItems);
+    //FIXME send message response
+}
+
+function createTodoFile(){
+
 }
 
 exports.onTodoCommand = (client, Events) =>{
@@ -74,9 +117,8 @@ exports.onTodoCommand = (client, Events) =>{
         console.log("--------- Start of Log ---------"); //DEBUG
 
         const channelId = msg.channel.id;
+        const filePath = getFilePath(channelId);
         const dirName = files.mainPath;
-        const fileName = channelId + ".json";
-        const filePath = dirName + fileName;
 
         // check if folder exists
         if (!fs.fileExists(filePath)){
@@ -90,22 +132,21 @@ exports.onTodoCommand = (client, Events) =>{
         }
 
         let command = msg.content.split(prefix)[1];
-        const fileTodoItems = fs.readFile(filePath);
         let messageContent;
 
         switch (true){
             case command.search(/^(remove|r|rem)\s+\d/) != -1: // starts with "remove", following 1 or more whitespace, following a digit
-                messageContent = command.split(/(\d+)/)[1]; // extract number of todo to be removed from command
-                
-                //FIXME new function to remove todo item
+                let removeNumber = command.split(/(\d+)/)[1]; // extract number of todo to be removed from command
+
+                removeTodo(channelId, removeNumber);
                 break;
             case command.search(/^\s+\S+/) != -1: // starts with 1 or more whitespace at the start, following 1 or more non-whitespace characters
                 messageContent = command.split(/^\s+/)[1]; // extract content of message from command
 
-                newTodo(fileTodoItems, messageContent, filePath);
+                newTodo(channelId, messageContent);
                 break;
             default:
-                displayTodo(fileTodoItems);
+                displayTodo(channelId);
                 break;
         }
 
