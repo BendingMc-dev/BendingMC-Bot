@@ -43,10 +43,12 @@ class TodoItem {
     }
 
     toJSON() {
-        return {
-            count: this.count,
-            content: this.content
-        }
+        return [
+            {
+                count: this.count,
+                content: this.content
+            }
+        ]
     }
 }
 
@@ -109,16 +111,16 @@ exports.newTodo = (client, Events) =>{
         // check if message exists
         let messageContent = (msg.content.split(prefix + " ")[1] === undefined ? msg.content.split(prefix)[1] : msg.content.split(prefix + " ")[1]);
 
+        let fileContent = fs.readFile(filePath);
+
         if (messageContent){
             console.log("Message has todo item. Saving todo in file"); //DEBUG
             const todoItem = new TodoItem(1, messageContent);
-            let jsonMessageContent = JSON.stringify(todoItem);
+            fileContent.push(JSON.stringify(todoItem));
             fs.saveFile(filePath, jsonMessageContent);
             // send message in channel
         } else {
             console.log("Message does not have todo item. Displaying todo list of channel"); //DEBUG
-            let fileContent = fs.readFile(filePath);
-            console.log("Channel todo: " + fileContent.content);
             console.log("Channel todo: " + fileContent[0].content);
             // read file
             // send message in channel
