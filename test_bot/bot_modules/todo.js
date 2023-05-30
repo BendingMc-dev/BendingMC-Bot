@@ -88,19 +88,46 @@ function displayTodo(channelId){
     const filePath = getFilePath(channelId);
     const fileTodoItems = fs.readFile(filePath);
 
-    console.log("Message does not have todo item. Displaying todo list of channel"); //DEBUG
+    // console.log("Message does not have todo item. Displaying todo list of channel"); //DEBUG
+    // for (let todoItem of fileTodoItems.todo){
+    //     console.log("Todo item of channel: " + todoItem.count + " -> " + todoItem.content);
+    // }
+
+    // let messageResponse = `WIP. Displaying todo item of channel:\n`;
+    const messageResponseEmbed = {
+        color: 0x0099ff,
+        title: 'Channel Todo List',
+        url: '', //'https://discord.js.org',
+        author: {
+            name: '', //'Some name',
+            icon_url: '', //'https://i.imgur.com/AfFp7pu.png',
+            url: '', //'https://discord.js.org',
+        },
+        description: '', //'Some description here',
+        thumbnail: {
+            url: '', //'https://i.imgur.com/AfFp7pu.png',
+        },
+        fields: [
+            {
+                name: 'Todo Items',
+                value: '',
+            },
+        ],
+        image: {
+            url: '', //'https://i.imgur.com/AfFp7pu.png',
+        },
+        footer: {
+            text: '', //'Some footer text here',
+            icon_url: '', //'https://i.imgur.com/AfFp7pu.png',
+        },
+    };
+
     for (let todoItem of fileTodoItems.todo){
-        console.log("Todo item of channel: " + todoItem.count + " -> " + todoItem.content);
+        messageResponseEmbed.fields[0].value += `**${todoItem.count}. ${todoItem.content}**\n`;
     }
 
-    let messageResponse = `WIP. Displaying todo item of channel:\n`;
-
-    for (let todoItem of fileTodoItems.todo){
-        messageResponse += `**${todoItem.count}. ${todoItem.content}**\n\n`;
-    }
-
-    console.log("Message response to displayTodo command: " + messageResponse); //DEBUG
-    return messageResponse;
+    // console.log("Message response to displayTodo command: " + messageResponse); //DEBUG
+    return {embeds: [messageResponseEmbed]};
 }
 
 function removeTodo(channelId, todoNumber){
