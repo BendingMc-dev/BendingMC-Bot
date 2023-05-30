@@ -98,9 +98,8 @@ exports.newTodo = (client, Events) =>{
 
             for (let fileTodoItem of fileTodoItems.todo){
                 const todoItem = new TodoItem(fileTodoItem.count, fileTodoItem.content);
-                const jsonTodoItem = JSON.stringify(todoItem);
 
-                todoList.todoList.push(jsonTodoItem);
+                todoList.todoList.push(todoItem);
             }
 
             let todoListCount = todoList.todoList.length;
