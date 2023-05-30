@@ -78,7 +78,7 @@ function newTodo(channelId, messageContent){
 
     fileTodoItems.todo.push(todoItem);
 
-    saveTodoList(channelId, fileTodoItems.todoList);
+    saveTodoList(channelId, fileTodoItems.todo);
 
     // FIXME send message response
 }
