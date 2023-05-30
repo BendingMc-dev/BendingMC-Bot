@@ -121,8 +121,11 @@ function displayTodo(channelId){
         },
     };
 
+
     for (let todoItem of fileTodoItems.todo){
-        messageResponseEmbed.fields[0].value +=  `${todoItem.count}. ☐ ${todoItem.content} ${(todoItem.author ? '(<@' + todoItem.author + '>)' : '')} \n\n`;
+        let capitalizedTodoItemContent = todoItem.content.charAt(0).toUpperCase() + todoItem.content.slice(1);
+
+        messageResponseEmbed.fields[0].value +=  `${todoItem.count}. ☐ ${capitalizedTodoItemContent} ${(todoItem.author ? '(<@' + todoItem.author + '>)' : '')} \n\n`;
     }
 
     // console.log("Message response to displayTodo command: " + messageResponse); //DEBUG
