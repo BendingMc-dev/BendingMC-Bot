@@ -99,8 +99,8 @@ function displayTodo(channelId){
         title: 'Channel Todo List',
         // url: '', //'https://discord.js.org',
         author: {
-            name: '', //'Some name',
-            icon_url: 'https://www.dropbox.com/temp_thumb_from_token/s/u5ajixq3x3ubmsp?preserve_transparency=False&size=1200x1200&size_mode=4',
+            name: 'test', //'Some name',
+            icon_url: 'https:\/\/www.dropbox.com\/temp_thumb_from_token\/s\/u5ajixq3x3ubmsp?preserve_transparency=False&size=1200x1200&size_mode=4',
             url: '', //'https://discord.js.org',
         },
         //description: '', //'Some description here',
@@ -120,7 +120,7 @@ function displayTodo(channelId){
     };
 
     for (let todoItem of fileTodoItems.todo){
-        messageResponseEmbed.fields[0].value += `**⬛ [${todoItem.count}]** ${todoItem.content}\n\n`;
+        messageResponseEmbed.fields[0].value += `**⬛  [${todoItem.count}]** ${todoItem.content}\n\n`;
     }
 
     // console.log("Message response to displayTodo command: " + messageResponse); //DEBUG
