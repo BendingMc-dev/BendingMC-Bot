@@ -89,7 +89,7 @@ exports.onTodoCommand = (client, Events) =>{
             fs.saveFile(filePath, jsonTodoList);
         }
 
-        let command = msg.split(prefix)[1];
+        let command = msg.content.split(prefix)[1];
 
         switch (true){
             case command.search(/remove\s+\d|r\s+\d/) != -1: // starts with "remove", following 1 or more whitespace, following a digit
