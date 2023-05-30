@@ -28,8 +28,6 @@ exports.makeDir = (dir) => {
 }
 
 exports.saveFile = (file, data = "") =>{
-    console.log("Attempting to write JSON file with json: " + data);
-
     fs.writeFile(file, data, (err) =>{
         if (!err) return;
 
