@@ -75,12 +75,13 @@ function newTodo(channelId, messageContent){
 
     // fs.saveFile(filePath, jsonTodoList);
     const todoItem = new TodoItem(todoListCount, messageContent);
-
     fileTodoItems.todo.push(todoItem);
 
     saveTodoList(channelId, fileTodoItems.todo);
 
-    // FIXME send message response
+    let messageResponse = `Added new todo item with number ${todoItem.count} successfully! Use '?todo' to see the current todo list of this channel.`;
+    
+    return messageResponse;
 }
 
 function displayTodo(channelId){
@@ -92,7 +93,13 @@ function displayTodo(channelId){
         console.log("Todo item of channel: " + todoItem.count + " -> " + todoItem.content);
     }
 
-    // FIXME display todo in channel
+    let messageResponse = `WIP. Displaying todo item of channel:`;
+
+    for (let todoItem of fileTodoItems.todo){
+        messageResponse += `\- ${todoItem.count}. ${todoItem.content}\n`;
+    }
+
+    return messageResponse;
 }
 
 function removeTodo(channelId, todoNumber){
@@ -105,7 +112,10 @@ function removeTodo(channelId, todoNumber){
     });
 
     saveTodoList(channelId, filteredTodoItems);
-    //FIXME send message response
+    
+    let messageResponse = `Todo item #${todoNumber} removed successfully! Use '?todo' to see the current todo list of this channel.`;
+
+    return messageResponse;
 }
 
 function createTodoFile(){
@@ -139,6 +149,7 @@ exports.onTodoCommand = (client, Events) =>{
 
         let command = msg.content.split(prefix)[1];
         let messageContent;
+        let response;
 
         // decide which task to perform based on characters after the prefix
         switch (true){
@@ -146,20 +157,22 @@ exports.onTodoCommand = (client, Events) =>{
             case command.search(/^(remove|r|rem)\s+\d/) != -1:
                 let removeNumber = command.split(/(\d+)/)[1];
 
-                removeTodo(channelId, removeNumber);
+                response = removeTodo(channelId, removeNumber);
                 break;
 
             // starts with 1 or more whitespace at the start, following 1 or more non-whitespace characters
             case command.search(/^\s+\S+/) != -1:
                 messageContent = command.split(/^\s+/)[1];
 
-                newTodo(channelId, messageContent);
+                reseponse = newTodo(channelId, messageContent);
                 break;
             
             default:
-                displayTodo(channelId);
+                response = displayTodo(channelId);
                 break;
         }
+
+        msg.reply(response);
 
         // check if message exists
         // let messageContent = (msg.content.split(prefix + " ")[1] === undefined ? msg.content.split(prefix)[1] : msg.content.split(prefix + " ")[1]);
