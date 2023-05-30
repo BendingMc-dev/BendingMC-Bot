@@ -28,10 +28,7 @@ exports.makeDir = (dir) => {
 }
 
 exports.saveFile = (file, data = "") =>{
-    // const dirname = path.dirname(file);
-
-    // if (!this.fileExists(dirname))
-    //     this.makeDir(dirname);
+    console.log("Attempting to write JSON file with json: " + data);
 
     fs.writeFile(file, data, (err) =>{
         if (!err) return;
