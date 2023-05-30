@@ -74,12 +74,12 @@ exports.newTodo = (client, Events) =>{
         const filePath = dirName + fileName;
 
         // check if folder exists
-        if (!fs.fileExists(filePath)){
+        if (!fs.fileExists(dirName)){
             fs.makeDir(dirName);
 
             const todoList = new TodoList();
             let jsonTodoList = JSON.stringify(todoList);
-            console.log("New file created with the json: " + jsonTodoList);
+            console.log("New file created with the json: " + jsonTodoList); //DEBUG
 
             fs.saveFile(filePath, jsonTodoList);
         }
