@@ -37,9 +37,11 @@ const files = {
 }
 
 class TodoList{
+    todoList = [];
+
     toJSON(){
         return {
-            todo: []
+            todo: this.todoList
         }
     }
 }
@@ -87,17 +89,37 @@ exports.newTodo = (client, Events) =>{
         // check if message exists
         let messageContent = (msg.content.split(prefix + " ")[1] === undefined ? msg.content.split(prefix)[1] : msg.content.split(prefix + " ")[1]);
 
-        const fileContent = fs.readFile(filePath);
+        const fileTodoItems = fs.readFile(filePath);
 
         if (messageContent){
             console.log("Message has todo item. Saving todo in file"); //DEBUG
-            const todoItem = new TodoItem(1, messageContent);
-            let jsonTodoItem = JSON.stringify(todoItem);
-            let newFileContent = fileContent.todo.push(jsonTodoItem);
-            let jsonFileContent = JSON.stringify(fileContent);
-            console.log("Object as json is: " + jsonTodoItem);
-            console.log("Writing file with json: " + newFileContent);
-            fs.saveFile(filePath, jsonFileContent);
+
+            const todoList = new TodoList();
+
+            for (let fileTodoItem of fileTodoItems){
+                const todoItem = new TodoItem(fileTodoItem.count, fileTodoItem.content);
+                const jsonTodoItem = JSON.stringify(todoItem);
+
+                todoList.todoList.push(jsonTodoItem);
+            }
+
+            let todoListCount = todoList.todoList.length;
+
+            const todoItem = new TodoItem(todoListCount, messageContent);
+            const jsonTodoItem = JSON.stringify(todoItem);
+
+            todoList.todoList.push(jsonTodoItem);
+
+            const jsonTodoList = JSON.stringify(todoList);
+
+            fs.saveFile(filePath, jsonTodoList);
+
+            // const todoItem = new TodoItem(1, messageContent);
+            // let newFileContent = fileContent.todo.push(jsonTodoItem);
+            // let jsonFileContent = JSON.stringify(newFileContent);
+            // console.log("Object as json is: " + jsonTodoItem);
+            // console.log("Writing file with json: " + newFileContent);
+            // fs.saveFile(filePath, jsonFileContent);
             // send message in channel
         } else {
             console.log("Message does not have todo item. Displaying todo list of channel"); //DEBUG
