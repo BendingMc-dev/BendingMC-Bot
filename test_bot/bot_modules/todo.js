@@ -74,7 +74,7 @@ exports.newTodo = (client, Events) =>{
         const filePath = dirName + fileName;
 
         // check if folder exists
-        if (!fs.fileExists(dirName)){
+        if (!fs.fileExists(filePath)){
             fs.makeDir(dirName);
 
             const todoList = new TodoList();
