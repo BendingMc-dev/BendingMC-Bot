@@ -95,7 +95,8 @@ function removeTodo(channelId, todoNumber){
     const fileTodoItems = fs.readFile(filePath);
 
     const filteredTodoItems = fileTodoItems.todo.filter(todoItem =>{
-        todoItem.count === todoNumber;
+        console.log(`Filtering items... Count of todoItem (${todoItem.count}) and number of item to be removed ${todoNumber}`); //DEBUG
+        return todoItem.count !== todoNumber;
     });
 
     saveTodoList(channelId, filteredTodoItems);
