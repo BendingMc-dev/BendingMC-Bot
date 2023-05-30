@@ -31,7 +31,39 @@ class TodoItem {
     }
 }
 
-exports.newTodo = (client, Events) =>{
+function newTodo(fileTodoItems, messageContent){
+    console.log("Message has todo item. Saving todo in file"); //DEBUG
+
+    const todoList = new TodoList();
+
+    for (let fileTodoItem of fileTodoItems.todo){
+        const todoItem = new TodoItem(fileTodoItem.count, fileTodoItem.content);
+
+        todoList.todoList.push(todoItem);
+    }
+
+    let todoListCount = todoList.todoList.length + 1;
+    const todoItem = new TodoItem(todoListCount, messageContent);
+
+    todoList.todoList.push(todoItem);
+
+    const jsonTodoList = JSON.stringify(todoList, null, 2);
+
+    fs.saveFile(filePath, jsonTodoList);
+
+    // FIXME send message response
+}
+
+function displayTodo(){
+    console.log("Message does not have todo item. Displaying todo list of channel"); //DEBUG
+    for (let todoItem of fileTodoItems.todo){
+        console.log("Todo item of channel: " + todoItem.count + " -> " + todoItem.content);
+    }
+
+    // FIXME display todo in channel
+}
+
+exports.onTodoCommand = (client, Events) =>{
     client.on(Events.MessageCreate, msg =>{
         // check if message was sent by the bot
         if (msg.author.id === client.user.id) return;
@@ -77,32 +109,9 @@ exports.newTodo = (client, Events) =>{
         const fileTodoItems = fs.readFile(filePath);
 
         if (messageContent){
-            console.log("Message has todo item. Saving todo in file"); //DEBUG
-
-            const todoList = new TodoList();
-
-            for (let fileTodoItem of fileTodoItems.todo){
-                const todoItem = new TodoItem(fileTodoItem.count, fileTodoItem.content);
-
-                todoList.todoList.push(todoItem);
-            }
-
-            let todoListCount = todoList.todoList.length + 1;
-            const todoItem = new TodoItem(todoListCount, messageContent);
-
-            todoList.todoList.push(todoItem);
-
-            const jsonTodoList = JSON.stringify(todoList, null, 2);
-
-            fs.saveFile(filePath, jsonTodoList);
-
-            //FIXME send message in channel
+            newTodo(fileTodoItems, messageContent);
         } else {
-            console.log("Message does not have todo item. Displaying todo list of channel"); //DEBUG
-            for (let todoItem of fileTodoItems.todo){
-                console.log("Todo item of channel: " + todoItem.count + " -> " + todoItem.content);
-            }
-
+            displayTodo();
             // FIXME send message in channel
         }
 
