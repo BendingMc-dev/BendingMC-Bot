@@ -120,6 +120,10 @@ function displayTodo(channelId){
                 name: '3',
                 value: '',
             },
+            {
+                name: '4',
+                value: '',
+            },
         ],
         image: {
             url: '', //'https://i.imgur.com/AfFp7pu.png',
@@ -133,7 +137,8 @@ function displayTodo(channelId){
     for (let todoItem of fileTodoItems.todo){
         messageResponseEmbed.fields[0].value += `**[ ] ${todoItem.count}. ${todoItem.content}**\n`;
         messageResponseEmbed.fields[1].value += `**${todoItem.count}. [ ] ${todoItem.content}**\n`;
-        messageResponseEmbed.fields[0].value += `**(${todoItem.count}) [ ] ${todoItem.content}**\n`;
+        messageResponseEmbed.fields[2].value += `**(${todoItem.count}) [ ] ${todoItem.content}**\n`;
+        messageResponseEmbed.fields[3].value += `**(${todoItem.count}) [ ] ${todoItem.content}**\n`;
     }
 
     // console.log("Message response to displayTodo command: " + messageResponse); //DEBUG
