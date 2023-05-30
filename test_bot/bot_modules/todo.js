@@ -86,7 +86,7 @@ function newTodo(channelId, messageContent, messageAuthor){
     return messageResponse;
 }
 
-function displayTodo(channelId){
+function displayTodo(channelId, channelName){
     const filePath = getFilePath(channelId);
     const fileTodoItems = fs.readFile(filePath);
 
@@ -98,10 +98,10 @@ function displayTodo(channelId){
     // let messageResponse = `WIP. Displaying todo item of channel:\n`;
     const messageResponseEmbed = {
         color: 0xFB4E88,
-        title: '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+        // title: '',
         // url: '', //'https://discord.js.org',
         author: {
-            name: 'Channel Todo List', //'Some name',
+            name: `Channel Todo List | ${channelName}`, //'Some name',
             icon_url: 'https:\/\/www.dropbox.com\/temp_thumb_from_token\/s\/u5ajixq3x3ubmsp?preserve_transparency=False&size=1200x1200&size_mode=4',
             // url: '', //'https://discord.js.org',
         },
@@ -109,7 +109,7 @@ function displayTodo(channelId){
         fields: [
             {
                 name: '',
-                value: '',
+                value: '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n',
             },
         ],
         // image: {
@@ -125,7 +125,7 @@ function displayTodo(channelId){
     for (let todoItem of fileTodoItems.todo){
         let capitalizedTodoItemContent = todoItem.content.charAt(0).toUpperCase() + todoItem.content.slice(1);
 
-        messageResponseEmbed.fields[0].value +=  `${todoItem.count}. ☐ ${capitalizedTodoItemContent} ${(todoItem.author ? '(<@' + todoItem.author + '>)' : '')} \n\n`;
+        messageResponseEmbed.fields[0].value +=  `${todoItem.count}. | ☐ ${capitalizedTodoItemContent} ${(todoItem.author ? '(<@' + todoItem.author + '>)' : '')} \n\n`;
     }
 
     // console.log("Message response to displayTodo command: " + messageResponse); //DEBUG
@@ -180,6 +180,7 @@ exports.onTodoCommand = (client, Events) =>{
         let command = msg.content.split(prefix)[1];
         let messageContent;
         let response;
+        const channelName = msg.channel.name;
 
         // decide which task to perform based on characters after the prefix
         switch (true){
@@ -199,7 +200,7 @@ exports.onTodoCommand = (client, Events) =>{
                 break;
             
             default:
-                response = displayTodo(channelId);
+                response = displayTodo(channelId, channelName);
                 break;
         }
 
