@@ -113,11 +113,11 @@ function displayTodo(channelId, channelName){
             },
             {
                 name: '',
-                value: '──────────────────────────────────────\n',
+                value: '┌──────────────────────────────────────\n',
             },
             {
                 name: '',
-                value: '──────────────────────────────────────\n',
+                value: '└──────────────────────────────────────\n',
             },
         ],
         // image: {
@@ -133,14 +133,10 @@ function displayTodo(channelId, channelName){
     for (let todoItem of fileTodoItems.todo){
         let capitalizedTodoItemContent = todoItem.content.charAt(0).toUpperCase() + todoItem.content.slice(1);
 
-        messageResponseEmbed.fields[0].value +=  `☐ │ ${todoItem.count}. ${capitalizedTodoItemContent} ${(todoItem.author ? '(<@' + todoItem.author + '>)' : '')} \n`;
-        messageResponseEmbed.fields[0].value +=  `  │\n`;
+        messageResponseEmbed.fields[0].value +=  `☐ │ ${todoItem.count}. ${capitalizedTodoItemContent} ${(todoItem.author ? '(<@' + todoItem.author + '>)' : '')} \n\n`;
         
         messageResponseEmbed.fields[1].value +=  `  │ ${todoItem.count}. ${capitalizedTodoItemContent} ${(todoItem.author ? '(<@' + todoItem.author + '>)' : '')} \n`;
         messageResponseEmbed.fields[1].value +=  `  │\n`;
-        
-        messageResponseEmbed.fields[2].value +=  `☐│ ${todoItem.count}. ${capitalizedTodoItemContent} ${(todoItem.author ? '(<@' + todoItem.author + '>)' : '')} \n`;
-        messageResponseEmbed.fields[2].value +=  `  │\n`;
     }
 
     // console.log("Message response to displayTodo command: " + messageResponse); //DEBUG
