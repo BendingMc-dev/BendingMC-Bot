@@ -2,7 +2,14 @@ const fs = require('fs');
 const path = require('path');
 
 exports.readFile = (file) =>{
+    const data = fs.readFileSync(file, (err) =>{
+        if (!err) return;
 
+        console.log("There was an error while saving a json file");
+        console.log(err);
+    });
+
+    return JSON.parse(data);
 }
 
 exports.fileExists = (file) =>{
