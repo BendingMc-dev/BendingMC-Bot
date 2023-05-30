@@ -28,7 +28,7 @@ exports.makeDir = (dir) => {
 }
 
 exports.saveFile = (file, data = "") =>{
-    fs.writeFile(file, data, (err) =>{
+    fs.writeFileSync(file, data, (err) =>{
         if (!err) return;
 
         console.log("There was an error while saving a json file");
