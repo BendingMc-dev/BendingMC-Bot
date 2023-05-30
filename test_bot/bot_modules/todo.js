@@ -98,7 +98,9 @@ exports.newTodo = (client, Events) =>{
             // send message in channel
         } else {
             console.log("Message does not have todo item. Displaying todo list of channel"); //DEBUG
-            console.log("Channel todo: " + fileContent.Todo[0].content);
+            for (let todoItem of fileContent.todo){
+                console.log("Todo item of channel: " + todoItem.count + " -> " + todoItem.content);
+            }
             // read file
             // send message in channel
         }
