@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 exports.saveFile = (file, data = "") =>{
-    const dirname = path.dirname(file);
+    const dirname = `${__dirname}/${path.dirname(file)}`;
 
     if (!this.fileExists(dirname))
         this.makeDir(dirname);
