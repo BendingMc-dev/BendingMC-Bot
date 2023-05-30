@@ -1,4 +1,3 @@
-const mysql = require("../utils/mysql-manager.js");
 const fs = require("../utils/json-manager.js");
 
 const prefix = "?todo";
@@ -39,8 +38,8 @@ function saveTodoList(channelId, todoItems){
     const todoList = new TodoList();
 
     for (let todoItem of todoItems){
-        console.log(`Current length of list is (${todoList.todoList.length}). If this increases, use this as the count instead.`); //DEBUG
-        const item = new TodoItem(todoItem.count, todoItem.content);
+        let count = todoList.todoList.length + 1;
+        const item = new TodoItem(count, todoItem.content);
 
         todoList.todoList.push(item);
     }
@@ -55,26 +54,31 @@ function saveTodoList(channelId, todoItems){
 
 function newTodo(channelId, messageContent){
     const filePath = getFilePath(channelId);
-    const fileTodoItems = fs.readFile(filePath);
+    let fileTodoItems = fs.readFile(filePath);
 
-    console.log("Message has todo item. Saving todo in file"); //DEBUG
+    // console.log("Message has todo item. Saving todo in file"); //DEBUG
 
-    const todoList = new TodoList();
+    // const todoList = new TodoList();
 
-    for (let fileTodoItem of fileTodoItems.todo){
-        const todoItem = new TodoItem(fileTodoItem.count, fileTodoItem.content);
+    // for (let fileTodoItem of fileTodoItems.todo){
+    //     const todoItem = new TodoItem(fileTodoItem.count, fileTodoItem.content);
 
-        todoList.todoList.push(todoItem);
-    }
+    //     todoList.todoList.push(todoItem);
+    // }
 
-    let todoListCount = todoList.todoList.length + 1;
+    let todoListCount = fileTodoItems.todo.length + 1;
+    // const todoItem = new TodoItem(todoListCount, messageContent);
+
+    // todoList.todoList.push(todoItem);
+
+    // const jsonTodoList = JSON.stringify(todoList, null, 2);
+
+    // fs.saveFile(filePath, jsonTodoList);
     const todoItem = new TodoItem(todoListCount, messageContent);
 
-    todoList.todoList.push(todoItem);
+    fileTodoItems.todo.push(todoItem);
 
-    const jsonTodoList = JSON.stringify(todoList, null, 2);
-
-    fs.saveFile(filePath, jsonTodoList);
+    saveTodoList(channelId, fileTodoItems.todoList);
 
     // FIXME send message response
 }
@@ -136,17 +140,22 @@ exports.onTodoCommand = (client, Events) =>{
         let command = msg.content.split(prefix)[1];
         let messageContent;
 
+        // decide which task to perform based on characters after the prefix
         switch (true){
-            case command.search(/^(remove|r|rem)\s+\d/) != -1: // starts with "remove", following 1 or more whitespace, following a digit
-                let removeNumber = command.split(/(\d+)/)[1]; // extract number of todo to be removed from command
+            // starts with "remove", following 1 or more whitespace, following a digit
+            case command.search(/^(remove|r|rem)\s+\d/) != -1:
+                let removeNumber = command.split(/(\d+)/)[1];
 
                 removeTodo(channelId, removeNumber);
                 break;
-            case command.search(/^\s+\S+/) != -1: // starts with 1 or more whitespace at the start, following 1 or more non-whitespace characters
-                messageContent = command.split(/^\s+/)[1]; // extract content of message from command
+
+            // starts with 1 or more whitespace at the start, following 1 or more non-whitespace characters
+            case command.search(/^\s+\S+/) != -1:
+                messageContent = command.split(/^\s+/)[1];
 
                 newTodo(channelId, messageContent);
                 break;
+            
             default:
                 displayTodo(channelId);
                 break;
