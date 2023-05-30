@@ -35,7 +35,7 @@ function getFilePath(channelId){
     return files.mainPath + channelId + ".json";
 }
 
-function saveTodoList(todoItems){
+function saveTodoList(channelId, todoItems){
     const todoList = new TodoList();
 
     for (let todoItem of todoItems){
@@ -98,7 +98,7 @@ function removeTodo(channelId, todoNumber){
         todoItem.count === todoNumber;
     });
 
-    saveTodoList(filteredTodoItems);
+    saveTodoList(channelId, filteredTodoItems);
     //FIXME send message response
 }
 
