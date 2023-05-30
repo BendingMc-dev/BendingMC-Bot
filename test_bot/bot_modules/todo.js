@@ -96,7 +96,7 @@ function displayTodo(channelId){
     let messageResponse = `WIP. Displaying todo item of channel:\n`;
 
     for (let todoItem of fileTodoItems.todo){
-        messageResponse += `**${todoItem.count}. ${todoItem.content}\n\n**`;
+        messageResponse += `**${todoItem.count}. ${todoItem.content}**\n\n`;
     }
 
     console.log("Message response to displayTodo command: " + messageResponse); //DEBUG
