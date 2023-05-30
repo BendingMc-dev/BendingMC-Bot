@@ -2,14 +2,19 @@ const fs = require('fs');
 const path = require('path');
 
 exports.saveFile = (file, data = "") =>{
-    try {
-        fs.writeFileSync(file, data);
-        console.log(`New file created: ${file}`);
-    } catch (err) {
-        console.error("There was an error while saving a json file");
-        console.error(err);
-    }
+    const dirname = path.dirname(file);
 
+    if (!this.fileExists(dirname))
+        this.makeDir(dirname);
+
+    fs.writeFile(file, data, (err) =>{
+        if (err){
+            console.log("There was an error while saving a json file");
+            console.log(err);
+        } else {
+            console.log(`New file created: ${file}`);
+        }
+    })
 }
 
 exports.readFile = (file) =>{
