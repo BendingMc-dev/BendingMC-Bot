@@ -88,21 +88,42 @@ exports.newTodo = (client, Events) =>{
         // check if message has prefix
         if (!msg.content.startsWith(prefix)) return;
 
-        let channelId = msg.channel.id;
+        console.log("--------- Start of Log ---------"); //DEBUG
 
-        let fileName = channelId + ".json";
-        let filePath = files.mainPath + fileName;
+        const channelId = msg.channel.id;
+        const dirName = files.mainPath;
+        const fileName = channelId + ".json";
+        const filePath = dirName + fileName;
 
-        // check if file exists
-        console.log(`The file (${filePath}) exists: ${fs.fileExists(filePath)}`); //DEBUG
-        if (!fs.fileExists(filePath)){
-            console.log("File doesn't exist. Creating new file for channel");
+        // check if folder exists
+        // console.log(`The file (${filePath}) exists: ${fs.fileExists(filePath)}`); //DEBUG
+        // if (!fs.fileExists(filePath)){
+            // console.log("File doesn't exist. Creating new file for channel"); //DEBUG
+        //     fs.saveFile(filePath);
+        // }
+        if (!fs.fileExists(dirName)){
             fs.saveFile(filePath);
-            // fs.makeDir(files.mainPath);
         }
 
         // check if message exists
+        let messageContent = (msg.content.split(prefix + " ")[1] === undefined ? msg.content.split(prefix)[1] : msg.content.split(prefix + " ")[1]);
+
+        if (messageContent){
+            console.log("Message has todo item. Saving todo in file"); //DEBUG
+            // read file
+            // append todo at the end of file
+            // save file
+            // send message in channel
+        } else {
+            console.log("Message does not have todo item. Displaying todo list of channel"); //DEBUG
+            // read file
+            // send message in channel
+        }
+
         // send response
+
+        console.log("--------- End of Log ---------"); //DEBUG
+        console.log(" "); //DEBUG
     })    
 }
 
