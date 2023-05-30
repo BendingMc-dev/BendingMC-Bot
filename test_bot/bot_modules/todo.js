@@ -94,6 +94,7 @@ exports.newTodo = (client, Events) =>{
             const todoItem = new TodoItem(1, messageContent);
             fileContent = fileContent.todo.push(JSON.stringify(todoItem));
             let jsonFileContent = JSON.stringify(fileContent);
+            console.log("Writing file with json: " + jsonFileContent);
             fs.saveFile(filePath, jsonFileContent);
             // send message in channel
         } else {
