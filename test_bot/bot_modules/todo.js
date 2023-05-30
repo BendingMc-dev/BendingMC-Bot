@@ -122,7 +122,7 @@ function displayTodo(channelId){
     };
 
     for (let todoItem of fileTodoItems.todo){
-        messageResponseEmbed.fields[0].value += `**☐ [${todoItem.count}]** ${todoItem.content} (<@${todoItem.author}>)\n\n`;
+        messageResponseEmbed.fields[0].value += `**${todoItem.count} ☐** ${todoItem.content} (<@${todoItem.author}>)\n\n`;
     }
 
     // console.log("Message response to displayTodo command: " + messageResponse); //DEBUG
