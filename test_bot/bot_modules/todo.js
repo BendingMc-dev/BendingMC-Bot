@@ -111,10 +111,6 @@ function displayTodo(channelId, channelName){
                 name: '',
                 value: '──────────────────────────────────────\n',
             },
-            {
-                name: '',
-                value: '──────────────────────────────────────\n',
-            },
         ],
         // image: {
         //     url: '', //'https://i.imgur.com/AfFp7pu.png',
@@ -125,13 +121,11 @@ function displayTodo(channelId, channelName){
         },
     };
 
-
+    //FIXME add limit (if the next item + the current items length is more than 1000, create a new field and start adding there instead)
     for (let todoItem of fileTodoItems.todo){
         let capitalizedTodoItemContent = todoItem.content.charAt(0).toUpperCase() + todoItem.content.slice(1);
 
-        messageResponseEmbed.fields[0].value +=  `${todoItem.count}. ${capitalizedTodoItemContent} ${(todoItem.author ? '(<@' + todoItem.author + '>)' : '')} \n\n`;
-
-        messageResponseEmbed.fields[1].value +=  `${todoItem.count}. ${capitalizedTodoItemContent} ${(todoItem.author ? '(<@' + todoItem.author + '>)' : '')} \n`;
+        messageResponseEmbed.fields[0].value +=  `${todoItem.count}. ${capitalizedTodoItemContent} ${(todoItem.author ? '(<@' + todoItem.author + '>)' : '')} \n`;
     }
 
     // console.log("Message response to displayTodo command: " + messageResponse); //DEBUG
@@ -165,6 +159,14 @@ exports.onTodoCommand = (client, Events) =>{
 
         // check if message has prefix
         if (!msg.content.startsWith(prefix)) return;
+
+        let role = member.roles.cache.some(role => role.name === 'Admin');
+
+        console.log("Who is member?" + member);
+        console.log("Who is member.id? " + member.id);
+        console.log("Member has role? " + role);
+
+        console.log("Test member -> " + msg.author.roles.cache.some(role => role.name === 'Admin'))
 
         console.log("--------- Start of Log ---------"); //DEBUG
 
