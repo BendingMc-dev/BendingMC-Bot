@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const simpleGit = require('simple-git');
 
-const git = simpleGit('/test/git');
+const git = simpleGit('/test');
 const USER = process.env.GIT_USER;
 const PASS = process.env.GIT_PASSWORD;
 
