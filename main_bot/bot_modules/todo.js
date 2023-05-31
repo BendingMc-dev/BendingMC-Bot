@@ -113,19 +113,19 @@ function displayTodo(channelId, channelName){
                 // console.log("Embed exceeds cap of 1000 characters."); //DEBUG
                 // console.log("Current embed to use is: " + currentEmbed + ". If this is not 0, use current embed below. Otherwise, increment this by 1 and use below"); //DEBUG
             }
-            console.log("Using embed number #" + currentEmbed); //DEBUG
+            // console.log("Using embed number #" + currentEmbed); //DEBUG
 
             let capitalizedTodoItemContent = todoItem.content.charAt(0).toUpperCase() + todoItem.content.slice(1);
 
-            messageResponseEmbed.fields[0].value +=  `${todoItem.count}. ${capitalizedTodoItemContent} ${(todoItem.author ? '(' + todoItem.author + ')' : '')}\n`;
+            messageResponseEmbed.fields[currentEmbed].value +=  `${todoItem.count}. ${capitalizedTodoItemContent} ${(todoItem.author ? '(' + todoItem.author + ')' : '')}\n`;
         }
 
     }
 
     messageResponseEmbed.fields[0].value += "```";
 
-    return "Under maintenance, sorry! >_>";
-    //return {embeds: [messageResponseEmbed]};
+    // return "Under maintenance, sorry! >_>";
+    return {embeds: [messageResponseEmbed]};
 }
 
 function removeTodo(channelId, todoNumber){
