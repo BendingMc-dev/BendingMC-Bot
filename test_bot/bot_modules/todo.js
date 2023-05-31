@@ -85,27 +85,49 @@ function displayTodo(channelId, channelName){
             {
                 name: '',
                 value: '',
-            },
+            }
         ],
     };
 
-    messageResponseEmbed.fields[0].value += "```markdown\n";
+
+    // messageResponseEmbed.fields[0].value += "```markdown\n";
+    for (let field of messageResponseEmbed.fields){
+        field.value += "```markdown\n";
+    }
 
     if (!fileTodoItems.todo.length) {
         messageResponseEmbed.fields[0].value += "It looks like this channel doesn't have a todo list!\n";
     } else {
-        //FIXME add limit (if the next item + the current items length is more than 1000, create a new field and start adding there instead)
+        const characterLimit = 1000;
 
         for (let todoItem of fileTodoItems.todo){
+            let currentEmbed = messageResponseEmbed.fields.length - 1;
+            let currentEmbedSize = messageResponseEmbed.fields[currentEmbed].value.length;
+            let predictSize = currentEmbedSize + todoItem.content.length;
+
+            if (predictSize > characterLimit){
+                const newField = {
+                    name: '',
+                    value: '```markdown\n',
+                }
+
+                messageResponseEmbed.fields.push(newField);
+                currentEmbed += 1;
+            }
+
             let capitalizedTodoItemContent = todoItem.content.charAt(0).toUpperCase() + todoItem.content.slice(1);
 
-            messageResponseEmbed.fields[0].value +=  `${todoItem.count}. ${capitalizedTodoItemContent} ${(todoItem.author ? '(' + todoItem.author + ')' : '')}\n`;
+            messageResponseEmbed.fields[currentEmbed].value +=  `${todoItem.count}. ${capitalizedTodoItemContent} ${(todoItem.author ? '(' + todoItem.author + ')' : '')}\n`;
         }
 
     }
 
-    messageResponseEmbed.fields[0].value += "```";
+    // messageResponseEmbed.fields[0].value += "```";
+    for (let field of messageResponseEmbed.fields){
+        field.value += "```";
+    }
 
+    // return "Under maintenance, sorry! >_>";
     return {embeds: [messageResponseEmbed]};
 }
 
