@@ -1,5 +1,4 @@
 const fs = require('fs');
-const path = require('path');
 
 exports.readFile = (file) =>{
     const data = fs.readFileSync(file, (err) =>{
