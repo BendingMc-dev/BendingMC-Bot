@@ -98,8 +98,6 @@ function displayTodo(channelId, channelName){
     if (!fileTodoItems.todo.length) {
         messageResponseEmbed.fields[0].value += "It looks like this channel doesn't have a todo list!\n";
     } else {
-        //FIXME add limit (if the next item + the current items length is more than 1000, create a new field and start adding there instead)
-
         const characterLimit = 1000;
 
         for (let todoItem of fileTodoItems.todo){
@@ -127,7 +125,6 @@ function displayTodo(channelId, channelName){
     // messageResponseEmbed.fields[0].value += "```";
     for (let field of messageResponseEmbed.fields){
         field.value += "```";
-        console.log("Iterating fields. Current value of field is: " + field.value); //DEBUG
     }
 
     // return "Under maintenance, sorry! >_>";
