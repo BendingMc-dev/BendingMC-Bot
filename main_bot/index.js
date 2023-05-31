@@ -44,7 +44,7 @@ client.on(Events.MessageCreate, msg =>{
 })
 
 // Log in
-const BOT_TOKEN = process.env.MAIN_BOT_TOKEN;
+const BOT_TOKEN = process.env.BOT_TOKEN;
 client.login(BOT_TOKEN);
 
 // Start console message
