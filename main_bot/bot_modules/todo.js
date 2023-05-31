@@ -85,7 +85,7 @@ function displayTodo(channelId, channelName){
             {
                 name: '',
                 value: '',
-            },
+            }
         ],
     };
 
@@ -108,12 +108,10 @@ function displayTodo(channelId, channelName){
                     name: '',
                     value: '',
                 }
+                
                 messageResponseEmbed.fields.push(newField);
                 currentEmbed += 1;
-                // console.log("Embed exceeds cap of 1000 characters."); //DEBUG
-                // console.log("Current embed to use is: " + currentEmbed + ". If this is not 0, use current embed below. Otherwise, increment this by 1 and use below"); //DEBUG
             }
-            // console.log("Using embed number #" + currentEmbed); //DEBUG
 
             let capitalizedTodoItemContent = todoItem.content.charAt(0).toUpperCase() + todoItem.content.slice(1);
 
