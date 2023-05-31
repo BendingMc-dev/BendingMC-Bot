@@ -89,7 +89,11 @@ function displayTodo(channelId, channelName){
         ],
     };
 
-    messageResponseEmbed.fields[0].value += "```markdown\n";
+
+    // messageResponseEmbed.fields[0].value += "```markdown\n";
+    for (let field of messageResponseEmbed.fields){
+        field.value += "```markdown\n";
+    }
 
     if (!fileTodoItems.todo.length) {
         messageResponseEmbed.fields[0].value += "It looks like this channel doesn't have a todo list!\n";
@@ -108,7 +112,7 @@ function displayTodo(channelId, channelName){
                     name: '',
                     value: '',
                 }
-                
+
                 messageResponseEmbed.fields.push(newField);
                 currentEmbed += 1;
             }
@@ -120,7 +124,10 @@ function displayTodo(channelId, channelName){
 
     }
 
-    messageResponseEmbed.fields[0].value += "```";
+    // messageResponseEmbed.fields[0].value += "```";
+    for (let field of messageResponseEmbed.fields){
+        field.value += "```";
+    }
 
     // return "Under maintenance, sorry! >_>";
     return {embeds: [messageResponseEmbed]};
