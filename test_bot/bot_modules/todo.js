@@ -160,12 +160,6 @@ exports.onTodoCommand = (client, Events) =>{
         // check if message has prefix
         if (!msg.content.startsWith(prefix)) return;
 
-        let role = member.roles.cache.some(role => role.name === 'Admin');
-
-        console.log("Who is member?" + member);
-        console.log("Who is member.id? " + member.id);
-        console.log("Member has role? " + role);
-
         console.log("Test member -> " + msg.author.roles.cache.some(role => role.name === 'Admin'))
 
         console.log("--------- Start of Log ---------"); //DEBUG
