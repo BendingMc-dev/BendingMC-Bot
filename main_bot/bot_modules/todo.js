@@ -109,8 +109,8 @@ function displayTodo(channelId, channelName){
 
             if (predictSize > characterLimit){
                 const newField = {
-                    name: '```markdown\n',
-                    value: '',
+                    name: '',
+                    value: '```markdown\n',
                 }
 
                 messageResponseEmbed.fields.push(newField);
@@ -127,6 +127,7 @@ function displayTodo(channelId, channelName){
     // messageResponseEmbed.fields[0].value += "```";
     for (let field of messageResponseEmbed.fields){
         field.value += "```";
+        console.log("Iterating fields. Current value of field is: " + field.value); //DEBUG
     }
 
     // return "Under maintenance, sorry! >_>";
