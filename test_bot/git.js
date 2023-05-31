@@ -11,7 +11,7 @@ exports.cloneRepo = () =>{
 
     const remote = `https://${USER}:${PASS}@${REPO}`;
 
-    git.clone(remote, '/test')
+    git.clone(remote, process.cwd() + '/test/')
         .then(() => console.log('finished'))
         .catch((err) => console.error('failed: ', err));
 }
