@@ -96,7 +96,23 @@ function displayTodo(channelId, channelName){
     } else {
         //FIXME add limit (if the next item + the current items length is more than 1000, create a new field and start adding there instead)
 
+        const characterLimit = 1000;
+
         for (let todoItem of fileTodoItems.todo){
+            let currentEmbed = messageResponseEmbed.fields.length - 1;
+            let currentEmbedSize = messageResponseEmbed.fields[currentEmbed].value.length;
+            let predictSize = currentEmbedSize + todoItem.content.length;
+
+            if (predictSize > characterLimit){
+                const newField = {
+                    name: '',
+                    value: '',
+                }
+                messageResponseEmbed.fields.push(newField);
+                console.log("Embed exceeds cap of 1000 characters."); //DEBUG
+                console.log("Current embed to use is: " + currentEmbed + ". If this is not 0, use current embed below. Otherwise, increment this by 1 and use below"); //DEBUG
+            }
+
             let capitalizedTodoItemContent = todoItem.content.charAt(0).toUpperCase() + todoItem.content.slice(1);
 
             messageResponseEmbed.fields[0].value +=  `${todoItem.count}. ${capitalizedTodoItemContent} ${(todoItem.author ? '(' + todoItem.author + ')' : '')}\n`;
@@ -106,7 +122,8 @@ function displayTodo(channelId, channelName){
 
     messageResponseEmbed.fields[0].value += "```";
 
-    return {embeds: [messageResponseEmbed]};
+    return "Under maintenance, sorry! >_>";
+    //return {embeds: [messageResponseEmbed]};
 }
 
 function removeTodo(channelId, todoNumber){
