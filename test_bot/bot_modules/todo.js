@@ -102,11 +102,11 @@ function displayTodo(channelId, channelName){
         // title: '',
         // url: '', //'https://discord.js.org',
         author: {
-            name: `Channel Todo List | `, //'Some name',
+            name: `Channel Todo List`, //'Some name',
             icon_url: 'https:\/\/www.dropbox.com\/temp_thumb_from_token\/s\/u5ajixq3x3ubmsp?preserve_transparency=False&size=1200x1200&size_mode=4',
             // url: '', //'https://discord.js.org',
         },
-        description: '```markdown\n' + channelName + '\n```', //'Some description here',
+        description: '```markdown\nChannel: ' + channelName + '\n```', //'Some description here',
         fields: [
             {
                 name: '',
@@ -122,14 +122,18 @@ function displayTodo(channelId, channelName){
         },
     };
 
-    //FIXME add limit (if the next item + the current items length is more than 1000, create a new field and start adding there instead)
-    for (let todoItem of fileTodoItems.todo){
-        let capitalizedTodoItemContent = todoItem.content.charAt(0).toUpperCase() + todoItem.content.slice(1);
+    if (!fileTodoItems.todo.length) {
+        messageResponseEmbed.fields[0].value += "It looks like this channel doesn't have any todo items!";
+    } else {
+        //FIXME add limit (if the next item + the current items length is more than 1000, create a new field and start adding there instead)
+        for (let todoItem of fileTodoItems.todo){
+            let capitalizedTodoItemContent = todoItem.content.charAt(0).toUpperCase() + todoItem.content.slice(1);
 
-        messageResponseEmbed.fields[0].value +=  `${todoItem.count}. ${capitalizedTodoItemContent} ${(todoItem.author ? '(<@' + todoItem.author + '>)' : '')}\n`;
+            messageResponseEmbed.fields[0].value +=  `${todoItem.count}. ${capitalizedTodoItemContent} ${(todoItem.author ? '(' + todoItem.author + ')' : '')}\n`;
+        }
     }
 
-    messageResponseEmbed.fields[0].value += "```";
+    messageResponseEmbed.fields[0].value += "\n```";
 
     // console.log("Message response to displayTodo command: " + messageResponse); //DEBUG
     return {embeds: [messageResponseEmbed]};
@@ -199,7 +203,7 @@ exports.onTodoCommand = (client, Events) =>{
             // starts with 1 or more whitespace at the start, following 1 or more non-whitespace characters
             case command.search(/^\s+\S+/) != -1:
                 messageContent = command.split(/^\s+/)[1];
-                let messageAuthor = msg.author.id;
+                let messageAuthor = msg.author.name;
 
                 response = newTodo(channelId, messageContent, messageAuthor);
                 break;
