@@ -163,7 +163,7 @@ exports.onTodoCommand = (client, Events) =>{
         // check if message has prefix
         if (!msg.content.startsWith(prefix)) return;
 
-        if (!msg.member.roles.cache.has(requiredRole)) return;
+        // if (!msg.member.roles.cache.has(requiredRole)) return;
 
         console.log("--------- Start of Log ---------"); //DEBUG
 
