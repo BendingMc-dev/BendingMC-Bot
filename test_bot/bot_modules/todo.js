@@ -92,7 +92,7 @@ function displayTodo(channelId, channelName){
     messageResponseEmbed.fields[0].value += "```markdown\n";
 
     if (!fileTodoItems.todo.length) {
-        messageResponseEmbed.fields[0].value += "It looks like this channel doesn't have any todo items!\n";
+        messageResponseEmbed.fields[0].value += "It looks like this channel doesn't have a todo list!\n";
     } else {
         //FIXME add limit (if the next item + the current items length is more than 1000, create a new field and start adding there instead)
 

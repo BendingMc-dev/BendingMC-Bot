@@ -1,35 +1,136 @@
-/*
-    when user sends message with prefix ("?todo"), extract the content of the message
-    if the channel already has a todo stored, add the message content to the todo
-    if no message content, display the todo of the channel
-*/
-const mysql = require("../utils/mysql-manager.js");
+const fs = require("../utils/json-manager.js");
 
 const prefix = "?todo";
+const requiredRole = "398732282229293059";
 
-const database = { //FIXME create a new class in another file to handle database info of modules. New class constructor takes in table name and map of columns. Include function to output columns in query format
-    table: "ChannelTodo",
-    columns: new Map([
-        ["Id","TEXT"],
-        ["Todo","TEXT"],
-    ]),
+const files = {
+    mainPath: "data/todo_lists/"
+}
 
-    getColumnNames: function (){
-        let tableColumns = "";
-        
-        this.columns.forEach((value, key, map) => {
-            if (!tableColumns) {
-                tableColumns += `${key}`;
-            } else {
-                tableColumns += `, ${key}`;
-            }
-        });
+class TodoList{
+    todoList = [];
 
-        return tableColumns;
+    toJSON(){
+        return {
+            todo: this.todoList
+        }
     }
 }
 
-exports.newTodo = (client, Events) => {
+class TodoItem {
+    constructor(count, content, author){
+        this.count = count;
+        this.content = content;
+        this.author = author;
+    }
+
+    toJSON() {
+        return  {
+            count: this.count,
+            content: this.content,
+            author: this.author,
+        }
+    }
+}
+
+function getFilePath(channelId){
+    return files.mainPath + channelId + ".json";
+}
+
+function saveTodoList(channelId, todoItems){
+    const todoList = new TodoList();
+
+    for (let todoItem of todoItems){
+        let count = todoList.todoList.length + 1;
+        const item = new TodoItem(count, todoItem.content, todoItem.author);
+
+        todoList.todoList.push(item);
+    }
+
+    let options = null;
+    let spacing = 2;
+    const jsonTodoList = JSON.stringify(todoList, options, spacing);
+    const filePath = getFilePath(channelId);
+
+    fs.saveFile(filePath, jsonTodoList);
+}
+
+function newTodo(channelId, messageContent, messageAuthor){
+    const filePath = getFilePath(channelId);
+    let fileTodoItems = fs.readFile(filePath);
+    let todoListCount = fileTodoItems.todo.length + 1;
+    const todoItem = new TodoItem(todoListCount, messageContent, messageAuthor);
+
+    fileTodoItems.todo.push(todoItem);
+
+    saveTodoList(channelId, fileTodoItems.todo);
+
+    let messageResponse = `Todo item #${todoItem.count} added successfully! Use '?todo' to see the current todo list of this channel.`;
+    
+    return messageResponse;
+}
+
+function displayTodo(channelId, channelName){
+    const filePath = getFilePath(channelId);
+    const fileTodoItems = fs.readFile(filePath);
+
+    const messageResponseEmbed = {
+        color: 0xFB4E88,
+        author: {
+            name: `Channel Todo List`,
+            icon_url: 'https:\/\/www.dropbox.com\/temp_thumb_from_token\/s\/u5ajixq3x3ubmsp?preserve_transparency=False&size=1200x1200&size_mode=4',
+        },
+        description: '```markdown\n' + channelName + '\n```',
+        fields: [
+            {
+                name: '',
+                value: '',
+            },
+        ],
+    };
+
+    messageResponseEmbed.fields[0].value += "```markdown\n";
+
+    if (!fileTodoItems.todo.length) {
+        messageResponseEmbed.fields[0].value += "It looks like this channel doesn't have a todo list!\n";
+    } else {
+        //FIXME add limit (if the next item + the current items length is more than 1000, create a new field and start adding there instead)
+
+        for (let todoItem of fileTodoItems.todo){
+            let capitalizedTodoItemContent = todoItem.content.charAt(0).toUpperCase() + todoItem.content.slice(1);
+
+            messageResponseEmbed.fields[0].value +=  `${todoItem.count}. ${capitalizedTodoItemContent} ${(todoItem.author ? '(' + todoItem.author + ')' : '')}\n`;
+        }
+
+    }
+
+    messageResponseEmbed.fields[0].value += "```";
+
+    return {embeds: [messageResponseEmbed]};
+}
+
+function removeTodo(channelId, todoNumber){
+    const filePath = getFilePath(channelId);
+    const fileTodoItems = fs.readFile(filePath);
+
+    const filteredTodoItems = fileTodoItems.todo.filter(todoItem =>{
+        return todoItem.count != todoNumber;
+    });
+    
+    //FIXME check if there are any items to remove
+
+    saveTodoList(channelId, filteredTodoItems);
+    
+    let messageResponse = `Todo item #${todoNumber} removed successfully! Use '?todo' to see the current todo list of this channel.`;
+
+    return messageResponse;
+}
+
+function createTodoFile(){
+
+}
+
+exports.onTodoCommand = (client, Events) =>{
     client.on(Events.MessageCreate, msg =>{
         // check if message was sent by the bot
         if (msg.author.id === client.user.id) return;
@@ -37,53 +138,53 @@ exports.newTodo = (client, Events) => {
         // check if message has prefix
         if (!msg.content.startsWith(prefix)) return;
 
-        let channelId = msg.channel.id;
+        // check if user has the "staff" role (bmc)
+        if (!msg.member.roles.cache.has(requiredRole)) return;
 
-        // create table in database
-        let tableColumns = "";
+        const channelId = msg.channel.id;
+        const filePath = getFilePath(channelId);
+        const dirName = files.mainPath;
 
-        database.columns.forEach((value, key, map) => {
-            if (tableColumns) {
-                tableColumns += `, ${key} ${value}`;
-            } else {
-                tableColumns += `${key} ${value}`;
-            }
-        })
+        // check if folder exists
+        if (!fs.fileExists(filePath)){
+            fs.makeDir(dirName);
 
-        mysql.createTable(database.table, tableColumns);
+            const todoList = new TodoList();
+            let jsonTodoList = JSON.stringify(todoList, null, 2);
 
-        // fetch todo of channel from database
-        mysql.fetch(channelId, database.table).then((channelTodo) =>{
-            console.log("Channel Todo: " + channelTodo);
+            fs.saveFile(filePath, jsonTodoList);
+        }
 
-            // check if channel has a todo list
-            if (!channelTodo.length) {
-                // create todo
-                console.log("Channel does not have todo, creating new entry in database"); //DEBUG
+        let command = msg.content.split(prefix)[1];
+        let messageContent;
+        let response;
+        const channelName = msg.channel.name;
 
-                mysql.insert(`${channelId}, ""`, database.table, database.getColumnNames());
+        // decide which task to perform based on characters after the prefix
+        switch (true){
+            // starts with "remove", following 1 or more whitespace, following a digit
+            case command.search(/^(remove|r|rem)\s+\d/) != -1:
+                let removeNumber = command.split(/(\d+)/)[1];
 
-                // console.log("Columns of database: " + columnNames) //DEBUG
+                response = removeTodo(channelId, removeNumber);
+                break;
 
-                // mysql.insert()
-            } else {
-                console.log("Channel already has entry. Skipping"); //DEBUG
-            }
+            // starts with 1 or more whitespace at the start, following 1 or more non-whitespace characters
+            case command.search(/^\s+\S+/) != -1:
+                messageContent = command.split(/^\s+/)[1];
+                let messageAuthor = msg.author.username;
 
-            let content = msg.content.split(prefix)[1];
-            console.log("Message is: (" + content + ")"); //DEBUG
+                response = newTodo(channelId, messageContent, messageAuthor);
+                break;
+            
+            default:
+                response = displayTodo(channelId, channelName);
+                break;
+        }
 
-            // check if message content exists after removing prefix
-            if (!content) {
-                // display todo of channel
-                console.log("Todo command has no content. Displaying todo of channel") //DEBUG
-            } else {
-                // add todo to channel
-                console.log("Todo command has content. Adding new todo item to channel") //DEBUG
-            }
-
-            //FIXME add a way to remove todo item (at the start of each todo item, add a number as an id)
-            //FIXME create embed manager
-        });
-    })
+        if (!response)
+            return;
+            
+        msg.reply(response);
+    })    
 }

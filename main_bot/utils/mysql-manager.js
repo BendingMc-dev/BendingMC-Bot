@@ -16,13 +16,12 @@ function createConnection() {
 function dbQuery(connection, query){
     // query = `USE ${MYSQL_CREDENTIALS.database}; ${query}`;
     // console.log("Database: " + MYSQL_CREDENTIALS.database);
-    return new Promise( (resolve, reject) => {
+    return new Promise( (resolve) => {
         connection.query(query, (err, result) =>{
             // throw an error if query produces one
-            // if (err) console.log(" There was an error while executing query from database: " + err); //FIXME try and catch
-            if (err)
-                console.log()
-                reject(err);
+            if (err) console.log(" There was an error while executing query from database: " + err); //FIXME try and catch
+            // if (err)
+                // reject(err);
             // result;
         
             // console.log("Inside query, results: " + result); //DEBUG
@@ -38,22 +37,19 @@ function dbConnect(connection){
     });
 }
 
-function test() {
-    return new Promise( (resolve, reject) => {
-        resolve("resolved");
-    })
-}
-
 exports.createTable = (tableName, tableColumns) =>{
-    // create connection
-    let connection = createConnection();
+    return new Promise( (resolve) => {
+        // create connection
+        let connection = createConnection();
 
-    // create table
-    let query = `CREATE TABLE IF NOT EXISTS ${tableName} (${tableColumns});`;
+        // create table
+        let query = `CREATE TABLE IF NOT EXISTS ${tableName} (${tableColumns});`;
 
-    dbQuery(connection, query);
-
-    connection.end();
+        dbQuery(connection, query).then( ()=>{
+            connection.end();
+            resolve(); 
+        });
+    })
 }
 
 exports.fetch = (id, table) => {
@@ -91,13 +87,29 @@ exports.fetch = (id, table) => {
 }
 
 exports.insert = (values, table, columns) => {
+    return new Promise( (resolve) => {
+        let connection = createConnection();
+
+        dbConnect(connection);
+
+        let query = `INSERT INTO ${table} (${columns}) VALUES (${values});`;
+
+        dbQuery(connection, query).then( () =>{
+            connection.end();
+
+            resolve();
+        });
+    })
+}
+
+exports.update = (table, column, value, id) => {
     let connection = createConnection();
 
     dbConnect(connection);
 
-    let query = `INSERT INTO ${table} (${columns}) VALUES (${values});`;
+    let query = `UPDATE ${table} SET ${column}='${value}' WHERE Id='${id}'`;
 
     dbQuery(connection, query);
-
+    
     connection.end();
 }

@@ -1,4 +1,5 @@
 const { Client, IntentsBitField, Partials, Events, Channel } = require('discord.js');
+// const { Client, GatewayIntentBits, Partials, Events } = require('discord.js');
 
 const suggestions = require("./bot_modules/suggestions.js");
 // const reminder = require("./bot_modules/reminder.js");
@@ -35,7 +36,7 @@ client.on(Events.MessageCreate, msg =>{
 // Execute modules based on events
 //FIXME implement event manager
 suggestions.resolveSuggestion(client, Events); //FIXME use the function after the event is triggered instead -> "on new message, function()"
-// todo.newTodo(client, Events);
+todo.onTodoCommand(client, Events);
 
 client.on(Events.MessageCreate, msg =>{
 	suggestions.onNewSuggestion(client, msg);
@@ -43,7 +44,7 @@ client.on(Events.MessageCreate, msg =>{
 })
 
 // Log in
-const BOT_TOKEN = process.env.BOT_TOKEN;
+const BOT_TOKEN = process.env.TEST_BOT_TOKEN;
 client.login(BOT_TOKEN);
 
 // Start console message
