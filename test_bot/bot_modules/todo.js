@@ -1,6 +1,7 @@
 const fs = require("../utils/json-manager.js");
 
 const prefix = "?todo";
+const requiredRole = "398732282229293059";
 
 const files = {
     mainPath: "data/todo_lists/"
@@ -101,15 +102,15 @@ function displayTodo(channelId, channelName){
         // title: '',
         // url: '', //'https://discord.js.org',
         author: {
-            name: `Channel Todo List | ${channelName}`, //'Some name',
+            name: `Channel Todo List | `, //'Some name',
             icon_url: 'https:\/\/www.dropbox.com\/temp_thumb_from_token\/s\/u5ajixq3x3ubmsp?preserve_transparency=False&size=1200x1200&size_mode=4',
             // url: '', //'https://discord.js.org',
         },
-        //description: '', //'Some description here',
+        description: '```markdown\n' + channelName + '\n```', //'Some description here',
         fields: [
             {
                 name: '',
-                value: '──────────────────────────────────────\n',
+                value: '```markdown\n',
             },
         ],
         // image: {
@@ -125,8 +126,10 @@ function displayTodo(channelId, channelName){
     for (let todoItem of fileTodoItems.todo){
         let capitalizedTodoItemContent = todoItem.content.charAt(0).toUpperCase() + todoItem.content.slice(1);
 
-        messageResponseEmbed.fields[0].value +=  `${todoItem.count}. ${capitalizedTodoItemContent} ${(todoItem.author ? '(<@' + todoItem.author + '>)' : '')} \n`;
+        messageResponseEmbed.fields[0].value +=  `${todoItem.count}. ${capitalizedTodoItemContent} ${(todoItem.author ? '(<@' + todoItem.author + '>)' : '')}\n`;
     }
+
+    messageResponseEmbed.fields[0].value += "```";
 
     // console.log("Message response to displayTodo command: " + messageResponse); //DEBUG
     return {embeds: [messageResponseEmbed]};
@@ -160,7 +163,7 @@ exports.onTodoCommand = (client, Events) =>{
         // check if message has prefix
         if (!msg.content.startsWith(prefix)) return;
 
-        console.log("Test member -> " + msg.member.roles.cache.some(role => role.name === 'Admin'))
+        if (!msg.member.roles.cache.has(requiredRole)) return;
 
         console.log("--------- Start of Log ---------"); //DEBUG
 
