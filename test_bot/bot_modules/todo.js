@@ -110,7 +110,7 @@ function displayTodo(channelId, channelName){
         fields: [
             {
                 name: '',
-                value: '```markdown\n',
+                value: '',
             },
         ],
         // image: {
@@ -123,17 +123,21 @@ function displayTodo(channelId, channelName){
     };
 
     if (!fileTodoItems.todo.length) {
-        messageResponseEmbed.fields[0].value += "It looks like this channel doesn't have any todo items!";
+        messageResponseEmbed.fields[0].value += "```yml\n";
+        messageResponseEmbed.fields[0].value += "It looks like this channel doesn't have any todo items!\n";
+        messageResponseEmbed.fields[0].value += "```";
     } else {
         //FIXME add limit (if the next item + the current items length is more than 1000, create a new field and start adding there instead)
+        messageResponseEmbed.fields[0].value += "```markdown\n";
+
         for (let todoItem of fileTodoItems.todo){
             let capitalizedTodoItemContent = todoItem.content.charAt(0).toUpperCase() + todoItem.content.slice(1);
 
             messageResponseEmbed.fields[0].value +=  `${todoItem.count}. ${capitalizedTodoItemContent} ${(todoItem.author ? '(' + todoItem.author + ')' : '')}\n`;
         }
-    }
 
-    messageResponseEmbed.fields[0].value += "\n```";
+        messageResponseEmbed.fields[0].value += "```";
+    }
 
     // console.log("Message response to displayTodo command: " + messageResponse); //DEBUG
     return {embeds: [messageResponseEmbed]};
