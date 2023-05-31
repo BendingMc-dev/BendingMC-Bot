@@ -106,7 +106,7 @@ function displayTodo(channelId, channelName){
             icon_url: 'https:\/\/www.dropbox.com\/temp_thumb_from_token\/s\/u5ajixq3x3ubmsp?preserve_transparency=False&size=1200x1200&size_mode=4',
             // url: '', //'https://discord.js.org',
         },
-        description: '```markdown\n' + channelName + '\n```', //'Some description here',
+        description: '```yml\n' + channelName + '\n```', //'Some description here',
         fields: [
             {
                 name: '',
