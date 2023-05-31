@@ -109,7 +109,7 @@ function displayTodo(channelId, channelName){
 
             if (predictSize > characterLimit){
                 const newField = {
-                    name: '',
+                    name: '```markdown\n',
                     value: '',
                 }
 
