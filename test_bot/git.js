@@ -17,8 +17,8 @@ const git = simpleGit(config.getRepoPath());
 
 exports.run = () =>{
     // check if repo exists
-    pullRepo();
     fetchRepo();
+    // pullRepo();
 }
 
 function fetchRepo(){
@@ -29,15 +29,15 @@ function fetchRepo(){
         .catch((err) => console.log("There was an error while fetching git repository: " + err))
 }
 
-function pullRepo(){
-    console.log("Attempting to pull from git repository...");
+// function pullRepo(){
+//     console.log("Attempting to pull from git repository...");
 
-    git.pull(config.getRemote(), 'test', (err, update)=>{
-        console.log("Changes: " + update.summary.changes);
-    })
-        .then(() => {console.log("Finished pull from git repository!")})
-        .catch((err) => console.log("There was an error while pulling from git repository: " + err))
-}
+//     git.pull(config.getRemote(), 'test', (err, update)=>{
+//         console.log("Changes: " + update.summary.changes);
+//     })
+//         .then(() => {console.log("Finished pull from git repository!")})
+//         .catch((err) => console.log("There was an error while pulling from git repository: " + err))
+// }
 
 exports.cloneRepo = () =>{
 
