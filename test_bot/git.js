@@ -32,7 +32,7 @@ function fetchRepo(){
 function pullRepo(){
     console.log("Attempting to pull from git repository...");
 
-    git.fetch(config.remote, 'test')
+    git.pull(config.remote, 'test')
         .then((err, update) => {
             console.log("Finished pull from git repository!");
             console.log("Changes: " + update.summary.changes);
