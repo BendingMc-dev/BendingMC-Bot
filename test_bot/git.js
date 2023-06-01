@@ -6,12 +6,26 @@ const git = simpleGit();
 const config = {
     auth_user: process.env.GIT_USER,
     auth_token: process.env.GIT_AUTH_TOKEN,
-    repo: process.env.GIT_REPO_NAME
+    repo_name: process.env.GIT_REPO_NAME,
+
+    repo: `github.com/${this.auth_user}/${this.repo_name}`,
+    remote: `${this.auth_user}:${this.auth_token}@${this.repo}`
+}
+
+exports.run = () =>{
+    // check if repo exists
+    pullRepo();
+}
+
+function pullRepo(){
+    console.log("Attempting to pull from git repository...");
+    
+    git.pull(config.remote, 'test')
+        .then(() => console.log("Finished pulling from git repository!"))
+        .catch((err) => console.log("There was an error while pulling from git repository: " + err))
 }
 
 exports.cloneRepo = () =>{
-    const REPO = `github.com/${config.auth_user}/${config.repo}`;
-    const remote = `https://${config.auth_user}:${config.auth_token}@${REPO}`;
 
     console.log('Attempting to clone git repository...');
 
