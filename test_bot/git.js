@@ -6,9 +6,9 @@ const config = {
     auth_token: process.env.GIT_AUTH_TOKEN,
     repo_name: process.env.GIT_REPO_NAME,
 
-    repoPath: `/${this.repo_name}`,
-    repo: `github.com/${this.auth_user}/${this.repo_name}`,
-    remote: `${this.auth_user}:${this.auth_token}@${this.repo}`
+    getRepoName: function () {return `/${this.repo_name}`},
+    getRepo: function () {return `github.com/${this.auth_user}/${this.getRepoName()}`},
+    getRemote: function () {return `${this.auth_user}:${this.auth_token}@${this.getRepo()}`}
 }
 
 console.log("Pulling from path: " + config.repoPath); //DEBUG
