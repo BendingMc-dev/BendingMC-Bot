@@ -6,7 +6,7 @@ const git = simpleGit();
 const config = {
     auth_user: process.env.GIT_USER,
     auth_token: process.env.GIT_AUTH_TOKEN,
-    repo: process.env.GIT_REPO_NAME
+    repo: `${process.env.GIT_REPO_NAME}`
 }
 
 exports.cloneRepo = () =>{
