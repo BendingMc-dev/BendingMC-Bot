@@ -24,7 +24,7 @@ exports.run = () =>{
 function fetchRepo(){
     console.log("Attempting to fetch git repository...");
 
-    git.fetch(config.remote(), 'test')
+    git.fetch(config.getRemote(), 'test')
         .then(() => console.log("Finished fetch git repository!"))
         .catch((err) => console.log("There was an error while fetching git repository: " + err))
 }
@@ -32,7 +32,7 @@ function fetchRepo(){
 function pullRepo(){
     console.log("Attempting to pull from git repository...");
 
-    git.pull(config.remote(), 'test', (err, update)=>{
+    git.pull(config.getRemote(), 'test', (err, update)=>{
         console.log("Changes: " + update.summary.changes);
     })
         .then(() => {console.log("Finished pull from git repository!")})
@@ -43,7 +43,7 @@ exports.cloneRepo = () =>{
 
     console.log('Attempting to clone git repository...');
 
-    git.clone(config.remote(), process.cwd() + '/test/')
+    git.clone(config.getRemote(), process.cwd() + '/test/')
         .then(() => console.log('Finished cloning git repository!'))
         .catch((err) => console.error('There was an error while cloning git repository: ', err));
 }
