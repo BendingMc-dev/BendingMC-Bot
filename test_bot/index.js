@@ -1,6 +1,6 @@
 const git = require('./git.js');
 
-git.cloneRepo();
+git.run();
 
 const { Client, IntentsBitField, Partials, Events, Channel } = require('discord.js');
 // const { Client, GatewayIntentBits, Partials, Events } = require('discord.js');
