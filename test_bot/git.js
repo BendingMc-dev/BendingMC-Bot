@@ -6,14 +6,14 @@ const config = {
     auth_token: process.env.GIT_AUTH_TOKEN,
     repo_name: process.env.GIT_REPO_NAME,
 
-    getRepoName: function () {return `/${this.repo_name}`},
-    getRepo: function () {return `github.com/${this.auth_user}/${this.getRepoName()}`},
+    getRepoPath: function () {return `/${this.repo_name}`},
+    getRepo: function () {return `github.com/${this.auth_user}/${this.getRepoPath()}`},
     getRemote: function () {return `${this.auth_user}:${this.auth_token}@${this.getRepo()}`}
 }
 
-console.log("Pulling from path: " + config.repoPath); //DEBUG
+console.log("Pulling from path: " + config.getRepoName()); //DEBUG
 
-const git = simpleGit(config.repoPath);
+const git = simpleGit(config.getRepoPath());
 
 exports.run = () =>{
     // check if repo exists
