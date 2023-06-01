@@ -6,10 +6,12 @@ const config = {
     auth_token: process.env.GIT_AUTH_TOKEN,
     repo_name: process.env.GIT_REPO_NAME,
 
-    repoPath: `${process.cwd()}/${this.repo_name}`,
+    repoPath: `/${this.repo_name}`,
     repo: `github.com/${this.auth_user}/${this.repo_name}`,
     remote: `${this.auth_user}:${this.auth_token}@${this.repo}`
 }
+
+console.log("Pulling from path: " + config.repoPath); //DEBUG
 
 const git = simpleGit(config.repoPath);
 
@@ -20,7 +22,6 @@ exports.run = () =>{
 
 function pullRepo(){
     console.log("Attempting to pull from git repository...");
-    console.log("Pulling from path: " + config.repoPath); //DEBUG
 
     git.pull(config.remote, 'test')
         .then(() => console.log("Finished pulling from git repository!"))
