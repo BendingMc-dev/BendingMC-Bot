@@ -1,16 +1,17 @@
 require('dotenv').config();
 const simpleGit = require('simple-git');
 
-const git = simpleGit();
-
 const config = {
     auth_user: process.env.GIT_USER,
     auth_token: process.env.GIT_AUTH_TOKEN,
     repo_name: process.env.GIT_REPO_NAME,
 
+    repoPath: `${__dirname}/${this.repo_name}`,
     repo: `github.com/${this.auth_user}/${this.repo_name}`,
     remote: `${this.auth_user}:${this.auth_token}@${this.repo}`
 }
+
+const git = simpleGit(config.repoPath);
 
 exports.run = () =>{
     // check if repo exists
@@ -19,7 +20,7 @@ exports.run = () =>{
 
 function pullRepo(){
     console.log("Attempting to pull from git repository...");
-    
+
     git.pull(config.remote, 'test')
         .then(() => console.log("Finished pulling from git repository!"))
         .catch((err) => console.log("There was an error while pulling from git repository: " + err))
