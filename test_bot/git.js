@@ -11,7 +11,7 @@ const config = {
     getRemote: function () {return `${this.auth_user}:${this.auth_token}@${this.getRepo()}`}
 }
 
-console.log("Pulling from path: " + config.getRepoName()); //DEBUG
+console.log("Pulling from path: " + config.getRepoPath()); //DEBUG
 
 const git = simpleGit(config.getRepoPath());
 
