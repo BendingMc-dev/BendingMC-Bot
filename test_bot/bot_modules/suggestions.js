@@ -92,9 +92,12 @@ function findTagsInForumByName(forum, tags = []){
 }
 
 function threadChannelHasTags(channel, tags){
+    console.log("Thread tags: " + channel.appliedTags);
     for (let tag of tags){
         // check if the channel has the tag applied to it
         let channelHasTag = channel.appliedTags.includes(tag);
+        console.log("Current tag: " + tag);
+        console.log("Channel has tag: " + channel.appliedTags.includes(tag));
         if (channelHasTag);
             return true;
     }
@@ -131,6 +134,9 @@ exports.onNewSuggestion = (client, msg) => {
         let forumChannel = msg.channel.parent;
         let tagsToApplyById = findTagsInForumByName(forumChannel, tagsToApplyOnNewSuggestion);
         let ignoreMessagesWithTagsById = findTagsInForumByName(forumChannel, tagsToIgnoreOnNewSuggestion);
+
+        console.log("Tags to be applied: " + tagsToApplyById);
+        console.log("Tags to be ignored: " + ignoreMessagesWithTagsById);
 
         // check if thread channel has any tags that are being ignored
         let channelHasIgnoredTags = threadChannelHasTags(msg.channel, ignoreMessagesWithTagsById);
