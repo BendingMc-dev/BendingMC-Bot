@@ -101,8 +101,6 @@ function threadChannelHasTags(channel, tags){
     when a message is created, execute this function
 */
 exports.onNewSuggestion = (client, msg) => {
-        console.log("new suggestion");
-
         // check if bot is the author of the message
         let botIsMsgAuthor = msg.author.id === client.user.id
         if (botIsMsgAuthor) return;
@@ -114,7 +112,7 @@ exports.onNewSuggestion = (client, msg) => {
         console.log("channel is thread");
 
         // check if the parent channel of the thread channel is a forum
-        let parentChannelIsForum = msg.channel.parent.type !== FORUM_CHANNEL_TYPE_ENUM;
+        let parentChannelIsForum = msg.channel.parent.type == FORUM_CHANNEL_TYPE_ENUM;
         if (!parentChannelIsForum) return;
 
         console.log("parent channel is forum");
