@@ -1,63 +1,74 @@
+// --= OPTIONS =--
+const FORUM_CHANNEL_TYPE_ENUM = 15;
+const CHANNEL_MAX_TAGS = 5; // discord's limit, please don't change this :C
+
+let suggestionChannels = []; // list of id of channels--eventually migrate this into a command so channels can be added and remove through discord
+
+let tagsToApplyOnNewSuggestion = ["Awaiting Response"]; // tags that will be applied when the message is sent
+let tagsToIgnoreOnNewSuggestion = ["Approved", "Denied", "Implemented"]; // if the message has any of these tags, don't create a new suggestion
+
+/* 
+    if a channel can't have any more tags due to discord's limit, should tags be removed from the channel first?
+    the amount of tags that will be removed is exactly the amount of tags defined in the 'tagsToApplyOnNewSuggestion' list
+    tags that were applied to the channel first will be removed before tags that were applied to the channel last
+*/
+let removeTagIfLimitIsReached = true; 
+
+// --= END SECTION =--
+
+
+/* 
+    channel = channel object
+    tags[] = array of tag IDs to be removed from the channel
+*/
 function removeTagsInChannel(channel, tags = []){
+    // iterate over all tags applied to the channel
     let channelTags = channel.appliedTags;
-
     for (let tag of tags){
-        // check if the channel has tag
-        if (channelTags.includes(tag))
-            channelTags.splice(channelTags.indexOf(tag), 1)
+        // check if the channel has tag to be removed
+        let channelHasTag = channelTags.includes(tag);
+        if (!channelHasTag)
+            continue;
+            
+        channelTags.splice(channelTags.indexOf(tag), 1)
     }
 
     channel.setAppliedTags(channelTags);
 }
 
-function addTagsInChannel(channel, tags = []){
-    const CHANNEL_MAX_TAGS = 5;
-
-    // check if number of tags to be applied is greater than max allowed
-    if (tags.length > CHANNEL_MAX_TAGS){
-        console.log("List of tags to apply is greater than max number of tags allowed in a thread (tags/max): " + tags.length + " / " + CHANNEL_MAX_TAGS); //FIXME throw new exception here
-        console.log("Only the first " + CHANNEL_MAX_TAGS + " tags will be applied to the channel");
-
-        let maxLength = CHANNEL_MAX_TAGS - 1;
-
-        tags = tags.slice(0, maxLength);
-    }
-
+/* 
+    channel = channel object
+    tags[] = array of tag IDs to be added to the channel
+*/
+function addTagsToChannel(channel, tags = []) {
+    // iterate over all tags that should be applied to the channel
     let channelTags = channel.appliedTags;
+    for (let tag of tags) {
 
-    for (let tag of tags){
-        if (!channelTags.includes(tag))
-            channelTags.push(tag);
-    }
+        // check if the channel has the max number of tags possible
+        let channelHasMaxAmountTags = channelTags.length >= CHANNEL_MAX_TAGS;
+        if (channelHasMaxAmountTags) {
 
-    // check if channel has more than 5 tags
-    if (channelTags.length > CHANNEL_MAX_TAGS){
-        console.log("Tried to apply more tags than is allowed in a thread (tags/max): " + channelTags.length + " / " + CHANNEL_MAX_TAGS) //FIXME throw exception here
-        console.log("Only the last " + CHANNEL_MAX_TAGS + " tags will be applied to the thread");
+            // check if tags can be removed in case the channel has maximum amount of tags allowed (defined in the options section, towards the beginning of this file)
+            if (!removeTagIfLimitIsReached) break;
 
-        let startPosition = channelTags.length - CHANNEL_MAX_TAGS;
+            let removeTags = [];
+            let channelFirstTag = channelTags[0];
+            removeTags.push(channelFirstTag);
 
-        channelTags = channelTags.slice(startPosition);
+            removeTagsInChannel(channel, removeTags);
+        }
+
+        // check if channel already has the tag to be added
+        let channelHasTag = channelTags.includes(tag);
+        if (channelHasTag)
+            continue;
+        
+        channelTags.push(tag);
     }
 
     channel.setAppliedTags(channelTags);
 }
-
-// function updateTags(channel, addTags = [], removeTags = []){
-//     let updatedTags = channel.appliedTags;
-
-//     addTags.forEach(addTag =>{
-//         if (!channel.appliedTags.includes(addTag)){
-//             updatedTags.push(addTag);
-//         }
-//     })
-
-//     removeTags.forEach(removeTag =>{
-//         updatedTags = updatedTags.filter(i => i !== removeTag);
-//     })
-
-//     channel.setAppliedTags(updatedTags);
-// }
 
 function findTagsInForumByName(forum, tags = []){
     let forumAvailableTags = forum.availableTags;
@@ -84,141 +95,94 @@ function threadChannelHasTags(channel, tags){
     return false;
 }
 
+/* 
+    when a message is created, execute this function
+*/
 exports.onNewSuggestion = (client, msg) => {
-        // check if message was sent by the bot
-        if (msg.author.id === client.user.id) return;
+        // check if bot is the author of the message
+        let botIsMsgAuthor = msg.author.id === client.user.id
+        if (botIsMsgAuthor) return;
 
-        // check if message is a thread
-        if (!msg.channel.isThread()) return;
+        // check if message was sent in a thread
+        let msgChannelIsThread = msg.channel.isThread()
+        if (!msgChannelIsThread) return;
 
-        let threadChannel = msg.channel;
+        // check if the parent channel of the thread channel is a forum
+        let parentChannelIsForum = msg.channel.parent.type !== FORUM_CHANNEL_TYPE_ENUM;
+        if (!parentChannelIsForum) return;
 
-        const FORUM_CHANNEL_TYPE_ENUM = 15;
+        // check if the channel the message was sent into is part of the list of suggestion channels
+        let channelIsSuggestionChannel = suggestionChannels.includes(msg.channel.id);
+        if (!channelIsSuggestionChannel) return;
 
-        // check if thread channel is part of a forum
-        if (threadChannel.parent.type !== FORUM_CHANNEL_TYPE_ENUM) return;
+        let forumChannel = msg.channel.parent;
+        let tagsToApplyById = findTagsInForumByName(forumChannel, tagsToApplyOnNewSuggestion);
+        let ignoreMessagesWithTagsById = findTagsInForumByName(forumChannel, tagsToIgnoreOnNewSuggestion);
 
-        let tagsToApply = ["Awaiting Response"]; // tags that will be applied when the message is created
-        let ignoreMessagesWithTags = ["Approved", "Denied", "Implemented"]; // if thread has any of these tags, ignore this event
-
-        let forumChannel = threadChannel.parent;
-
-        let tagsToApplyById = findTagsInForumByName(forumChannel, tagsToApply);
-        let ignoreMessagesWithTagsById = findTagsInForumByName(forumChannel, ignoreMessagesWithTags);
-
-        // check if thread channel needs to apply any tags
-        if (!tagsToApply.length)
+        // check if thread channel has any tags that are being ignored
+        let channelHasIgnoredTags = threadChannelHasTags(msg.channel, ignoreMessagesWithTagsById);
+        if (channelHasIgnoredTags)
             return;
 
-        // check if thread channel has any tags from ignoreMessagesWithTagsById
-        if (threadChannelHasTags(threadChannel, ignoreMessagesWithTagsById))
-            return;
+        addTagsToChannel(msg.channel, tagsToApplyById);
+}
 
-        let applyTags = [];
-
-        tagsToApplyById.forEach( tag =>{
-            // check if thread channel has tags from tagsToApplyById
-            if (!threadChannel.appliedTags.includes(tag.id))
-                applyTags.push(tag.id);
-        });
-
-        // check if channel will have any tags applied to it
-        if (!applyTags.length)
-            return;
-
-        addTagsInChannel(threadChannel, applyTags);
-} 
-
-// exports.newSuggestion = (client, Events) => {
-//     client.on(Events.MessageCreate, msg =>{
-//         if (msg.author.id === client.user.id) return;
-//         if (!msg.channel.isThread()) return;
-
-//         let tagsToApply = ["Awaiting Response"];
-//         let blockTags = ["Approved", "Denied", "Implemented"];
-//         let channel = msg.channel;
-//         let threadTags = channel.appliedTags;
-//         let forumTags = channel.parent.availableTags;
-        
-//         // Checks if forum has the tags tagsToApply[]
-//         let foundForumTags = [];
-//         let foundForumBlockTags = [];
-//         forumTags.forEach(forumTag => {
-//             tagsToApply.forEach(tagToApply =>{
-//                 if (forumTag.name === tagToApply) foundForumTags.push(forumTag.id);
-//             })
-//             blockTags.forEach(blockTag =>{
-//                 if (forumTag.name === blockTag) foundForumBlockTags.push(forumTag.id);
-//             })
-//         })
-//         if (!foundForumTags.length || !foundForumBlockTags) return;
-        
-//         // Checks if thread has the tags in foundForumTags[] AND if thread doesn't have tags in blockTags[]
-//         let applyTags = [];
-//         foundForumTags.forEach(foundForumTag =>{
-//             foundForumBlockTags.forEach(foundForumBlockTag =>{
-//                 if (!threadTags.includes(foundForumTag) && !threadTags.includes(foundForumBlockTag)){
-//                     applyTags.push(foundForumTag);
-//                 }
-//             })
-//         })
-        
-//         updateTags(channel, applyTags);
-//     })
-// }
-
+/* 
+    when a user makes changes to a thread channel (rename, add/remove tags, etc.), execute this function
+*/
 exports.resolveSuggestion = (client, Events) =>{
-    client.on(Events.ThreadUpdate, (oldChannel, newChannel) =>{
-        addedTags = newChannel.appliedTags.filter(n => !oldChannel.appliedTags.includes(n));
-        if (!addedTags.length) return;
+    client.on(Events.ThreadUpdate, async (oldChannel, newChannel) =>{
+        // check if tags were added to the channel
+        let addedTags = newChannel.appliedTags.filter(tag => oldChannel.appliedTags.includes(tag));
+        let tagsWereAdded = addedtags.length > 0;
+        if (!tagsWereAdded) return;
 
         // Get audit log, specifically last user who edited a forum thread
-        newChannel.guild.fetchAuditLogs({ type: 111, limit: 1 }).then((audit) =>{
-            let user = audit.entries.first().executor.id;
+        let user = await newChannel.guild.fetchAuditLogs({ type: 111, limit: 1 }).entries.first().executor.id;
 
-            // Define tag maps
-            let forumTagsByName = new Map();
-            let forumTagsById = new Map();
-            newChannel.parent.availableTags.forEach(availableTag =>{
-                forumTagsByName.set(availableTag.name, availableTag.id);
-                forumTagsById.set(availableTag.id, availableTag.name);
-            });
-
-            // Set message and remove tags depending on which tags were added
-            let message = "";
-            let removeTags = [];
-            let error;
-            addedTags.forEach(addedTag =>{
-                switch (forumTagsById.get(addedTag)){
-                    case "Approved":
-                        message = "approved";
-                        break;
-                    case "Denied":
-                        message = "denied";
-                        break;
-                    case "Implemented":
-                        message = "implemented";
-                        if (newChannel.appliedTags.includes(forumTagsByName.get("Approved"))) removeTags.push(forumTagsByName.get("Approved"));
-                        if (newChannel.appliedTags.includes(forumTagsByName.get("Denied"))) removeTags.push(forumTagsByName.get("Denied"));
-                        break;
-                    default:
-                        error = true;
-                        break;
-                }
-            })
-            if (error === true) return;
-            removeTags.push(forumTagsByName.get("Awaiting Response"));
-            
-            // Remove tags
-            removeTagsInChannel(newChannel, removeTags);
-
-            // Send message and close post
-            newChannel.fetchOwner().then((owner) =>{
-                newChannel.send(`Hello <@${owner.id}>! This suggestion has been ${message} by <@${user}>! If you have any questions regarding the decision, please contact <@${user}>. This post has been locked and closed.`).then(() => {
-                    newChannel.setLocked(true);
-                    newChannel.setArchived(true);
-                });
-            });
+        // Define tag maps
+        let forumTagsByName = new Map();
+        let forumTagsById = new Map();
+        newChannel.parent.availableTags.forEach(availableTag =>{
+            forumTagsByName.set(availableTag.name, availableTag.id);
+            forumTagsById.set(availableTag.id, availableTag.name);
         });
-    })
+
+        // Set message and remove tags depending on which tags were added
+        let message = "";
+        let removeTags = [];
+        let error;
+        addedTags.forEach(addedTag =>{
+            switch (forumTagsById.get(addedTag)){
+                case "Approved":
+                    message = "approved";
+                    break;
+                case "Denied":
+                    message = "denied";
+                    break;
+                case "Implemented":
+                    message = "implemented";
+                    if (newChannel.appliedTags.includes(forumTagsByName.get("Approved"))) removeTags.push(forumTagsByName.get("Approved"));
+                    if (newChannel.appliedTags.includes(forumTagsByName.get("Denied"))) removeTags.push(forumTagsByName.get("Denied"));
+                    break;
+                default:
+                    error = true;
+                    break;
+            }
+        });
+
+        if (error === true) return;
+        removeTags.push(forumTagsByName.get("Awaiting Response"));
+        
+        // Remove tags
+        removeTagsInChannel(newChannel, removeTags);
+
+        // Send message and close post
+        let owner = await newChannel.fetchOwner();
+        let msg = `Hello <@${owner.id}>! This suggestion has been ${message} by <@${user}>! If you have any questions regarding the decision, please contact <@${user}>. This post has been locked and closed.`;
+        let sentMessage = await newChannel.send(msg);
+        
+        newChannel.setLocked(true);
+        newChannel.setArchived(true);
+    });
 }
