@@ -67,6 +67,8 @@ function addTagsToChannel(channel, tags = []) {
         channelTags.push(tag);
     }
 
+    console.log("Channel tags: " + channelTags);
+
     channel.setAppliedTags(channelTags);
 }
 
@@ -109,13 +111,19 @@ exports.onNewSuggestion = (client, msg) => {
         let msgChannelIsThread = msg.channel.isThread()
         if (!msgChannelIsThread) return;
 
+        console.log("channel is thread");
+
         // check if the parent channel of the thread channel is a forum
         let parentChannelIsForum = msg.channel.parent.type !== FORUM_CHANNEL_TYPE_ENUM;
         if (!parentChannelIsForum) return;
 
+        console.log("parent channel is forum");
+
         // check if the channel the message was sent into is part of the list of suggestion channels
         let channelIsSuggestionChannel = suggestionChannels.includes(msg.channel.id);
         if (!channelIsSuggestionChannel) return;
+
+        console.log("thread is suggestion channel");
 
         let forumChannel = msg.channel.parent;
         let tagsToApplyById = findTagsInForumByName(forumChannel, tagsToApplyOnNewSuggestion);
@@ -125,6 +133,8 @@ exports.onNewSuggestion = (client, msg) => {
         let channelHasIgnoredTags = threadChannelHasTags(msg.channel, ignoreMessagesWithTagsById);
         if (channelHasIgnoredTags)
             return;
+
+        console.log("channel doesn't have ignored tags");
 
         addTagsToChannel(msg.channel, tagsToApplyById);
 }
