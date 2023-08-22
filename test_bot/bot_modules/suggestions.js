@@ -171,33 +171,40 @@ exports.resolveSuggestion = (client, Events) =>{
         // Define tag maps
         let forumTagsByName = new Map();
         let forumTagsById = new Map();
-        newChannel.parent.availableTags.forEach(availableTag =>{
+        let forumAvailableTags = newChannel.parent.availableTags;
+
+        for (let availableTag of forumAvailableTags) {
             forumTagsByName.set(availableTag.name, availableTag.id);
             forumTagsById.set(availableTag.id, availableTag.name);
-        });
+        }
 
         // Set message and remove tags depending on which tags were added
         let message = "";
         let removeTags = [];
         let error;
-        addedTags.forEach(addedTag =>{
-            switch (forumTagsById.get(addedTag)){
-                case "Approved":
-                    message = "approved";
-                    break;
-                case "Denied":
-                    message = "denied";
-                    break;
-                case "Implemented":
-                    message = "implemented";
-                    if (newChannel.appliedTags.includes(forumTagsByName.get("Approved"))) removeTags.push(forumTagsByName.get("Approved"));
-                    if (newChannel.appliedTags.includes(forumTagsByName.get("Denied"))) removeTags.push(forumTagsByName.get("Denied"));
-                    break;
-                default:
-                    error = true;
-                    break;
-            }
-        });
+        
+        let addedTag = addedTags[0];
+        let tagName = forumTagsById.get(addedTag);
+
+        console.log("added tag: " + addedTag); //debug
+        console.log("tag name: " + tagName); //debug
+
+        switch (tagName) {
+            case "Approved":
+                message = "approved";
+                break;
+            case "Denied":
+                message = "denied";
+                break;
+            case "Implemented":
+                message = "implemented";
+                if (newChannel.appliedTags.includes(forumTagsByName.get("Approved"))) removeTags.push(forumTagsByName.get("Approved"));
+                if (newChannel.appliedTags.includes(forumTagsByName.get("Denied"))) removeTags.push(forumTagsByName.get("Denied"));
+                break;
+            default:
+                error = true;
+                break;
+        }
 
         if (error === true)
             console.log("error!"); //debug
