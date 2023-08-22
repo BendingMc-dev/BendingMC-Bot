@@ -70,19 +70,23 @@ function addTagsToChannel(channel, tags = []) {
     console.log("Channel tags: " + channelTags);
 
     channel.setAppliedTags(channelTags);
+
+    console.log("Applied tags to channel");
 }
 
 function findTagsInForumByName(forum, tags = []){
     let forumAvailableTags = forum.availableTags;
     let results = [];
 
-    forumAvailableTags.forEach( forumTag =>{
-        tags.forEach( tag => {
-            // check if the name of the tag in the forum matches the name of the given tag
-            if (forumTag.name === tag)
-                results.push(forumTag);
-        });
-    });
+    for (let forumTag of forumAvailableTags) {
+        for (let tag of tags) {
+            // check if name of the tag of the forum matches the name of the given tag
+            let forumHasTag = forumTag.name === tag;
+            if (!forumHasTag) break;
+
+            results.push(forumTag.id);
+        }
+    }
 
     return results;
 }
@@ -90,7 +94,8 @@ function findTagsInForumByName(forum, tags = []){
 function threadChannelHasTags(channel, tags){
     for (let tag of tags){
         // check if the channel has the tag applied to it
-        if (channel.appliedTags.includes(tag.id))
+        let channelHasTag = channel.appliedTags.includes(tag.id);
+        if (channelHasTag);
             return true;
     }
 
