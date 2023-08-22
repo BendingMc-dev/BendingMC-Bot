@@ -2,7 +2,7 @@
 const FORUM_CHANNEL_TYPE_ENUM = 15;
 const CHANNEL_MAX_TAGS = 5; // discord's limit, please don't change this :C
 
-let suggestionChannels = [1078194360031641670]; // list of id of channels--eventually migrate this into a command so channels can be added and remove through discord
+let suggestionChannels = ["1078194360031641670"]; // list of id of channels--eventually migrate this into a command so channels can be added and remove through discord
 
 let tagsToApplyOnNewSuggestion = ["Awaiting Response"]; // tags that will be applied when the message is sent
 let tagsToIgnoreOnNewSuggestion = ["Approved", "Denied", "Implemented"]; // if the message has any of these tags, don't create a new suggestion
@@ -117,12 +117,8 @@ exports.onNewSuggestion = (client, msg) => {
 
         console.log("parent channel is forum");
 
-        console.log("channel id: " + msg.channel.id);
-        console.log("suggestion channel (1): " + suggestionChannels[0]);
-        console.log("suggestionsChannel includes channel id: " + suggestionChannels.includes(msg.channel.id));
-        
         // check if the channel the message was sent into is part of the list of suggestion channels
-        let channelIsSuggestionChannel = suggestionChannels.includes(msg.channel.id);
+        let channelIsSuggestionChannel = suggestionChannels.includes(msg.channel.parent.id);
         if (!channelIsSuggestionChannel) return;
 
         console.log("thread is suggestion channel");
