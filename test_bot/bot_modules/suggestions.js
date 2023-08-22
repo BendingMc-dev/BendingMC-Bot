@@ -77,11 +77,7 @@ function addTagsToChannel(channel, tags = []) {
         channelTags.push(tag);
     }
 
-    console.log("Channel tags: " + channelTags);
-
     channel.setAppliedTags(channelTags);
-
-    console.log("Applied tags to channel");
 }
 
 function findTagsInForumByName(forum, tags = []){
@@ -94,8 +90,6 @@ function findTagsInForumByName(forum, tags = []){
             let forumHasTag = forumTag.name === tag;
             if (!forumHasTag) continue;
 
-            console.log(`Found tag (${tag}) with id (${forumTag.id})`);
-
             results.push(forumTag.id);
         }
     }
@@ -104,12 +98,9 @@ function findTagsInForumByName(forum, tags = []){
 }
 
 function threadChannelHasTags(channel, tags){
-    console.log("Thread tags: " + channel.appliedTags);
     for (let tag of tags){
         // check if the channel has the tag applied to it
         let channelHasTag = channel.appliedTags.includes(tag);
-        console.log("Current tag: " + tag);
-        console.log("Channel has tag: " + channel.appliedTags.includes(tag));
         if (channelHasTag)
             return true;
     }
@@ -121,10 +112,6 @@ function threadChannelHasTags(channel, tags){
     when a message is created, execute this function
 */
 exports.onNewSuggestion = (client, msg) => {
-    console.log("");
-    console.log("");
-    console.log("--- Start Log ---");
-
     // check if bot is the author of the message
     let botIsMsgAuthor = msg.author.id === client.user.id
     if (botIsMsgAuthor) return;
@@ -133,26 +120,17 @@ exports.onNewSuggestion = (client, msg) => {
     let msgChannelIsThread = msg.channel.isThread()
     if (!msgChannelIsThread) return;
 
-    console.log("channel is thread");
-
     // check if the parent channel of the thread channel is a forum
     let parentChannelIsForum = msg.channel.parent.type == FORUM_CHANNEL_TYPE_ENUM;
     if (!parentChannelIsForum) return;
-
-    console.log("parent channel is forum");
 
     // check if the channel the message was sent into is part of the list of suggestion channels
     let channelIsSuggestionChannel = suggestionChannels.includes(msg.channel.parent.id);
     if (!channelIsSuggestionChannel) return;
 
-    console.log("thread is suggestion channel");
-
     let forumChannel = msg.channel.parent;
     let tagsToApplyById = findTagsInForumByName(forumChannel, tagsToApplyOnNewSuggestion);
     let ignoreMessagesWithTagsById = findTagsInForumByName(forumChannel, tagsToIgnoreOnNewSuggestion);
-
-    console.log("Tags to be applied: " + tagsToApplyById);
-    console.log("Tags to be ignored: " + ignoreMessagesWithTagsById);
 
     //console.log("Thread has any ignored tags: " + threadChannelHasTags(msg.channel, ignoreMessagesWithTagsById));
 
@@ -160,8 +138,6 @@ exports.onNewSuggestion = (client, msg) => {
     let channelHasIgnoredTags = threadChannelHasTags(msg.channel, ignoreMessagesWithTagsById);
     if (channelHasIgnoredTags)
         return;
-
-    console.log("channel doesn't have ignored tags");
 
     addTagsToChannel(msg.channel, tagsToApplyById);
 }
@@ -171,10 +147,15 @@ exports.onNewSuggestion = (client, msg) => {
 */
 exports.resolveSuggestion = (client, Events) =>{
     client.on(Events.ThreadUpdate, async (oldChannel, newChannel) =>{
+        console.log("-"); //debug
+        console.log("-- Starting Log --"); //debug
+
         // check if tags were added to the channel
         let addedTags = newChannel.appliedTags.filter(tag => oldChannel.appliedTags.includes(tag));
         let tagsWereAdded = addedTags.length > 0;
         if (!tagsWereAdded) return;
+
+        console.log("tags were added to this thread"); //debug
 
         // Get audit log, specifically last user who edited a forum thread
         let audit = await newChannel.guild.fetchAuditLogs({ type: 111, limit: 1 });
@@ -184,6 +165,8 @@ exports.resolveSuggestion = (client, Events) =>{
         let botEditedChannel = user == client.user.id;
         if (botEditedChannel)
             return;
+
+        console.log("bot did not edit this channel"); //debug
 
         // Define tag maps
         let forumTagsByName = new Map();
@@ -215,6 +198,9 @@ exports.resolveSuggestion = (client, Events) =>{
                     break;
             }
         });
+
+        if (error === true)
+            console.log("error!"); //debug
 
         if (error === true) return;
         removeTags.push(forumTagsByName.get("Awaiting Response"));
