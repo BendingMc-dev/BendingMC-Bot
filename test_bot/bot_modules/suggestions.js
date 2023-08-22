@@ -94,7 +94,7 @@ function findTagsInForumByName(forum, tags = []){
 function threadChannelHasTags(channel, tags){
     for (let tag of tags){
         // check if the channel has the tag applied to it
-        let channelHasTag = channel.appliedTags.includes(tag.id);
+        let channelHasTag = channel.appliedTags.includes(tag);
         if (channelHasTag);
             return true;
     }
