@@ -99,6 +99,8 @@ function threadChannelHasTags(channel, tags){
     when a message is created, execute this function
 */
 exports.onNewSuggestion = (client, msg) => {
+        console.log("new suggestion");
+
         // check if bot is the author of the message
         let botIsMsgAuthor = msg.author.id === client.user.id
         if (botIsMsgAuthor) return;
@@ -139,6 +141,11 @@ exports.resolveSuggestion = (client, Events) =>{
 
         // Get audit log, specifically last user who edited a forum thread
         let user = await newChannel.guild.fetchAuditLogs({ type: 111, limit: 1 }).entries.first().executor.id;
+
+        // check if bot edited the channel
+        let botEditedChannel = user == client.user.id;
+        if (botEditedChannel)
+            return;
 
         // Define tag maps
         let forumTagsByName = new Map();
