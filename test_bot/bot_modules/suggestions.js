@@ -121,6 +121,9 @@ exports.onNewSuggestion = (client, msg) => {
         let channelIsSuggestionChannel = suggestionChannels.includes(msg.channel.id);
         if (!channelIsSuggestionChannel) return;
 
+        console.log("channel id: " + msg.channel.id);
+        console.log("suggestion channel (1): " + suggestionChannels[0]);
+        console.log("suggestionsChannel includes channel id: " + suggestionChannels.includes(msg.channel.id));
         console.log("thread is suggestion channel");
 
         let forumChannel = msg.channel.parent;
