@@ -157,7 +157,7 @@ exports.resolveSuggestion = (client, Events) =>{
     client.on(Events.ThreadUpdate, async (oldChannel, newChannel) =>{
         // check if tags were added to the channel
         let addedTags = newChannel.appliedTags.filter(tag => oldChannel.appliedTags.includes(tag));
-        let tagsWereAdded = addedtags.length > 0;
+        let tagsWereAdded = addedTags.length > 0;
         if (!tagsWereAdded) return;
 
         // Get audit log, specifically last user who edited a forum thread
