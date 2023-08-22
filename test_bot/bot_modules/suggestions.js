@@ -151,7 +151,7 @@ exports.resolveSuggestion = (client, Events) =>{
         console.log("-- Starting Log --"); //debug
 
         // check if tags were added to the channel
-        let addedTags = newChannel.appliedTags.filter(tag => oldChannel.appliedTags.includes(tag));
+        let addedTags = newChannel.appliedTags.filter(tag => !oldChannel.appliedTags.includes(tag));
         let tagsWereAdded = addedTags.length > 0;
         if (!tagsWereAdded) return;
 
