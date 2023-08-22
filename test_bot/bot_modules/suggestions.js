@@ -109,45 +109,49 @@ function threadChannelHasTags(channel, tags){
     when a message is created, execute this function
 */
 exports.onNewSuggestion = (client, msg) => {
-        // check if bot is the author of the message
-        let botIsMsgAuthor = msg.author.id === client.user.id
-        if (botIsMsgAuthor) return;
+    console.log("");
+    console.log("");
+    console.log("--- Start Log ---");
 
-        // check if message was sent in a thread
-        let msgChannelIsThread = msg.channel.isThread()
-        if (!msgChannelIsThread) return;
+    // check if bot is the author of the message
+    let botIsMsgAuthor = msg.author.id === client.user.id
+    if (botIsMsgAuthor) return;
 
-        console.log("channel is thread");
+    // check if message was sent in a thread
+    let msgChannelIsThread = msg.channel.isThread()
+    if (!msgChannelIsThread) return;
 
-        // check if the parent channel of the thread channel is a forum
-        let parentChannelIsForum = msg.channel.parent.type == FORUM_CHANNEL_TYPE_ENUM;
-        if (!parentChannelIsForum) return;
+    console.log("channel is thread");
 
-        console.log("parent channel is forum");
+    // check if the parent channel of the thread channel is a forum
+    let parentChannelIsForum = msg.channel.parent.type == FORUM_CHANNEL_TYPE_ENUM;
+    if (!parentChannelIsForum) return;
 
-        // check if the channel the message was sent into is part of the list of suggestion channels
-        let channelIsSuggestionChannel = suggestionChannels.includes(msg.channel.parent.id);
-        if (!channelIsSuggestionChannel) return;
+    console.log("parent channel is forum");
 
-        console.log("thread is suggestion channel");
+    // check if the channel the message was sent into is part of the list of suggestion channels
+    let channelIsSuggestionChannel = suggestionChannels.includes(msg.channel.parent.id);
+    if (!channelIsSuggestionChannel) return;
 
-        let forumChannel = msg.channel.parent;
-        let tagsToApplyById = findTagsInForumByName(forumChannel, tagsToApplyOnNewSuggestion);
-        let ignoreMessagesWithTagsById = findTagsInForumByName(forumChannel, tagsToIgnoreOnNewSuggestion);
+    console.log("thread is suggestion channel");
 
-        console.log("Tags to be applied: " + tagsToApplyById);
-        console.log("Tags to be ignored: " + ignoreMessagesWithTagsById);
+    let forumChannel = msg.channel.parent;
+    let tagsToApplyById = findTagsInForumByName(forumChannel, tagsToApplyOnNewSuggestion);
+    let ignoreMessagesWithTagsById = findTagsInForumByName(forumChannel, tagsToIgnoreOnNewSuggestion);
 
-        console.log("Thread has any ignored tags: " + threadChannelHasTags(msg.channel, ignoreMessagesWithTagsById));
+    console.log("Tags to be applied: " + tagsToApplyById);
+    console.log("Tags to be ignored: " + ignoreMessagesWithTagsById);
 
-        // check if thread channel has any tags that are being ignored
-        let channelHasIgnoredTags = threadChannelHasTags(msg.channel, ignoreMessagesWithTagsById);
-        if (channelHasIgnoredTags)
-            return;
+    console.log("Thread has any ignored tags: " + threadChannelHasTags(msg.channel, ignoreMessagesWithTagsById));
 
-        console.log("channel doesn't have ignored tags");
+    // check if thread channel has any tags that are being ignored
+    let channelHasIgnoredTags = threadChannelHasTags(msg.channel, ignoreMessagesWithTagsById);
+    if (channelHasIgnoredTags)
+        return;
 
-        addTagsToChannel(msg.channel, tagsToApplyById);
+    console.log("channel doesn't have ignored tags");
+
+    addTagsToChannel(msg.channel, tagsToApplyById);
 }
 
 /* 
@@ -161,7 +165,8 @@ exports.resolveSuggestion = (client, Events) =>{
         if (!tagsWereAdded) return;
 
         // Get audit log, specifically last user who edited a forum thread
-        let user = await newChannel.guild.fetchAuditLogs({ type: 111, limit: 1 }).entries.first().executor.id;
+        let audit = await newChannel.guild.fetchAuditLogs({ type: 111, limit: 1 });
+        let user = audit.entries.first().executor.id;
 
         // check if bot edited the channel
         let botEditedChannel = user == client.user.id;
@@ -208,7 +213,8 @@ exports.resolveSuggestion = (client, Events) =>{
         // Send message and close post
         let owner = await newChannel.fetchOwner();
         let msg = `Hello <@${owner.id}>! This suggestion has been ${message} by <@${user}>! If you have any questions regarding the decision, please contact <@${user}>. This post has been locked and closed.`;
-        let sentMessage = await newChannel.send(msg);
+        
+        await newChannel.send(msg);
         
         newChannel.setLocked(true);
         newChannel.setArchived(true);
