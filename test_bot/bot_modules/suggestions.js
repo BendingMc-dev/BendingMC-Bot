@@ -92,7 +92,7 @@ function findTagsInForumByName(forum, tags = []){
         for (let tag of tags) {
             // check if name of the tag of the forum matches the name of the given tag
             let forumHasTag = forumTag.name === tag;
-            if (!forumHasTag) break;
+            if (!forumHasTag) continue;
 
             console.log(`Found tag (${tag}) with id (${forumTag.id})`);
 
