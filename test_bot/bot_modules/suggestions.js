@@ -17,6 +17,16 @@ let removeTagIfLimitIsReached = true;
 // --= END SECTION =--
 
 
+
+
+
+
+
+
+
+
+
+
 /* 
     channel = channel object
     tags[] = array of tag IDs to be removed from the channel
@@ -84,6 +94,8 @@ function findTagsInForumByName(forum, tags = []){
             let forumHasTag = forumTag.name === tag;
             if (!forumHasTag) break;
 
+            console.log(`Found tag (${tag}) with id (${forumTag.id})`);
+
             results.push(forumTag.id);
         }
     }
@@ -142,7 +154,7 @@ exports.onNewSuggestion = (client, msg) => {
     console.log("Tags to be applied: " + tagsToApplyById);
     console.log("Tags to be ignored: " + ignoreMessagesWithTagsById);
 
-    console.log("Thread has any ignored tags: " + threadChannelHasTags(msg.channel, ignoreMessagesWithTagsById));
+    //console.log("Thread has any ignored tags: " + threadChannelHasTags(msg.channel, ignoreMessagesWithTagsById));
 
     // check if thread channel has any tags that are being ignored
     let channelHasIgnoredTags = threadChannelHasTags(msg.channel, ignoreMessagesWithTagsById);
