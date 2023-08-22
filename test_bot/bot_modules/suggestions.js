@@ -98,7 +98,7 @@ function threadChannelHasTags(channel, tags){
         let channelHasTag = channel.appliedTags.includes(tag);
         console.log("Current tag: " + tag);
         console.log("Channel has tag: " + channel.appliedTags.includes(tag));
-        if (channelHasTag);
+        if (channelHasTag)
             return true;
     }
 
@@ -137,6 +137,8 @@ exports.onNewSuggestion = (client, msg) => {
 
         console.log("Tags to be applied: " + tagsToApplyById);
         console.log("Tags to be ignored: " + ignoreMessagesWithTagsById);
+
+        console.log("Thread has any ignored tags: " + threadChannelHasTags(msg.channel, ignoreMessagesWithTagsById));
 
         // check if thread channel has any tags that are being ignored
         let channelHasIgnoredTags = threadChannelHasTags(msg.channel, ignoreMessagesWithTagsById);
