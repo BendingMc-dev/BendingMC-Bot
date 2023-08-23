@@ -6,7 +6,7 @@ function getFiles(path) {
     let dirents = fs.readdirSync(path, {withFileTypes: true});
 
     for (let dirent of dirents) {
-        console.log("(all) file name: " + file.name);
+        console.log("(all) file name: " + dirent.name);
 
         // check if dirent is file
         let isFile = dirent.isFile();
