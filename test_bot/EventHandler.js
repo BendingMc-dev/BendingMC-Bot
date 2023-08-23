@@ -1,7 +1,7 @@
 const path = require("path");
 const fs = require("fs");
 
-module.exports = function main(client) {
+module.exports = (client) => {
     // get all files in a folder
     // for each file, require a function inside of it
     

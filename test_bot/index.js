@@ -8,6 +8,7 @@ const { Client, IntentsBitField, Partials, Events, Channel } = require('discord.
 const suggestions = require("./bot_modules/suggestions.js");
 // const reminder = require("./bot_modules/reminder.js");
 const todo = require("./bot_modules/todo.js");
+const EventHandler = require('./EventHandler.js');
 
 require('dotenv').config();
 
@@ -44,8 +45,11 @@ todo.onTodoCommand(client, Events);
 
 client.on(Events.MessageCreate, msg =>{
 	suggestions.onNewSuggestion(client, msg);
+	EventHandler(client);
 	// reminder.setReminder(client, msg);
-})
+});
+
+client.on()
 
 // Log in
 const BOT_TOKEN = process.env.TEST_BOT_TOKEN;
