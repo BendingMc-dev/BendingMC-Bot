@@ -44,30 +44,35 @@ module.exports = (client) => {
     // const modulesFolder = "bot_modules";
     const folderPath = path.join(__dirname, "bot_modules");
     const modulesPath = "/bot_modules";
-    
-    // console.log(`Dirname: (${__dirname}). Concat: ${__dirname + "/" + modulesFolder}`);
 
     let moduleFolders = getFiles(folderPath, {foldersOnly: true});
 
-    console.log("Sub folders: " + moduleFolders);
-
+    // load modules in sub-folders
     for (let folder of moduleFolders) {
         let files = getFiles(folder, {customPath: modulesPath});
-
-        console.log("folder: " + folder.split("/").pop());
-        console.log("folder modules: " + files);
 
         for (let file of files) {
             let fileName = file.split("/").pop();
             let botModule = require(file);
-
-            // console.log("Loading module: " + fileName);
 
             try {
                 botModule.main();
             } catch {
                 console.log(`The module ${fileName} but had no 'main' function! At ${file}`);
             }
+        }
+    }
+
+    // load modules
+    let files = getFiles(folderPath, {customPath: modulesPath});
+    for (let file of files) {
+        let fileName = file.split("/").pop();
+        let botModule = require(file);
+
+        try {
+            botModule.main();
+        } catch {
+            console.log(`The module ${fileName} but had no 'main' function! At ${file}`);
         }
     }
 }
