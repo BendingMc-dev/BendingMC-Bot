@@ -49,8 +49,6 @@ client.on(Events.MessageCreate, msg =>{
 	// reminder.setReminder(client, msg);
 });
 
-client.on()
-
 // Log in
 const BOT_TOKEN = process.env.TEST_BOT_TOKEN;
 client.login(BOT_TOKEN);
