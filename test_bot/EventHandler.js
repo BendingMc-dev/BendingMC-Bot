@@ -63,8 +63,8 @@ module.exports = (client) => {
 
             try {
                 module.main();
-            } catch (err) {
-                console.log(err);
+            } catch {
+                console.log("A module was loaded but had no 'main' function!");
             }
         }
     }
