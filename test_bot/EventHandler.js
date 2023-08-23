@@ -1,7 +1,7 @@
 const path = require("path");
 const fs = require("fs");
 
-function getFiles(directory, foldersOnly = false) {
+function getFiles(directory, options) {
     let files = [];
     let dirents = fs.readdirSync(directory, {withFileTypes: true});
 
@@ -9,6 +9,7 @@ function getFiles(directory, foldersOnly = false) {
         let filePath = path.join(directory, dirent.name);
 
         // if folders only is true, this function will only return folders. Otherwise, it will only return file paths
+        let foldersOnly = options.foldersOnly === true;
         if (foldersOnly) {
             let isFolder = dirent.isDirectory();
             if (!isFolder) continue;
@@ -31,7 +32,11 @@ module.exports = (client) => {
     
     const folderPath = path.join(__dirname, "bot_modules");
 
-    console.log("folder path: " + folderPath);
+    let moduleFolders = getFiles(folderPath, {foldersOnly: true});
+
+    for (let folder of moduleFolders) {
+        let files = getFiles(folderPath);
+    }
 
     let files = getFiles(folderPath);
 
