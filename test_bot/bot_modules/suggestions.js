@@ -170,6 +170,8 @@ exports.resolveSuggestion = (client, Events) =>{
         let forumChannel = channel.parent;
         let addedTagName = forumChannel.availableTags.filter(tag => tag.id === addedTags[0])[0].name;
 
+        console.log("checking if tags were added..."); //debug
+
         // check if tags were added to the channel
         let tagsWereAdded = addedTags.length > 0;
         if (!tagsWereAdded) return;
