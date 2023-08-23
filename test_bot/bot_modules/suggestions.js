@@ -192,7 +192,10 @@ exports.resolveSuggestion = (client, Events) =>{
             return;
 
         // Remove tags
-        let removeTags = findTagsInForumByName(forumChannel, tagsToRemoveOnResolveSuggestion);
+        let removeTags = [];
+        removeTags.concat(findTagsInForumByName(forumChannel, tagsToRemoveOnResolveSuggestion));
+
+        console.log("removeTags: " + removeTags);
         
         let decisionTag = resolveSuggestionTags.filter(tag => tag.name === addedTagName)[0];
         let decisionTagsToRemove = findTagsInForumByName(forumChannel, decisionTag.tagsToRemove);
