@@ -1,6 +1,21 @@
 const path = require("path");
 const fs = require("fs");
 
+function getFiles(path) {
+    let files = [];
+    let dirents = fs.readdirSync(path, {withFileTypes: true});
+
+    for (let dirent of dirents) {
+        // check if dirent is file
+        let isFile = dirent.isFile();
+        if (!isFile) continue;
+
+        files.push(dirent);
+    }
+
+    return files;
+}
+
 module.exports = (client) => {
     // get all files in a folder
     // for each file, require a function inside of it
@@ -9,9 +24,9 @@ module.exports = (client) => {
 
     console.log("folder path: " + folderPath);
 
-    let files = fs.readdirSync(folderPath, {withFileTypes: true});
+    let files = getFiles(folderPath);
 
     for (let file of files) {
-        console.log("name of file: " + file.name);
+        console.log("file name: " + file.name);
     }
 }
