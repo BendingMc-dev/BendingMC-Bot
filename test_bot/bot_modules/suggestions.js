@@ -174,20 +174,13 @@ exports.resolveSuggestion = (client, Events) =>{
         let forumChannel = channel.parent;
         let addedTagName = forumChannel.availableTags.filter(tag => tag.id === addedTags[0])[0].name;
 
-        console.log("tags were added to channel"); //debug
-        console.log("name of tag that was added: " + addedTagName); //debug
-
         // check if added tag can resolve a suggestion (e.g. if the tag added is "Bending", it can't resolve a suggestion)
         let tagCanResolveSuggestion = resolveSuggestionTags.filter(tag => tag.name === addedTagName).length > 0;
         if (!tagCanResolveSuggestion) return;
 
-        console.log("added tag can resolve suggestion"); //debug
-
         // check if the channel is part of the list of suggestion channels
         let channelIsSuggestionChannel = suggestionChannels.includes(channel.parent.id);
         if (!channelIsSuggestionChannel) return;
-
-        console.log("channel is a suggestion channel"); //debug
 
         // Get audit log, specifically last user who edited a forum thread
         let audit = await channel.guild.fetchAuditLogs({ type: 111, limit: 1 });
@@ -198,25 +191,19 @@ exports.resolveSuggestion = (client, Events) =>{
         if (botEditedChannel)
             return;
 
-        console.log("bot did not edit channel"); //debug
-
         // Remove tags
         let removeTags = findTagsInForumByName(forumChannel, tagsToRemoveOnResolveSuggestion);
         
         let decisionTag = resolveSuggestionTags.filter(tag => tag.name === addedTagName)[0];
-        let decisionTagsToRemove = decisionTag.tagsToRemove;
+        let decisionTagsToRemove = findTagsInForumByName(forumChannel, decisionTag.tagsToRemove);
 
         removeTags.concat(decisionTagsToRemove);
         
         removeTagsInChannel(channel, removeTags);
 
-        console.log("removed tags from channel"); //debug
-
         // Send message and close post
         let owner = await channel.fetchOwner();
         let message = `Hello <@${owner.id}>! This suggestion has been ${decisionTag.name} by <@${user.id}>! If you have any questions regarding the decision, please contact <@${user.id}>. This post has been locked and closed.`;
-
-        console.log("message sent: " + `Hello <@${owner.id}>! This suggestion has been ${decisionTag.name} by <@${user.id}>! If you have any questions regarding the decision, please contact <@${user.id}>. This post has been locked and closed.`);
         
         await channel.send(message);
         
