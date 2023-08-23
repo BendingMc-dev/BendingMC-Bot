@@ -7,12 +7,19 @@ let suggestionChannels = ["1078194360031641670"]; // list of id of channels--eve
 let tagsToApplyOnNewSuggestion = ["Awaiting Response"]; // tags that will be applied when the message is sent
 let tagsToIgnoreOnNewSuggestion = ["Approved", "Denied", "Implemented"]; // if the message has any of these tags, don't create a new suggestion
 
-/* 
-    if a channel can't have any more tags due to discord's limit, should tags be removed from the channel first?
+/*  if a channel can't have any more tags due to discord's limit, should tags be removed from the channel first?
     the amount of tags that will be removed is exactly the amount of tags defined in the 'tagsToApplyOnNewSuggestion' list
-    tags that were applied to the channel first will be removed before tags that were applied to the channel last
-*/
+    tags that were applied to the channel first will be removed before tags that were applied to the channel last   */
 let removeTagIfLimitIsReached = true; 
+
+let tagsToRemoveOnResolveSuggestion = ["Awaiting Response"]; // list of tags that will be removed when a suggestion is resolved (do not include tags that resolve suggestions -> "Approved", etc.)
+
+/*  name = name of the tag (must be equal to the one on the forum)
+    tagsToRemove = array of tags (names) that will be removed from the thread when this tag is added (e.g. `{name: "Approved", tagsToRemove: ["Denied"]}` means the tag "Denied" would be removed if the tag "Approved" were added to the thread)
+    the variable `tagsToRemoveOnResolveSuggestion` ensures that all tags listed are removed when a suggestion is resolved   */
+const resolveSuggestionTags = [
+    {name: "Approved", tagsToRemove: []}
+];
 
 // --= END SECTION =--
 
@@ -80,6 +87,12 @@ function addTagsToChannel(channel, tags = []) {
     channel.setAppliedTags(channelTags);
 }
 
+/* 
+    forum = channel object
+    tags[] = array of tag names; will try to find tag IDs from the forum that match these
+
+    returns = array of tag IDs that match the name of given tags
+*/
 function findTagsInForumByName(forum, tags = []){
     let forumAvailableTags = forum.availableTags;
     let results = [];
@@ -97,6 +110,12 @@ function findTagsInForumByName(forum, tags = []){
     return results;
 }
 
+/* 
+    channel = channel object
+    tags[] = array of tag IDs; will check if the channel has any of these
+
+    returns = true or false
+*/
 function threadChannelHasTags(channel, tags){
     for (let tag of tags){
         // check if the channel has the tag applied to it
@@ -132,8 +151,6 @@ exports.onNewSuggestion = (client, msg) => {
     let tagsToApplyById = findTagsInForumByName(forumChannel, tagsToApplyOnNewSuggestion);
     let ignoreMessagesWithTagsById = findTagsInForumByName(forumChannel, tagsToIgnoreOnNewSuggestion);
 
-    //console.log("Thread has any ignored tags: " + threadChannelHasTags(msg.channel, ignoreMessagesWithTagsById));
-
     // check if thread channel has any tags that are being ignored
     let channelHasIgnoredTags = threadChannelHasTags(msg.channel, ignoreMessagesWithTagsById);
     if (channelHasIgnoredTags)
@@ -146,82 +163,48 @@ exports.onNewSuggestion = (client, msg) => {
     when a user makes changes to a thread channel (rename, add/remove tags, etc.), execute this function
 */
 exports.resolveSuggestion = (client, Events) =>{
-    client.on(Events.ThreadUpdate, async (oldChannel, newChannel) =>{
-        console.log("-"); //debug
-        console.log("-- Starting Log --"); //debug
-
+    client.on(Events.ThreadUpdate, async (oldChannel, channel) =>{
         // check if tags were added to the channel
-        let addedTags = newChannel.appliedTags.filter(tag => !oldChannel.appliedTags.includes(tag));
+        let addedTags = channel.appliedTags.filter(tag => !oldChannel.appliedTags.includes(tag));
+        let addedTagName = addedTags[0];
         let tagsWereAdded = addedTags.length > 0;
         if (!tagsWereAdded) return;
 
-        console.log("tags were added to this thread"); //debug
+        // check if added tag can resolve a suggestion (e.g. if the tag added is "Bending", it can't resolve a suggestion)
+        let tagCanResolveSuggestion = resolveSuggestionTags.filter(tag => tag.name === addedTagName).length > 0;
+        if (!tagCanResolveSuggestion) return;
+
+        // check if the channel is part of the list of suggestion channels
+        let channelIsSuggestionChannel = suggestionChannels.includes(channel.parent.id);
+        if (!channelIsSuggestionChannel) return;
 
         // Get audit log, specifically last user who edited a forum thread
-        let audit = await newChannel.guild.fetchAuditLogs({ type: 111, limit: 1 });
-        let user = audit.entries.first().executor.id;
+        let audit = await channel.guild.fetchAuditLogs({ type: 111, limit: 1 });
+        let user = audit.entries.first().executor;
 
         // check if bot edited the channel
-        let botEditedChannel = user == client.user.id;
+        let botEditedChannel = user.id == client.user.id;
         if (botEditedChannel)
             return;
 
-        console.log("bot did not edit this channel"); //debug
-
-        // Define tag maps
-        let forumTagsByName = new Map();
-        let forumTagsById = new Map();
-        let forumAvailableTags = newChannel.parent.availableTags;
-
-        for (let availableTag of forumAvailableTags) {
-            forumTagsByName.set(availableTag.name, availableTag.id);
-            forumTagsById.set(availableTag.id, availableTag.name);
-        }
-
-        // Set message and remove tags depending on which tags were added
-        let message = "";
-        let removeTags = [];
-        let error;
-        
-        let addedTag = addedTags[0];
-        let tagName = forumTagsById.get(addedTag);
-
-        console.log("added tag: " + addedTag); //debug
-        console.log("tag name: " + tagName); //debug
-
-        switch (tagName) {
-            case "Approved":
-                message = "approved";
-                break;
-            case "Denied":
-                message = "denied";
-                break;
-            case "Implemented":
-                message = "implemented";
-                if (newChannel.appliedTags.includes(forumTagsByName.get("Approved"))) removeTags.push(forumTagsByName.get("Approved"));
-                if (newChannel.appliedTags.includes(forumTagsByName.get("Denied"))) removeTags.push(forumTagsByName.get("Denied"));
-                break;
-            default:
-                error = true;
-                break;
-        }
-
-        if (error === true)
-            console.log("error!"); //debug
-
-        if (error === true) return;
-        removeTags.push(forumTagsByName.get("Awaiting Response"));
-        
         // Remove tags
-        removeTagsInChannel(newChannel, removeTags);
+        let forumChannel = channel.parent;
+        let removeTags = findTagsInForumByName(forumChannel, tagsToRemoveOnResolveSuggestion);
+        
+        let decisionTag = resolveSuggestionTags.filter(tag => tag.name === addedTagName)[0];
+        let decisionTagsToRemove = decisionTag.tagsToRemove;
+
+        removeTags.concat(decisionTagsToRemove);
+        
+        removeTagsInChannel(channel, removeTags);
 
         // Send message and close post
-        let owner = await newChannel.fetchOwner();
-        let msg = `Hello <@${owner.id}>! This suggestion has been ${message} by <@${user}>! If you have any questions regarding the decision, please contact <@${user}>. This post has been locked and closed.`;
+        let owner = await channel.fetchOwner();
+        let message = `Hello <@${owner.id}>! This suggestion has been ${decisionTag.name} by <@${user.id}>! If you have any questions regarding the decision, please contact <@${user.id}>. This post has been locked and closed.`;
         
-        await newChannel.send(msg);
+        await channel.send(message);
         
-        newChannel.setLocked(true);
-        newChannel.setArchived(true);
+        channel.setLocked(true);
+        channel.setArchived(true);
     });
 }
