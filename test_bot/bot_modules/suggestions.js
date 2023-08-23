@@ -122,6 +122,14 @@ exports.onNewSuggestion = (client, msg) => {
     if (channelHasIgnoredTags)
         return;
 
+    // check if thread has maximum number of tags applied and remove 1 if so
+    let channelTags = msg.channel.appliedTags;
+    let channelHasMaxAmountTags = channelTags.length >= CHANNEL_MAX_TAGS;
+    if (channelHasMaxAmountTags) {
+        channelTags = channelTags.splice(-1, 0);
+        removeTagsInChannel(msg.channel, channelTags);
+    }
+
     addTagsToChannel(msg.channel, tagsToApplyById);
 }
 
