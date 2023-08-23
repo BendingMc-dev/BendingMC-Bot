@@ -166,14 +166,16 @@ exports.onNewSuggestion = (client, msg) => {
 */
 exports.resolveSuggestion = (client, Events) =>{
     client.on(Events.ThreadUpdate, async (oldChannel, channel) =>{
-        // check if tags were added to the channel
         let addedTags = channel.appliedTags.filter(tag => !oldChannel.appliedTags.includes(tag));
         let forumChannel = channel.parent;
         let addedTagName = forumChannel.availableTags.filter(tag => tag.id === addedTags[0])[0];
+        
+        // check if tags were added to the channel
         let tagsWereAdded = addedTags.length > 0;
         if (!tagsWereAdded) return;
 
         console.log("tags were added to channel"); //debug
+        console.log("name of tag that was added: " + addedTagName); //debug
 
         // check if added tag can resolve a suggestion (e.g. if the tag added is "Bending", it can't resolve a suggestion)
         let tagCanResolveSuggestion = resolveSuggestionTags.filter(tag => tag.name === addedTagName).length > 0;
