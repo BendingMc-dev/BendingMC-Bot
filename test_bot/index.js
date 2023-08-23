@@ -9,7 +9,6 @@ const suggestions = require("./bot_modules/suggestions.js");
 // const reminder = require("./bot_modules/reminder.js");
 const todo = require("./bot_modules/todo.js");
 const EventHandler = require('./EventHandler.js');
-const test = require("/test_bot/bot_modules/test.js");
 
 require('dotenv').config();
 
@@ -48,7 +47,6 @@ client.on(Events.MessageCreate, msg =>{
 	suggestions.onNewSuggestion(client, msg);
 	EventHandler(client);
 	// reminder.setReminder(client, msg);
-	test.main();
 });
 
 // Log in
