@@ -18,7 +18,7 @@ function getFiles(directory, options) {
         // if customPath is set, return files with that path instead of the full path
         let isCustomPath = customPath != null;
         if (isCustomPath) {
-            filePath = path.join(customPath, dirent.name);
+            filePath = customPath + "/" + dirent.name;
         } else {
             filePath = path.join(directory, dirent.name);
         }
@@ -45,11 +45,11 @@ module.exports = (client) => {
     // get all files in a folder
     // for each file, require a function inside of it
     
-    const modulesFolder = "bot_modules";
-    const folderPath = path.join(__dirname, modulesFolder);
+    // const modulesFolder = "bot_modules";
+    const folderPath = path.join(__dirname, "bot_modules");
     const modulesPath = "./bot_modules";
     
-    console.log(`Dirname: ${__dirname}. Concat: ${__dirname + "./" + modulesFolder}`);
+    // console.log(`Dirname: (${__dirname}). Concat: ${__dirname + "/" + modulesFolder}`);
 
     let moduleFolders = getFiles(folderPath, {foldersOnly: true, customPath: modulesPath});
 
@@ -58,6 +58,10 @@ module.exports = (client) => {
 
         for (let file of files) {
             console.log("file: " + file);
+
+            let module = require(file);
+
+            module.main();
         }
     }
 }
