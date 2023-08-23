@@ -202,7 +202,7 @@ exports.resolveSuggestion = (client, Events) =>{
         console.log("tags to remove (names): " + decisionTag.tagsToRemove);
         console.log("tags to remove: " + decisionTagsToRemove);
 
-        removeTags.concat(decisionTagsToRemove);
+        removeTags = removeTags.concat(decisionTagsToRemove);
 
         console.log("remove tags: " + removeTags);
         
