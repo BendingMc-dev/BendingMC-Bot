@@ -49,12 +49,19 @@ module.exports = (client) => {
 
     let moduleFolders = getFiles(folderPath, {foldersOnly: true, customPath: modulesPath});
 
+    console.log("Sub folders: " + moduleFolders);
+
     for (let folder of moduleFolders) {
         let files = getFiles(folderPath, {customPath: modulesPath});
+
+        console.log("folder: " + folder.split("/").pop());
+        console.log("folder modules: " + files);
 
         for (let file of files) {
             let fileName = file.split("/").pop();
             let botModule = require(file);
+
+            console.log("Loading module: " + fileName);
 
             try {
                 botModule.main();
