@@ -61,7 +61,11 @@ module.exports = (client) => {
 
             let module = require(file);
 
-            module.main();
+            try {
+                module.main();
+            } catch (err) {
+                console.log(err);
+            }
         }
     }
 }
