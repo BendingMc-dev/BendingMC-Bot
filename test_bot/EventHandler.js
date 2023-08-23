@@ -57,10 +57,10 @@ module.exports = (client) => {
 
         for (let file of files) {
             let fileName = file.split("/").pop();
-            let module = require(file);
+            let botModule = require(file);
 
             try {
-                module.main();
+                botModule.main();
             } catch {
                 console.log(`The module ${fileName} but had no 'main' function! At ${file}`);
             }
