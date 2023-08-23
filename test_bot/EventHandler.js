@@ -47,7 +47,7 @@ module.exports = (client) => {
     
     // console.log(`Dirname: (${__dirname}). Concat: ${__dirname + "/" + modulesFolder}`);
 
-    let moduleFolders = getFiles(folderPath, {foldersOnly: true, customPath: modulesPath});
+    let moduleFolders = getFiles(folderPath, {foldersOnly: true});
 
     console.log("Sub folders: " + moduleFolders);
 
@@ -61,7 +61,7 @@ module.exports = (client) => {
             let fileName = file.split("/").pop();
             let botModule = require(file);
 
-            console.log("Loading module: " + fileName);
+            // console.log("Loading module: " + fileName);
 
             try {
                 botModule.main();
