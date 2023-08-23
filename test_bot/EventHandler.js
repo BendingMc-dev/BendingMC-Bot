@@ -6,6 +6,8 @@ function getFiles(path) {
     let dirents = fs.readdirSync(path, {withFileTypes: true});
 
     for (let dirent of dirents) {
+        console.log("(all) file name: " + file.name);
+
         // check if dirent is file
         let isFile = dirent.isFile();
         if (!isFile) continue;
@@ -27,6 +29,6 @@ module.exports = (client) => {
     let files = getFiles(folderPath);
 
     for (let file of files) {
-        console.log("file name: " + file.name);
+        // console.log("file name: " + file.name);
     }
 }
