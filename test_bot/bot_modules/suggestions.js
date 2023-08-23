@@ -168,8 +168,8 @@ exports.resolveSuggestion = (client, Events) =>{
     client.on(Events.ThreadUpdate, async (oldChannel, channel) =>{
         let addedTags = channel.appliedTags.filter(tag => !oldChannel.appliedTags.includes(tag));
         let forumChannel = channel.parent;
-        let addedTagName = forumChannel.availableTags.filter(tag => tag.id === addedTags[0])[0];
-        
+        let addedTagName = forumChannel.availableTags.filter(tag => tag.id === addedTags[0])[0].name;
+
         // check if tags were added to the channel
         let tagsWereAdded = addedTags.length > 0;
         if (!tagsWereAdded) return;
