@@ -210,9 +210,13 @@ exports.resolveSuggestion = (client, Events) =>{
         
         removeTagsInChannel(channel, removeTags);
 
+        console.log("removed tags from channel"); //debug
+
         // Send message and close post
         let owner = await channel.fetchOwner();
         let message = `Hello <@${owner.id}>! This suggestion has been ${decisionTag.name} by <@${user.id}>! If you have any questions regarding the decision, please contact <@${user.id}>. This post has been locked and closed.`;
+
+        console.log("message sent: " + `Hello <@${owner.id}>! This suggestion has been ${decisionTag.name} by <@${user.id}>! If you have any questions regarding the decision, please contact <@${user.id}>. This post has been locked and closed.`);
         
         await channel.send(message);
         
