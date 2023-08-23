@@ -52,7 +52,7 @@ module.exports = (client) => {
     console.log("Sub folders: " + moduleFolders);
 
     for (let folder of moduleFolders) {
-        let files = getFiles(folderPath, {customPath: modulesPath});
+        let files = getFiles(folder, {customPath: modulesPath});
 
         console.log("folder: " + folder.split("/").pop());
         console.log("folder modules: " + files);
