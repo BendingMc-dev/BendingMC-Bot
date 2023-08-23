@@ -19,7 +19,7 @@ function getFiles(directory, options) {
         let isCustomPath = customPath != null;
         if (isCustomPath) {
             let splitCustomPath = filePath.split(customPath)[1];
-            filePath = customPath + splitCustomPath;
+            filePath = "." + customPath + splitCustomPath;
         }
 
         // if folders only is true, this function will only return folders. Otherwise, it will only return file paths
@@ -40,10 +40,7 @@ function getFiles(directory, options) {
     return files;
 }
 
-module.exports = (client) => {
-    // get all files in a folder
-    // for each file, require a function inside of it
-    
+module.exports = (client) => {    
     // const modulesFolder = "bot_modules";
     const folderPath = path.join(__dirname, "bot_modules");
     const modulesPath = "/bot_modules";
