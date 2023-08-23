@@ -25,21 +25,6 @@ const resolveSuggestionTags = [
 
 // --= END SECTION =--
 
-
-
-
-
-
-
-
-
-
-
-
-/* 
-    channel = channel object
-    tags[] = array of tag IDs to be removed from the channel
-*/
 function removeTagsInChannel(channel, tags = []){
     // iterate over all tags applied to the channel
     let channelTags = channel.appliedTags;
@@ -55,19 +40,13 @@ function removeTagsInChannel(channel, tags = []){
     channel.setAppliedTags(channelTags);
 }
 
-/* 
-    channel = channel object
-    tags[] = array of tag IDs to be added to the channel
-*/
 function addTagsToChannel(channel, tags = []) {
     // iterate over all tags that should be applied to the channel
     let channelTags = channel.appliedTags;
     for (let tag of tags) {
-
         // check if the channel has the max number of tags possible
         let channelHasMaxAmountTags = channelTags.length >= CHANNEL_MAX_TAGS;
         if (channelHasMaxAmountTags) {
-
             // check if tags can be removed in case the channel has maximum amount of tags allowed (defined in the options section, towards the beginning of this file)
             if (!removeTagIfLimitIsReached) break;
 
@@ -89,12 +68,6 @@ function addTagsToChannel(channel, tags = []) {
     channel.setAppliedTags(channelTags);
 }
 
-/* 
-    forum = channel object
-    tags[] = array of tag names; will try to find tag IDs from the forum that match these
-
-    returns = array of tag IDs that match the name of given tags
-*/
 function findTagsInForumByName(forum, tags = []){
     let forumAvailableTags = forum.availableTags;
     let results = [];
@@ -112,12 +85,6 @@ function findTagsInForumByName(forum, tags = []){
     return results;
 }
 
-/* 
-    channel = channel object
-    tags[] = array of tag IDs; will check if the channel has any of these
-
-    returns = true or false
-*/
 function threadChannelHasTags(channel, tags){
     for (let tag of tags){
         // check if the channel has the tag applied to it
@@ -129,9 +96,6 @@ function threadChannelHasTags(channel, tags){
     return false;
 }
 
-/* 
-    when a message is created, execute this function
-*/
 exports.onNewSuggestion = (client, msg) => {
     // check if bot is the author of the message
     let botIsMsgAuthor = msg.author.id === client.user.id
@@ -161,9 +125,6 @@ exports.onNewSuggestion = (client, msg) => {
     addTagsToChannel(msg.channel, tagsToApplyById);
 }
 
-/* 
-    when a user makes changes to a thread channel (rename, add/remove tags, etc.), execute this function
-*/
 exports.resolveSuggestion = (client, Events) =>{
     client.on(Events.ThreadUpdate, async (oldChannel, channel) =>{
         // check if tags were added to the channel
