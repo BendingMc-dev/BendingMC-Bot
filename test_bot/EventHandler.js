@@ -12,15 +12,14 @@ function getFiles(directory, options) {
     let dirents = fs.readdirSync(directory, {withFileTypes: true});
 
     for (let dirent of dirents) {
-        let filePath;
+        let filePath = path.join(directory, dirent.name);
         let customPath = options.customPath;
         
         // if customPath is set, return files with that path instead of the full path
         let isCustomPath = customPath != null;
         if (isCustomPath) {
-            filePath = customPath + "/" + dirent.name;
-        } else {
-            filePath = path.join(directory, dirent.name);
+            let splitCustomPath = filePath.split(customPath)[1];
+            filePath = customPath + splitCustomPath;
         }
 
         // if folders only is true, this function will only return folders. Otherwise, it will only return file paths
@@ -47,7 +46,7 @@ module.exports = (client) => {
     
     // const modulesFolder = "bot_modules";
     const folderPath = path.join(__dirname, "bot_modules");
-    const modulesPath = "./bot_modules";
+    const modulesPath = "/bot_modules";
     
     // console.log(`Dirname: (${__dirname}). Concat: ${__dirname + "/" + modulesFolder}`);
 
@@ -57,14 +56,13 @@ module.exports = (client) => {
         let files = getFiles(folderPath, {customPath: modulesPath});
 
         for (let file of files) {
-            console.log("file: " + file);
-
+            let fileName = file.split("/").pop();
             let module = require(file);
 
             try {
                 module.main();
             } catch {
-                console.log("A module was loaded but had no 'main' function!");
+                console.log(`The module ${fileName} but had no 'main' function! At ${file}`);
             }
         }
     }
