@@ -18,7 +18,9 @@ let tagsToRemoveOnResolveSuggestion = ["Awaiting Response"]; // list of tags tha
     tagsToRemove = array of tags (names) that will be removed from the thread when this tag is added (e.g. `{name: "Approved", tagsToRemove: ["Denied"]}` means the tag "Denied" would be removed if the tag "Approved" were added to the thread)
     the variable `tagsToRemoveOnResolveSuggestion` ensures that all tags listed are removed when a suggestion is resolved   */
 const resolveSuggestionTags = [
-    {name: "Approved", tagsToRemove: []}
+    {name: "Approved", tagsToRemove: ["Denied", "Implemented"]},
+    {name: "Denied", tagsToRemove: ["Implemented", "Approved"]},
+    {name: "Implemented", tagsToRemove: ["Denied", "Approved"]},
 ];
 
 // --= END SECTION =--
@@ -166,17 +168,24 @@ exports.resolveSuggestion = (client, Events) =>{
     client.on(Events.ThreadUpdate, async (oldChannel, channel) =>{
         // check if tags were added to the channel
         let addedTags = channel.appliedTags.filter(tag => !oldChannel.appliedTags.includes(tag));
-        let addedTagName = addedTags[0];
+        let forumChannel = channel.parent;
+        let addedTagName = forumChannel.availableTags.filter(tag => tag.id === addedTags[0])[0];
         let tagsWereAdded = addedTags.length > 0;
         if (!tagsWereAdded) return;
+
+        console.log("tags were added to channel"); //debug
 
         // check if added tag can resolve a suggestion (e.g. if the tag added is "Bending", it can't resolve a suggestion)
         let tagCanResolveSuggestion = resolveSuggestionTags.filter(tag => tag.name === addedTagName).length > 0;
         if (!tagCanResolveSuggestion) return;
 
+        console.log("added tag can resolve suggestion"); //debug
+
         // check if the channel is part of the list of suggestion channels
         let channelIsSuggestionChannel = suggestionChannels.includes(channel.parent.id);
         if (!channelIsSuggestionChannel) return;
+
+        console.log("channel is a suggestion channel"); //debug
 
         // Get audit log, specifically last user who edited a forum thread
         let audit = await channel.guild.fetchAuditLogs({ type: 111, limit: 1 });
@@ -187,8 +196,9 @@ exports.resolveSuggestion = (client, Events) =>{
         if (botEditedChannel)
             return;
 
+        console.log("bot did not edit channel"); //debug
+
         // Remove tags
-        let forumChannel = channel.parent;
         let removeTags = findTagsInForumByName(forumChannel, tagsToRemoveOnResolveSuggestion);
         
         let decisionTag = resolveSuggestionTags.filter(tag => tag.name === addedTagName)[0];
