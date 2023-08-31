@@ -2,6 +2,7 @@ const { Client, IntentsBitField, Partials, Events, Channel } = require('discord.
 // const { Client, GatewayIntentBits, Partials, Events } = require('discord.js');
 
 const suggestions = require("./bot_modules/suggestions.js");
+const bugreports = require("./bot_modules/bugreports.js");
 // const reminder = require("./bot_modules/reminder.js");
 const todo = require("./bot_modules/todo.js");
 
@@ -36,12 +37,12 @@ client.on(Events.MessageCreate, msg =>{
 // Execute modules based on events
 //FIXME implement event manager
 suggestions.resolveSuggestion(client, Events); //FIXME use the function after the event is triggered instead -> "on new message, function()"
-suggestions.resolveBugReport(client, Events); //FIXME use the function after the event is triggered instead -> "on new message, function()"
+bugreports.resolveBugReport(client, Events); //FIXME use the function after the event is triggered instead -> "on new message, function()"
 todo.onTodoCommand(client, Events);
 
 client.on(Events.MessageCreate, msg =>{
 	suggestions.onNewSuggestion(client, msg);
-	suggestions.onNewBugReport(client, msg);
+	bugreports.onNewBugReport(client, msg);
 	// reminder.setReminder(client, msg);
 })
 
