@@ -70,9 +70,9 @@ module.exports = (client) => {
         let botModule = require(file);
 
         try {
-            botModule.main();
+            botModule.main(client, arg);
         } catch {
-            console.log(`The module ${fileName} but had no 'main' function! At ${file}`);
+            console.warn(`Could not load module ${fileName}! At ${file}`);
         }
     }
 }
