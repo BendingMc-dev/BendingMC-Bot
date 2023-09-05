@@ -172,7 +172,7 @@ exports.resolveSuggestion = (client, Events) =>{
 
         // Send message and close post
         let owner = await channel.fetchOwner();
-        let message = `Hello <@${owner.id}>! This suggestion has been ${decisionTag.name} by <@${user.id}>! If you have any questions regarding the decision, please contact <@${user.id}>. This post has been locked and closed.`;
+        let message = `Hello <@${owner.id}>! This suggestion has been ${decisionTag.name.toLowerCase()} by <@${user.id}>! If you have any questions regarding the decision, please contact <@${user.id}>. This post has been locked and closed.`;
         
         await channel.send(message);
         

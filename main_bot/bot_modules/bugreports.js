@@ -171,7 +171,7 @@ exports.resolveBugReport = (client, Events) =>{
 
         // Send message and close post
         let owner = await channel.fetchOwner();
-        let message = `Hello <@${owner.id}>! This bug has been ${decisionTag.name} by <@${user.id}>! If you have any questions regarding the decision, please contact <@${user.id}>. This post has been closed.`;
+        let message = `This bug has been ${decisionTag.name.toLowerCase()}! This report will now be closed.`;
 
         await channel.send(message);
 
