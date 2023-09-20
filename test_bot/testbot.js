@@ -1,12 +1,22 @@
 require('dotenv').config();
 const { Client, IntentsBitField, Partials, Events, Channel } = require('discord.js');
 
-exports.main = () => {
+exports.main = async () => {
     console.log(`Initiating client...`);
 
     const client = buildClient();
 
-    login(client);
+    client.on(Events.MessageCreate, msg =>{
+        if (msg.author.id === client.user.id) return;
+        
+        if (msg.content === "ping"){
+            msg.reply("pong!");
+        } else if (msg.content === "restart") {
+            this.restart(client);
+        }
+    })
+
+    await login(client);
 
     console.log(`Client ready! Logged in as ${client.user.tag}`);
 }
@@ -15,6 +25,8 @@ exports.restart = async (client) => {
     let clientExists = client.isReady();
 
     if (!clientExists) return;
+
+    console.log("Restarting client...");
 
     await client.destroy();
 
