@@ -21,7 +21,7 @@ function getCommands() {
     return commands;
 }
 
-module.exports.registerCommands = (client) => {
+exports.registerCommands = (client) => {
     const botCommands = getCommands();
     client.commands = new Collection();
 
@@ -37,7 +37,7 @@ module.exports.registerCommands = (client) => {
     }
 }
 
-module.exports.executeCommand = async (client, interaction) => {
+exports.executeCommand = async (client, interaction) => {
     let interactionName = interaction.commandName;
     const command = client.commands.get(interactionName);
 
