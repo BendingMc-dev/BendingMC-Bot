@@ -1,6 +1,6 @@
 require('dotenv').config();
 const { Client, IntentsBitField, Partials, Events, Channel } = require('discord.js');
-const CommandHandler = require('CommandHandler.js');
+const CommandHandler = require('./CommandHandler.js');
 
 exports.main = async () => {
     console.log(``);
