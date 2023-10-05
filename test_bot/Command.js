@@ -1,4 +1,4 @@
-class Command {
+exports.Command = class Command {
     name;
     description;
     
