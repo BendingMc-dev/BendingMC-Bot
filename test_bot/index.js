@@ -4,7 +4,7 @@ git.run();
 
 const testbot = require("./testbot.js");
 
-testbot.main();
+//testbot.main();
 
 // const { Client, IntentsBitField, Partials, Events, Channel } = require('discord.js');
 // // const { Client, GatewayIntentBits, Partials, Events } = require('discord.js');
