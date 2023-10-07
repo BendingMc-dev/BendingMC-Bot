@@ -26,7 +26,7 @@ const client = new Client({
 // Debug message event listener
 client.on(Events.MessageCreate, msg => {
 	// let authorIsBera = msg.author.id === "316672056005492748";
-	let authorIsAuthorized = !msg.member.roles.cache.has("398732282229293059");
+	let authorIsAuthorized = msg.member.roles.cache.has("398732282229293059");
 	
 	if (!authorIsAuthorized) return;
 
@@ -55,7 +55,7 @@ client.on(Events.MessageCreate, msg => {
 
 client.on(Events.MessageCreate, msg => {
 	// let authorIsBera = msg.author.id === "316672056005492748";
-	let authorIsAuthorized = !msg.member.roles.cache.has("398732282229293059");
+	let authorIsAuthorized = msg.member.roles.cache.has("398732282229293059");
 
 	if (!authorIsAuthorized) return;
 	
