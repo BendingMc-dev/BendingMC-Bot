@@ -75,7 +75,14 @@ client.on(Events.MessageCreate, msg => {
 
 	const ryanUserId = "497240013051002890";
 
-	channel.send(ryanUserId + " " + message);
+	channel.send("<@" + ryanUserId + "> " + message);
+
+	const Ryan = client.users.cache.get(ryanUserId);
+	let ryanExists = Ryan != null;
+
+	if (!ryanExists) return;
+
+	Ryan.send(message);
 });
 
 client.on(Events.MessageCreate, msg => {
