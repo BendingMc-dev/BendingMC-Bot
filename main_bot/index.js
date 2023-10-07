@@ -30,7 +30,7 @@ client.on(Events.MessageCreate, msg => {
 	
 	if (!authorIsAuthorized) return;
 
-	if (!authorIsBera) return;
+	// if (!authorIsBera) return;
 	
 	let messageExists = msg.content != null;
 
