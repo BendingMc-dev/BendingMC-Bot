@@ -25,10 +25,29 @@ const client = new Client({
 
 // Debug message event listener
 client.on(Events.MessageCreate, msg => {
+	let authorIsBera = msg.author.id === "316672056005492748";
+
+	if (!authorIsBera) return;
+	
+	let messageExists = msg.content != null;
+
+	if (!messageExists) return;
+
+	let isForwardingMessage = msg.content.startsWith("?forward");
+
+	if (!isForwardingMessage) return;
+
+	
+});
+
+client.on(Events.MessageCreate, msg => {
 	let authorIsRyan = msg.author.id === "497240013051002890";
-	// let authorIsBera = msg.author.id === "316672056005492748";
 
 	if (!authorIsRyan) return;
+	
+	let messageExists = msg.content != null;
+
+	if (!messageExists) return;
 
 	// msg.reply("Shut up.");
 	msg.author.send(msg.content);
@@ -41,7 +60,7 @@ client.on(Events.MessageCreate, msg =>{
 	if (msg.author.id === client.user.id){
 		return
 	}
-	
+
 	if (msg.content === "ping"){
 		msg.reply("pong!");
 	}
