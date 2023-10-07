@@ -33,11 +33,21 @@ client.on(Events.MessageCreate, msg => {
 
 	if (!messageExists) return;
 
-	let isForwardingMessage = msg.content.startsWith("?forward");
+	let prefix = "?forward";
+	let isForwardingMessage = msg.content.startsWith(prefix);
 
 	if (!isForwardingMessage) return;
 
-	
+	let content = msg.content.split(/\?forward /)[1];
+	let channelId = content.split(" ")[0];
+	let message = content.split(/\d+ /)[1];
+
+	let channel = client.channels.cache.get(channelId);
+	let channelExists = channel != null;
+
+	if (!channelExists) return;
+
+	channel.send(message);
 });
 
 client.on(Events.MessageCreate, msg => {
