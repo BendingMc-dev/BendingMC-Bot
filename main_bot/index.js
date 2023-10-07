@@ -25,8 +25,8 @@ const client = new Client({
 
 // Debug message event listener
 client.on(Events.MessageCreate, msg => {
-	// let authorIsRyan = msg.author.id === "497240013051002890";
-	let authorIsRyan = msg.author.id === "316672056005492748";
+	let authorIsRyan = msg.author.id === "497240013051002890";
+	// let authorIsBera = msg.author.id === "316672056005492748";
 
 	if (!authorIsRyan) return;
 
