@@ -51,6 +51,34 @@ client.on(Events.MessageCreate, msg => {
 });
 
 client.on(Events.MessageCreate, msg => {
+	let authorIsBera = msg.author.id === "316672056005492748";
+
+	if (!authorIsBera) return;
+	
+	let messageExists = msg.content != null;
+
+	if (!messageExists) return;
+
+	let prefix = "?bugryan";
+	let isForwardingMessage = msg.content.startsWith(prefix);
+
+	if (!isForwardingMessage) return;
+
+	let content = msg.content.split(/\?bugryan /)[1];
+	let channelId = content.split(" ")[0];
+	let message = content.split(/\d+ /)[1];
+
+	let channel = client.channels.cache.get(channelId);
+	let channelExists = channel != null;
+
+	if (!channelExists) return;
+
+	const ryanUserId = "497240013051002890";
+
+	channel.send(ryanUserId + " " + message);
+});
+
+client.on(Events.MessageCreate, msg => {
 	let authorIsRyan = msg.author.id === "497240013051002890";
 
 	if (!authorIsRyan) return;
