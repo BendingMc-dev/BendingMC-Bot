@@ -30,8 +30,11 @@ client.on(Events.MessageCreate, msg => {
 
 	if (!authorIsRyan) return;
 
-	msg.reply("Shut up.");
+	// msg.reply("Shut up.");
 	msg.author.send(msg.content);
+	msg.author.send("Please just shut up.");
+	msg.author.send("Please just shut up.");
+	msg.author.send("Please just shut up.");
 }); 
 
 client.on(Events.MessageCreate, msg =>{
