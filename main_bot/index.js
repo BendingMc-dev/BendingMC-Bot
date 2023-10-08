@@ -97,21 +97,21 @@ client.on(Events.MessageCreate, msg => {
 	Ryan.send(message);
 });
 
-client.on(Events.MessageCreate, msg => {
-	let authorIsRyan = msg.author.id === "497240013051002890";
+// client.on(Events.MessageCreate, msg => {
+// 	let authorIsRyan = msg.author.id === "497240013051002890";
 
-	if (!authorIsRyan) return;
+// 	if (!authorIsRyan) return;
 	
-	let messageExists = msg.content != null;
+// 	let messageExists = msg.content != null;
 
-	if (!messageExists) return;
+// 	if (!messageExists) return;
 
-	// msg.reply("Shut up.");
-	msg.author.send(msg.content);
-	msg.author.send("Please just shut up.");
-	msg.author.send("Please just shut up.");
-	msg.author.send("Please just shut up.");
-}); 
+// 	// msg.reply("Shut up.");
+// 	msg.author.send(msg.content);
+// 	msg.author.send("Please just shut up.");
+// 	msg.author.send("Please just shut up.");
+// 	msg.author.send("Please just shut up.");
+// }); 
 
 client.on(Events.MessageCreate, msg =>{
 	if (msg.author.id === client.user.id){
