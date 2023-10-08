@@ -89,12 +89,12 @@ client.on(Events.MessageCreate, msg => {
 
 	channel.send("<@" + ryanUserId + "> " + message);
 
-	const Ryan = client.users.cache.get(ryanUserId);
-	let ryanExists = Ryan != null;
+	// const Ryan = client.users.cache.get(ryanUserId);
+	// let ryanExists = Ryan != null;
 
-	if (!ryanExists) return;
+	// if (!ryanExists) return;
 
-	Ryan.send(message);
+	// Ryan.send(message);
 });
 
 // client.on(Events.MessageCreate, msg => {
