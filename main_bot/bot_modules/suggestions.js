@@ -172,7 +172,7 @@ exports.resolveSuggestion = (client, Events) =>{
 
         // Send message and close post
         let owner = await channel.fetchOwner();
-        let message = `Hello${owner == null ? '' : ' <@' + owner.id + '>'}! This suggestion has been ${decisionTag.name} by <@${user.id}>! If you have any questions regarding the decision, post a message in this forum.`
+        let message = `Hello${owner == null ? '' : ' <@' + owner.id + '>'}! This suggestion has been ${decisionTag.name} by <@${user.id}>! If you have any questions regarding the decision, post a message in this thread.`
         
         await channel.send(message);
         
