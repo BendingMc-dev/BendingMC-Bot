@@ -172,11 +172,11 @@ exports.resolveSuggestion = (client, Events) =>{
 
         // Send message and close post
         let owner = await channel.fetchOwner();
-        let message = `Hello${owner == null ? '' : ' <@' + owner.id + '>'}! This suggestion has been ${decisionTag.name} by <@${user.id}>! If you have any questions regarding the decision, please contact <@${user.id}>. This post has been locked and closed.`
+        let message = `Hello${owner == null ? '' : ' <@' + owner.id + '>'}! This suggestion has been ${decisionTag.name} by <@${user.id}>! If you have any questions regarding the decision, post a message in this forum.`
         
         await channel.send(message);
         
-        channel.setLocked(true);
+        // channel.setLocked(true);
         channel.setArchived(true);
     });
 }
