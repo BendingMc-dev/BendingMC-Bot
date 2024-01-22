@@ -59,11 +59,12 @@ client.on(Events.MessageCreate, msg => {
 
 client.on(Events.MessageCreate, msg => {
 	// let authorIsBera = msg.author.id === "316672056005492748";
+	let authorIsSophie = msg.author.id === "845175449129582612";
 	let memberExists = msg.member != null;
 
 	if (!memberExists) return;
 	
-	let authorIsAuthorized = msg.member.roles.cache.has("398732282229293059");
+	let authorIsAuthorized = msg.member.roles.cache.has("398732282229293059") || authorIsSophie;
 
 	if (!authorIsAuthorized) return;
 	
