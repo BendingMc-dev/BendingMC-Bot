@@ -3,7 +3,7 @@ const requiredRole = "398732282229293059";
 
 function modifyItemContent(name, category, quality, lore, chunkSize = 4) {
     const modifiedName = `&6&l${name}`;
-    const modifiedCategory = `${category}`; // ADD COLOUR CODE
+    const modifiedCategory = `&7${category}`;
     const modifiedQuality = generateItemQualityStars(quality);
     const loreChunks = splitLoreIntoChunks(lore, chunkSize); // Split lore into smaller chunks
 
@@ -22,27 +22,22 @@ function splitLoreIntoChunks(lore, chunkSize) {
 
     // Create chunks of the lore based on the chunk size
     for (let i = 0; i < words.length; i += chunkSize) {
-        chunks.push(words.slice(i, i + chunkSize).join(' '));
+        const chunk = words.slice(i, i + chunkSize).join(' '); 
+        chunks.push(chunk); 
         chunks.push(`${prependValue}${chunk}`);
     }
 
     return chunks;
 }
 
-function generateItemQualityStars(quality){
+function generateItemQualityStars(quality) {
     switch (quality) {
-        case '1':
-            return '1 star';
-        case '2':
-            return '2 stars';
-        case '3':
-            return '3 stars';
-        case '4':
-            return '4 stars';
-        case '5':
-            return '5 stars';
-        default:
-            return 'Unknown'; 
+        case '1': return '&7⭑&8⭒⭒⭒⭒'; 
+        case '2': return '&7⭑⭑&8⭒⭒⭒'; 
+        case '3': return '&7⭑⭑⭑&8⭒⭒'; 
+        case '4': return '&7⭑⭑⭑⭑&8⭒'; 
+        case '5': return '&7⭑⭑⭑⭑⭑&8'; 
+        default: return 'Unknown'; // Default case
     }
 }
 
@@ -62,18 +57,18 @@ exports.onItemCommand = (client, Events) => {
         const [name, category, quality, lore] = commandParts;
         const modifiedItem = modifyItemContent(name, category, quality, lore);
 
-        let yamlContent = `
- item:
-  name: "${modifiedItem.name}"
-  category: "${modifiedItem.category}"
-  quality: "${modifiedItem.quality}"
-`;
+        let yamlContent = `   
+item:
+    name: "${modifiedItem.name}"
+    lore:
+    - "${modifiedItem.category}"
+    - "${modifiedItem.quality}"
+    - ' '`;
         modifiedItem.lore.forEach((chunk, index) => {
             yamlContent += `
-  lore_chunk_${index + 1}: "${chunk}"`;
+    - "${chunk}"`;
         });
 
-        // Send the YAML response as a message
-        msg.reply(`Here is the formatted item in YAML format:\n\`\`\`yaml\n${yamlContent}\n\`\`\``);
+        msg.reply(`Here is the formatted item in ItemsAdder compatable format:\n\`\`\`yaml\n${yamlContent}\n\`\`\``);
     });
 };
