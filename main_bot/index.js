@@ -5,6 +5,7 @@ const suggestions = require("./bot_modules/suggestions.js");
 const bugreports = require("./bot_modules/bugreports.js");
 // const reminder = require("./bot_modules/reminder.js");
 const todo = require("./bot_modules/todo.js");
+const format = require("./bot_modules/format.js");
 
 require('dotenv').config();
 
@@ -134,6 +135,7 @@ client.on(Events.MessageCreate, msg =>{
 	suggestions.onNewSuggestion(client, msg);
 	bugreports.onNewBugReport(client, msg);
 	// reminder.setReminder(client, msg);
+	format.onItemCommand(client, msg);
 })
 
 // Log in
