@@ -130,12 +130,12 @@ client.on(Events.MessageCreate, msg =>{
 suggestions.resolveSuggestion(client, Events); //FIXME use the function after the event is triggered instead -> "on new message, function()"
 bugreports.resolveBugReport(client, Events); //FIXME use the function after the event is triggered instead -> "on new message, function()"
 todo.onTodoCommand(client, Events);
+format.onItemCommand(client, Events);
 
 client.on(Events.MessageCreate, msg =>{
 	suggestions.onNewSuggestion(client, msg);
 	bugreports.onNewBugReport(client, msg);
 	// reminder.setReminder(client, msg);
-	format.onItemCommand(client, msg);
 })
 
 // Log in
