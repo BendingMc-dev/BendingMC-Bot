@@ -2,12 +2,14 @@ const prefix = "?format";
 const requiredRole = "398732282229293059"; 
 
 function modifyItemContent(name, category, quality, lore, chunkSize = 4) {
+    const modifiedNamespace = name.toLowerCase().replace(/\s+/g, '_');
     const modifiedName = `&6&l${name}`;
     const modifiedCategory = `&7${category}`;
     const modifiedQuality = generateItemQualityStars(quality);
     const loreChunks = splitLoreIntoChunks(lore, chunkSize); // Split lore into smaller chunks
 
     return {
+        namespace: modifiedNamespace,
         name: modifiedName,
         category: modifiedCategory,
         quality: modifiedQuality,
@@ -23,7 +25,6 @@ function splitLoreIntoChunks(lore, chunkSize) {
     // Create chunks of the lore based on the chunk size
     for (let i = 0; i < words.length; i += chunkSize) {
         const chunk = words.slice(i, i + chunkSize).join(' '); 
-        chunks.push(chunk); 
         chunks.push(`${prependValue}${chunk}`);
     }
 
@@ -49,7 +50,7 @@ exports.onItemCommand = (client, Events) => {
 
         const command = msg.content.slice(prefix.length).trim();
         
-        const commandParts = command.split(/\s+/);
+        const commandParts = command.match(/"([^"]*)"/g)?.map(part => part.replace(/"/g, ''));
         if (commandParts.length !== 4) {
             return msg.reply('Please provide all four values: name, category, quality, and lore.');
         }
@@ -57,12 +58,14 @@ exports.onItemCommand = (client, Events) => {
         const [name, category, quality, lore] = commandParts;
         const modifiedItem = modifyItemContent(name, category, quality, lore);
 
-        let yamlContent = `   
-item:
-    name: "${modifiedItem.name}"
+        let yamlContent = 
+`${modifiedItem.namespace}:
+    display_name: "${modifiedItem.name}"
     lore:
     - "${modifiedItem.category}"
     - "${modifiedItem.quality}"
+    #- ' '
+    #- '&6🧪 &f{effect} &6{amplifier} {duration}
     - ' '`;
         modifiedItem.lore.forEach((chunk, index) => {
             yamlContent += `
