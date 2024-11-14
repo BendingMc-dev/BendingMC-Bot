@@ -1,10 +1,10 @@
 const prefix = "?format";
 const requiredRole = "398732282229293059"; 
 
-function modifyItemContent(name, category, quality, lore, chunkSize = 4) {
+function modifyItemContent(name, category, quality, lore, chunkSize = 5) {
     const modifiedNamespace = name.toLowerCase().replace(/\s+/g, '_');
     const modifiedName = `&6&l${name}`;
-    const modifiedCategory = `&7${category}`;
+    const modifiedCategory = `&8${category}`;
     const modifiedQuality = generateItemQualityStars(quality);
     const loreChunks = splitLoreIntoChunks(lore, chunkSize); // Split lore into smaller chunks
 
@@ -18,7 +18,7 @@ function modifyItemContent(name, category, quality, lore, chunkSize = 4) {
 }
 
 function splitLoreIntoChunks(lore, chunkSize) {
-    const prependValue = "&d"
+    const prependValue = "&5&o"
     const words = lore.split(/\s+/); 
     const chunks = [];
 
@@ -38,6 +38,7 @@ function generateItemQualityStars(quality) {
         case '3': return '&7⭑⭑⭑&8⭒⭒'; 
         case '4': return '&7⭑⭑⭑⭑&8⭒'; 
         case '5': return '&7⭑⭑⭑⭑⭑&8'; 
+        case '6': return '&6&l⭑⭑⭑⭑⭑&8'; 
         default: return 'Unknown'; // Default case
     }
 }
